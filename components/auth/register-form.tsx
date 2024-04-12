@@ -50,10 +50,9 @@ export const RegisterForm = () => {
 
   return (
     <CardWrapper
-      headerLabel="Create an account"
-      backButtonLabel="Already have an account?"
+      headerLabel="Créer un compte"
+      backButtonLabel="Vous êtes déjà inscrit ?"
       backButtonHref="/auth/login"
-      showSocial
     >
       <Form {...form}>
         <form 
@@ -66,7 +65,7 @@ export const RegisterForm = () => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Nom</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -83,12 +82,12 @@ export const RegisterForm = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Mail</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       disabled={isPending}
-                      placeholder="john.doe@example.com"
+                      placeholder="john.doe@email.com"
                       type="email"
                     />
                   </FormControl>
@@ -101,7 +100,7 @@ export const RegisterForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Mot de passe</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -122,7 +121,7 @@ export const RegisterForm = () => {
             type="submit"
             className="w-full"
           >
-            Create an account
+            S&apos;inscrire
           </Button>
         </form>
       </Form>
