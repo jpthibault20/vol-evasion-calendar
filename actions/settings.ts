@@ -16,13 +16,13 @@ export const settings = async (
   const user = await currentUser();
 
   if (!user?.id) {
-    return {error: "Unauthorized"}
+    return {error: "Non autorisé"}
 };
 
   const dbUser = await getUserById(user.id);
 
   if (!dbUser) {
-    return { error: "Unauthorized" }
+    return { error: "Non autorisé" }
   }
 
   if (user.isOAuth) {
@@ -36,7 +36,7 @@ export const settings = async (
     const existingUser = await getUserByEmail(values.email);
 
     if (existingUser && existingUser.id !== user.id) {
-      return { error: "Email already in use!" }
+      return { error: "Le mail est déjà utilisé !" }
     }
 
     const verificationToken = await generateVerificationToken(
@@ -47,7 +47,7 @@ export const settings = async (
       verificationToken.token,
     );
 
-    return { success: "Verification email sent!" };
+    return { success: "Mail de vérification envoyé !" };
   }
 
   if (values.password && values.newPassword && dbUser.password) {
@@ -57,7 +57,7 @@ export const settings = async (
     );
 
     if (!passwordsMatch) {
-      return { error: "Incorrect password!" };
+      return { error: "Mot de passe incorrect !" };
     }
 
     const hashedPassword = await bcrypt.hash(
@@ -76,5 +76,5 @@ export const settings = async (
   });
 
 
-  return { success: "Settings Updated!" }
+  return { success: "Paramètres mis à jour !" }
 }

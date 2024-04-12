@@ -28,7 +28,7 @@ export const login = async (
   const validatedFields = LoginSchema.safeParse(values);
 
   if (!validatedFields.success) {
-    return { error: "Invalid fields!" };
+    return { error: "Champs non valides !" };
   }
 
   const { email, password, code } = validatedFields.data;
@@ -36,7 +36,7 @@ export const login = async (
   const existingUser = await getUserByEmail(email);
 
   if (!existingUser || !existingUser.email || !existingUser.password) {
-    return { error: "Email does not exist!" }
+    return { error: "Le mail n'existe pas !" }
   }
 
   if (!existingUser.emailVerified) {
@@ -49,7 +49,7 @@ export const login = async (
       verificationToken.token,
     );
 
-    return { success: "Confirmation email sent!" };
+    return { success: "Mail envoyé !" };
   }
 
   if (existingUser.isTwoFactorEnabled && existingUser.email) {
@@ -59,17 +59,17 @@ export const login = async (
       );
 
       if (!twoFactorToken) {
-        return { error: "Invalid code!" };
+        return { error: "Code invalide !" };
       }
 
       if (twoFactorToken.token !== code) {
-        return { error: "Invalid code!" };
+        return { error: "Code invalide !" };
       }
 
       const hasExpired = new Date(twoFactorToken.expires) < new Date();
 
       if (hasExpired) {
-        return { error: "Code expired!" };
+        return { error: "Code expiré !" };
       }
 
       await db.twoFactorToken.delete({
@@ -112,9 +112,9 @@ export const login = async (
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
-          return { error: "Invalid credentials!" }
+          return { error: "Informations d'identification non valides !" }
         default:
-          return { error: "Something went wrong!" }
+          return { error: "Quelque chose n'a pas fonctionné !" }
       }
     }
 
