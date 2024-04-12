@@ -3,9 +3,10 @@ import { UserRole } from "@prisma/client";
 
 export const SettingsSchema = z.object({
   name: z.optional(z.string()),
-  isTwoFactorEnabled: z.optional(z.boolean()),
+  firstName: z.optional(z.string()),
   role: z.enum([UserRole.ADMIN, UserRole.USER]),
   email: z.optional(z.string().email()),
+  phone: z.optional(z.string().min(6)),
   password: z.optional(z.string().min(6)),
   newPassword: z.optional(z.string().min(6)),
 })
@@ -61,5 +62,11 @@ export const RegisterSchema = z.object({
   }),
   name: z.string().min(1, {
     message: "Nom attendue",
+  }),
+  firstName: z.string().min(1, {
+    message: "prenom attendue",
+  }),
+  phone: z.number().min(10, {
+    message: "Téléphone attendue",
   }),
 });

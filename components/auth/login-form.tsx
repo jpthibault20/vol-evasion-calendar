@@ -65,7 +65,7 @@ export const LoginForm = () => {
 
   return (
     <CardWrapper
-      headerLabel="Bienvenu"
+      headerLabel="Se Connecter"
       backButtonLabel="S'inscrire"
       backButtonHref="/auth/register"
     >
@@ -129,7 +129,7 @@ export const LoginForm = () => {
             type="submit"
             className="w-full"
           >
-            Connexion
+            Se Connecter
           </Button>
         </form>
       </Form>

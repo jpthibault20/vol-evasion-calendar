@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { LoginButton } from "@/components/auth/login-button";
+import { Card } from "@/components/ui/card";
 
 const font = Poppins({
   subsets: ["latin"],
@@ -11,25 +12,23 @@ const font = Poppins({
 
 export default function Home() {
   return (
-    <main className="flex h-full flex-col items-center justify-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800">
-      <div className="space-y-6 text-center">
-        <h1 className={cn(
-          "text-6xl font-semibold text-white drop-shadow-md",
+    <main className="flex h-full flex-col items-center justify-center bg-[url('/planeBackground.jpg')]">
+      <Card className="space-y-6 text-center bg-[#ffffff] p-6 border-none">
+        <div className={cn(
+          "font-semibold text-black drop-shadow-md",
           font.className,
         )}>
-          🛩️ Vol-Evasion Calendar
-        </h1>
-        <p className="text-white text-lg">
-          Merci de vous connecter pour acceder à la suite 
-        </p>
+          <h1 className="text-4xl ">Vol-Evasion</h1>
+          <h2 className="text-2xl ">Calendar</h2>
+        </div>
         <div>
           <LoginButton  asChild>
-            <Button variant="secondary" size="lg">
+            <Button  size="sm">
               Connexion
             </Button>
           </LoginButton>
         </div>
-      </div>
+      </Card>
     </main>
   )
 }
