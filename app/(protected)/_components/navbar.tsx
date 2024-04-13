@@ -8,9 +8,7 @@ export const Navbar = () => {
 
   return (
     <div>
-      <LogoutButton>
-        logOut
-      </LogoutButton>
+
     </div>
   );
 };

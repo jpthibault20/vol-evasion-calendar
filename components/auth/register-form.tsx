@@ -30,15 +30,16 @@ export const RegisterForm = () => {
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
       name: "",
-      firstName: "",
+      // firstName: "",
       email: "",
-      phone: "" as unknown as number,
+      // phone: "" as unknown as number,
       password: "",
       
     },
   });
 
   const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
+    console.log("debug")
     setError("");
     setSuccess("");
     
@@ -55,7 +56,7 @@ export const RegisterForm = () => {
     <CardWrapper
       headerLabel="Créer un compte"
       backButtonLabel="Vous êtes déjà inscrit ?"
-      backButtonHref="/auth/login"
+      backButtonHref="/"
     >
       <Form {...form}>
         <form 
@@ -81,7 +82,7 @@ export const RegisterForm = () => {
               )}
             />
 
-            <FormField
+            {/* <FormField
               control={form.control}
               name="firstName"
               render={({ field }) => (
@@ -97,7 +98,7 @@ export const RegisterForm = () => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             <FormField
               control={form.control}

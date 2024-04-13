@@ -10,6 +10,7 @@ import { sendVerificationEmail } from "@/lib/mail";
 import { generateVerificationToken } from "@/lib/tokens";
 
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
+  
   const validatedFields = RegisterSchema.safeParse(values);
 
   if (!validatedFields.success) {
@@ -24,7 +25,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
   if (existingUser) {
     return { error: "Le mail est déjà utilisé !" };
   }
-
+  
   await db.user.create({
     data: {
       name,

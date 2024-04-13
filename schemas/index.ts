@@ -63,10 +63,10 @@ export const RegisterSchema = z.object({
   name: z.string().min(1, {
     message: "Nom attendue",
   }),
-  firstName: z.string().min(1, {
-    message: "prenom attendue",
-  }),
-  phone: z.number().min(10, {
-    message: "Téléphone attendue",
-  }),
+  // firstName: z.string().min(1, {
+  //   message: "prenom attendue",
+  // }),
+  // phone: z.number().min(10, {
+  //   message: "Téléphone attendue",
+  // }),
 });
