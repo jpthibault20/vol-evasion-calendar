@@ -32,7 +32,7 @@ export const RegisterForm = () => {
       name: "",
       firstName: "",
       email: "",
-      phone: "" as unknown as number,
+      phone: "",
       password: "",
 
     },

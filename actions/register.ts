@@ -17,7 +17,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     return { error: "Champs non valides !" };
   }
 
-  const { email, password, name } = validatedFields.data;
+  const { email, phone, password, name, firstName } = validatedFields.data;
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const existingUser = await getUserByEmail(email);
@@ -25,12 +25,19 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
   if (existingUser) {
     return { error: "Le mail est déjà utilisé !" };
   }
-  
+
+  const phoneNumber = Number(phone);
+  if (isNaN(phoneNumber)) {
+    return{error: "Tel invalide"}
+  }
+
   await db.user.create({
     data: {
       name,
+      firstName,
       email,
       password: hashedPassword,
+      phone
     },
   });
 
