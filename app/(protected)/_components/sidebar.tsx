@@ -2,9 +2,10 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Menu, Calendar, Plane, User, LogOut, ChevronsRight, ChevronsLeft } from 'lucide-react';
-import { logout } from '@/actions/logout';
+import { Calendar, Plane, User, LogOut, ChevronsRight, ChevronsLeft } from 'lucide-react';
 import { LogoutButton } from '@/components/auth/logout-button';
+import { RoleGate } from "@/components/auth/role-gate";
+import { UserRole } from "@prisma/client";
 
 export const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -39,6 +40,7 @@ export const Sidebar = () => {
                 </div>
               </Link>
             </li>
+            <RoleGate allowedRole={UserRole.ADMIN}>
             <li>
               <Link href="/planes">
                 <div className={`flex items-center p-2 rounded-md hover:bg-gray-800 ${isOpen ? 'justify-start' : 'justify-center'}`}>
@@ -55,6 +57,7 @@ export const Sidebar = () => {
                 </div>
               </Link>
             </li>
+            </RoleGate>
             <li>
               <Link href="/account">
                 <div className={`flex items-center p-2 rounded-md hover:bg-gray-800 ${isOpen ? 'justify-start' : 'justify-center'}`}>
