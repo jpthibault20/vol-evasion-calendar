@@ -6,9 +6,9 @@ interface ProtectedLayoutProps {
 
 const ProtectedLayout = ({ children }: ProtectedLayoutProps) => {
   return ( 
-    <div className="h-full w-full flex  bg-white">
+    <div className="h-full w-full flex bg-white">
       <Sidebar />
-      <div className="h-full w-full flex items-center justify-center">
+      <div className="w-full">
         {children}
       </div>
     </div>

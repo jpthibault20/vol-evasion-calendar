@@ -9,6 +9,8 @@ generator client {
 
 enum UserRole {
   ADMIN
+  ELEVE
+  PILOTE
   USER
 }
 

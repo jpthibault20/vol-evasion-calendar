@@ -1,11 +1,16 @@
-import React from 'react'
+"use client"
 
-const account = () => {
+import { useCurrentUser } from '@/hooks/use-current-user';
+
+
+const Account = () => {
+  const user = useCurrentUser();
+  
   return (
-    <div>
-      account page
+    <div className='h-screen w-screen text-center place-content-center'>
+      role : {user?.role}
     </div>
   )
 }
 
-export default account
+export default Account
