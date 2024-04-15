@@ -52,8 +52,8 @@ export const NewPasswordForm = () => {
 
   return (
     <CardWrapper
-      headerLabel="Enter a new password"
-      backButtonLabel="Back to login"
+      headerLabel="Entrer un nouveau mot de passe"
+      backButtonLabel="Connexion ?"
       backButtonHref="/auth/login"
     >
       <Form {...form}>
@@ -67,7 +67,7 @@ export const NewPasswordForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Mot de passe</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -88,7 +88,7 @@ export const NewPasswordForm = () => {
             type="submit"
             className="w-full"
           >
-            Reset password
+            Reinitialiser le mot de pass
           </Button>
         </form>
       </Form>

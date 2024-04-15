@@ -5,9 +5,9 @@ import { CardWrapper } from "@/components/auth/card-wrapper";
 export const ErrorCard = () => {
   return (
     <CardWrapper
-      headerLabel="Oops! Something went wrong!"
+      headerLabel="Oups ! Quelque chose n'a pas fonctionné !"
       backButtonHref="/auth/login"
-      backButtonLabel="Back to login"
+      backButtonLabel="Connexion"
     >
       <div className="w-full flex justify-center items-center">
       <ExclamationTriangleIcon className="text-destructive" />

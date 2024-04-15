@@ -10,26 +10,34 @@ import { sendVerificationEmail } from "@/lib/mail";
 import { generateVerificationToken } from "@/lib/tokens";
 
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
+  
   const validatedFields = RegisterSchema.safeParse(values);
 
   if (!validatedFields.success) {
-    return { error: "Invalid fields!" };
+    return { error: "Champs non valides !" };
   }
 
-  const { email, password, name } = validatedFields.data;
+  const { email, phone, password, name, firstName } = validatedFields.data;
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const existingUser = await getUserByEmail(email);
 
   if (existingUser) {
-    return { error: "Email already in use!" };
+    return { error: "Le mail est déjà utilisé !" };
+  }
+
+  const phoneNumber = Number(phone);
+  if (isNaN(phoneNumber)) {
+    return{error: "Tel invalide"}
   }
 
   await db.user.create({
     data: {
       name,
+      firstName,
       email,
       password: hashedPassword,
+      phone
     },
   });
 
@@ -39,5 +47,5 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     verificationToken.token,
   );
 
-  return { success: "Confirmation email sent!" };
+  return { success: "Mail de confirmation envoyé !" };
 };
