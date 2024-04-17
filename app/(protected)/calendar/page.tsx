@@ -16,11 +16,6 @@ const Calendar = () => {
 
   return (
     <div className="w-full flex flex-col items-center">
-      {showForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <AppointmentForm setShowForm={setShowForm} showForm={showForm}/>
-        </div>
-      )}
 
       <div className="w-3/4">
         <h1 className="text-3xl font-bold mb-4 text-center">Calendrier</h1>
@@ -34,6 +29,12 @@ const Calendar = () => {
         >
           <PlusIcon size={24} />
         </button>
+
+        {showForm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <AppointmentForm setShowForm={setShowForm} showForm={showForm}/>
+        </div>
+      )}
       </RoleGate>
 
     </div>

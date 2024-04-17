@@ -17,7 +17,7 @@ export const AppointmentCardWrapper = ({
   setShowForm,
 }: CardWrapperProps) => {
   return (
-    <Card className="w-[400px] shadow-md">
+    <Card className="w-[300px] md:w-[400px] shadow-md">
 
       <CardHeader >
         <Header label={headerLabel} setShowForm={setShowForm} showForm={showForm}/>
