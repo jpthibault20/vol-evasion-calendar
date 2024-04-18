@@ -27,8 +27,10 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
 
     // validation "Horaire début" not passed
     const { timeStart } = validatedFields.data
-    timeStart.setHours(timeStart.getHours() + 2);  // hours gmt paris
-    if (new Date().getDate() != timeStart.getDate() && new Date().getMonth() != timeStart.getMonth() && new Date().getFullYear() != timeStart.getFullYear()) {
+    // timeStart.setHours(timeStart.getHours() + 2);  // hours gmt paris
+    if (new Date().getDate() == timeStart.getDate() && new Date().getMonth() == timeStart.getMonth() && new Date().getFullYear() == timeStart.getFullYear()) {
+        // console.log("date : ", new Date().getHours())
+        // console.log("timeStart : ", timeStart.getHours())
         if (new Date().getHours() >= timeStart.getHours()) {
             return { error: "Horaire début erroné (min + 1h)" }
         }
@@ -39,9 +41,9 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
 
     // validation "Horaire fin" must min 1 hour between "Horaire début"
     const { timeEnd } = validatedFields.data
-    timeEnd.setHours(timeEnd.getHours() + 2);  // hours gmt paris
+    // timeEnd.setHours(timeEnd.getHours() + 2);  // hours gmt paris
     if (timeEnd.getHours() <= timeStart.getHours()) {
-        return { error: "Horaire début erroné (min + 1h)" }
+        return { error: "Horaire fin erroné (min dispo 1h)" }
     }
 
     timeEnd.setDate(date.getDate());
@@ -67,7 +69,7 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
     // checked if apppointment with same date in db
     const appointmentAlreadyExiste = await db.appointment.findMany({
         where: {
-            startDate:{
+            startDate: {
                 gte: date,
                 lte: timeEnd,
             },
@@ -75,10 +77,23 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
         }
     })
     if (appointmentAlreadyExiste.length !== 0) {
-        return {error: "Un disponibilité déja avec c'est dates"}
+        return { error: "Un disponibilité déja avec c'est dates" }
     }
 
-    // If appointment more to 1h
+    //for reccurent appointments
+    if (recurrence) {
+        // If appointment up to 1h
+        if ((timeEnd.getHours() - date.getHours()) > 1) {
+
+            while (date != new Date()) {
+
+            }
+
+        }
+
+    }
+
+    // If appointment up to 1h
     if ((timeEnd.getHours() - date.getHours()) > 1) {
         const numberAppointment = timeEnd.getHours() - date.getHours();
 

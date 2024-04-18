@@ -16,8 +16,6 @@ export function Calendar({reload}) {
     fetchAppointments();
   }, [reload]);
 
-console.log(appointments);
-
   const events = appointments.map((appointment) => ({
     title: appointment.type,
     start: appointment.startDate,
