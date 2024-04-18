@@ -28,8 +28,10 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
     // validation "Horaire début" not passed
     const { timeStart } = validatedFields.data
     timeStart.setHours(timeStart.getHours() + 2);  // hours gmt paris
-    if (new Date().getHours() >= timeStart.getHours()) {
-        return { error: "Horaire début erroné (min + 1h)" }
+    if (new Date().getDate() != timeStart.getDate() && new Date().getMonth() != timeStart.getMonth() && new Date().getFullYear() != timeStart.getFullYear()) {
+        if (new Date().getHours() >= timeStart.getHours()) {
+            return { error: "Horaire début erroné (min + 1h)" }
+        }
     }
 
     date.setHours(timeStart.getHours());
@@ -47,7 +49,7 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
     timeEnd.setFullYear(date.getFullYear());
 
 
-    // if "disponibilité récurente" validate "date fin récurence" must min 1 week between "date"
+    // if "disponibilité récurente" validate "date fin récurence" must have min 1 week between "date"
     const { recurrence } = validatedFields.data;
     const { dateEndReccurence } = validatedFields.data;
     dateEndReccurence?.setHours(dateEndReccurence.getHours() + 2);  // hours gmt paris
@@ -57,17 +59,23 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
         }
     }
 
-
-
-    // Update "Date" and "horaire fin" after all validation 
-    // console.log("type de rdv : ", type);
-    // console.log("date début rdv : ", date);
-    // console.log("date fin rdv : ", timeEnd);
-    // console.log("rdv récurrent ? ", recurrence);
-    // console.group("date fin réccurence : ", dateEndReccurence);
-
+    // 
     if (!user?.id) {
         return { error: "Un problème es survenue" }
+    }
+
+    // checked if apppointment with same date in db
+    const appointmentAlreadyExiste = await db.appointment.findMany({
+        where: {
+            startDate:{
+                gte: date,
+                lte: timeEnd,
+            },
+            piloteID: user.id
+        }
+    })
+    if (appointmentAlreadyExiste.length !== 0) {
+        return {error: "Un disponibilité déja avec c'est dates"}
     }
 
     // If appointment more to 1h
@@ -75,8 +83,8 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
         const numberAppointment = timeEnd.getHours() - date.getHours();
 
         for (let index = 0; index < numberAppointment; index++) {
-            
-            timeEnd.setTime(date.getTime() +  3600000);
+
+            timeEnd.setTime(date.getTime() + 3600000);
 
             await db.appointment.create({
                 data: {
@@ -89,7 +97,7 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
                 }
             });
 
-            date.setTime(date.getTime() +  3600000);
+            date.setTime(date.getTime() + 3600000);
         }
 
         return { success: "Disponibilité ajoutée" };
