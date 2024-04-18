@@ -75,18 +75,10 @@ export const RegisterSchema = z.object({
 
 export const NewAppointment = z.object({
   type: z.enum([appointmentType.COURS, appointmentType.BAPTEME, appointmentType.ALL]),
-  date: z.date().min(new Date(), {
-    message: "Date invalide"
-  }),
-  timeStart: z.date().min(new Date(), {
-    message: "Date invalide"
-  }),
-  timeEnd: z.date().min(new Date(), {
-    message: "Date invalide"
-  }),
+  date: z.date(),
+  timeStart: z.date(),
+  timeEnd: z.date(),
   recurrence: z.boolean(),
-  dateEndReccurence: z.date().min(new Date(), {
-    message: "Date invalide"
-  }),
+  dateEndReccurence: z.date().optional(),
 
 })

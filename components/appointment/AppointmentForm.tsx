@@ -5,7 +5,6 @@ import { appointmentType } from "@prisma/client";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage, Form, FormDescription } from "../ui/form";
-import { Input } from "../ui/input";
 import { useState, useTransition } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Switch } from "../ui/switch";
@@ -18,6 +17,8 @@ import { Calendar } from "../ui/calendar";
 import TimePicker from "@/components/appointment/TimePicker"
 import { FormError } from "../form-error";
 import { FormSuccess } from "../form-success";
+import { newAppointment } from "@/actions/new-appointment";
+import { currentUser } from "@/lib/auth";
 
 interface AppointmentFormProps {
     setShowForm: (load: boolean) => void;
@@ -44,16 +45,20 @@ export const AppointmentForm = ({ setShowForm, showForm }: AppointmentFormProps)
     });
 
     const onSubmit = (values: z.infer<typeof NewAppointment>) => {
-        values.date.setHours(values.timeStart.getHours());
-        values.date.setMinutes(values.timeStart.getMinutes());
+        values.timeStart = timeAppointmentStart as Date;
+        values.timeEnd = timeAppointmentEnd as Date;
+        values.dateEndReccurence = dateAppointment as Date;
+        
+        setError("");
+        setSuccess("");
 
-        values.timeStart.setDate(values.date.getDate());
-
-        values.timeEnd.setDate(values.date.getDate());
-
-
-        console.log(timeAppointmentStart);
-        console.log(values);
+        startTransition(() => {
+            newAppointment(values)
+                .then((data) => {
+                    setError(data.error);
+                    setSuccess(data.success);
+                });
+        });
     }
 
 
