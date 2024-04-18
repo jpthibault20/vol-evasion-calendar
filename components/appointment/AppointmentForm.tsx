@@ -142,7 +142,7 @@ export const AppointmentForm = ({ setShowForm, showForm }: AppointmentFormProps)
                                                         <CalendarIcon className="mr-2 h-4 w-4" />
                                                         {field.value
                                                             ? format(new Date(field.value), "dd/MM/yyyy")
-                                                            : format(new Date(), "dd/MM/yyyy")}
+                                                            : "date"}
                                                     </Button>
                                                 </PopoverTrigger>
                                                 <PopoverContent className="w-auto p-0">
@@ -181,7 +181,7 @@ export const AppointmentForm = ({ setShowForm, showForm }: AppointmentFormProps)
                                                         )}
                                                     >
                                                         <Clock3 className="mr-2 h-4 w-4" />
-                                                        {timeAppointmentStart ? format(timeAppointmentStart, "k:mm") : format(new Date(), "k:mm")}
+                                                        {timeAppointmentStart ? format(timeAppointmentStart, "k:mm") : "horaire début"}
                                                     </Button>
                                                 </PopoverTrigger>
                                                 <PopoverContent className="w-auto p-0">
@@ -212,7 +212,7 @@ export const AppointmentForm = ({ setShowForm, showForm }: AppointmentFormProps)
                                                         )}
                                                     >
                                                         <Clock3 className="mr-2 h-4 w-4" />
-                                                        {timeAppointmentEnd ? format(timeAppointmentEnd, "k:mm") : format(new Date(), "k:mm")}
+                                                        {timeAppointmentEnd ? format(timeAppointmentEnd, "k:mm") : "horaire fin"}
                                                     </Button>
                                                 </PopoverTrigger>
                                                 <PopoverContent className="w-auto p-0">
@@ -268,7 +268,7 @@ export const AppointmentForm = ({ setShowForm, showForm }: AppointmentFormProps)
                                                             )}
                                                         >
                                                             <CalendarIcon className="mr-2 h-4 w-4" />
-                                                            {dateAppointment ? format(dateAppointment, "dd/MM/yyyy") : format(new Date(), "dd/MM/yyyy")}
+                                                            {dateAppointment ? format(dateAppointment, "dd/MM/yyyy") : "date fin"}
                                                         </Button>
                                                     </PopoverTrigger>
                                                     <PopoverContent className="w-auto p-0">
