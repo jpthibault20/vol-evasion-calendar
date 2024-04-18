@@ -2,12 +2,12 @@
 
 import React, { useState } from 'react';
 import { PlusIcon } from 'lucide-react';
-
+import { Calendar } from "@/components/calendar"
 import { RoleGate } from '@/components/auth/role-gate';
 import { UserRole } from '@prisma/client';
 import { AppointmentForm } from '@/components/appointment/AppointmentForm';
 
-const Calendar = () => {
+const CalendarPage = () => {
   const [showForm, setShowForm] = useState(false);
 
   const toggleForm = () => {
@@ -19,7 +19,7 @@ const Calendar = () => {
 
       <div className="w-3/4">
         <h1 className="text-3xl font-bold mb-4 text-center">Calendrier</h1>
-        {/* <Calendar /> */}
+        <Calendar reload={showForm}/>
       </div>
 
       <RoleGate allowedRole={UserRole.PILOTE}>
@@ -42,4 +42,4 @@ const Calendar = () => {
   );
 };
 
-export default Calendar;
+export default CalendarPage;
