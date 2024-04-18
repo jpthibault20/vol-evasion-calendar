@@ -18,7 +18,9 @@ import TimePicker from "@/components/appointment/TimePicker"
 import { FormError } from "../form-error";
 import { FormSuccess } from "../form-success";
 import { newAppointment } from "@/actions/new-appointment";
-import { currentUser } from "@/lib/auth";
+import { Toaster } from "@/components/ui/sonner"
+import { toast } from "sonner";
+
 
 interface AppointmentFormProps {
     setShowForm: (load: boolean) => void;
@@ -32,6 +34,9 @@ export const AppointmentForm = ({ setShowForm, showForm }: AppointmentFormProps)
     const [dateAppointment, setDateAppointment] = useState<Date>()
     const [timeAppointmentStart, setTimeAppointmentStart] = useState<Date>()
     const [timeAppointmentEnd, setTimeAppointmentEnd] = useState<Date>()
+
+    const [PopoverCalendar, setPopoverCalendar] = useState(false);
+    const [popoverCalendarAppointment, setPopoverCalendarAppointment] = useState(false);
 
     const form = useForm<z.infer<typeof NewAppointment>>({
         resolver: zodResolver(NewAppointment),
@@ -57,8 +62,21 @@ export const AppointmentForm = ({ setShowForm, showForm }: AppointmentFormProps)
                 .then((data) => {
                     setError(data.error);
                     setSuccess(data.success);
-                });
+                    if(data.success)    {
+                        setShowForm(false);
+                        toast("Disponibilité ajouté !", {
+                            action: {
+                                label: "X",
+                                onClick: () => console.log("Undo"),
+                            },
+                        })
+                    }
+                    
+
+
         });
+    
+    })
     }
 
 
@@ -112,7 +130,7 @@ export const AppointmentForm = ({ setShowForm, showForm }: AppointmentFormProps)
                                     <div className="">
                                         <FormLabel>Date</FormLabel>
                                         <div className="mt-2 grid grid-col-2 grid-flow-col">
-                                            <Popover>
+                                            <Popover open={PopoverCalendar} onOpenChange={setPopoverCalendar}>
                                                 <PopoverTrigger asChild>
                                                     <Button
                                                         variant={"outline"}
@@ -131,7 +149,10 @@ export const AppointmentForm = ({ setShowForm, showForm }: AppointmentFormProps)
                                                     <Calendar
                                                         mode="single"
                                                         selected={field.value ? new Date(field.value) : undefined}
-                                                        onSelect={(date) => field.onChange(date)}
+                                                        onSelect={(date) => {
+                                                            field.onChange(date);
+                                                            setPopoverCalendar(false);
+                                                        }}
                                                         initialFocus
                                                     />
                                                 </PopoverContent>
@@ -237,7 +258,7 @@ export const AppointmentForm = ({ setShowForm, showForm }: AppointmentFormProps)
                                         <div className="">
                                             <FormLabel>Date fin recurrence</FormLabel>
                                             <div className="mt-2 grid grid-col-2 grid-flow-col">
-                                                <Popover>
+                                                <Popover open={popoverCalendarAppointment} onOpenChange={setPopoverCalendarAppointment}>
                                                     <PopoverTrigger asChild>
                                                         <Button
                                                             variant={"outline"}
@@ -254,7 +275,10 @@ export const AppointmentForm = ({ setShowForm, showForm }: AppointmentFormProps)
                                                         <Calendar
                                                             mode="single"
                                                             selected={dateAppointment}
-                                                            onSelect={setDateAppointment}
+                                                            onSelect={ (data) => {
+                                                                setDateAppointment(data);
+                                                                setPopoverCalendarAppointment(false);
+                                                            }}
                                                             initialFocus
                                                         />
                                                     </PopoverContent>

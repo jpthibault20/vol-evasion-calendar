@@ -3,17 +3,16 @@
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { NewAppointment } from "@/schemas";
-import { error } from "console";
 import { z } from "zod";
 
 
 export const newAppointment = async (values: z.infer<typeof NewAppointment>) => {
     const user = await currentUser();
-    
+
     // validation fields
     const validatedFields = NewAppointment.safeParse(values);
     if (!validatedFields.success) {
-        return { error: "Champs non valides !" };
+        return { error: "Champs manquant !" };
     }
 
     const { type } = validatedFields.data
@@ -68,7 +67,32 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
     // console.group("date fin réccurence : ", dateEndReccurence);
 
     if (!user?.id) {
-        return{error: "Un problème es survenue"}
+        return { error: "Un problème es survenue" }
+    }
+
+    // If appointment more to 1h
+    if ((timeEnd.getHours() - date.getHours()) > 1) {
+        const numberAppointment = timeEnd.getHours() - date.getHours();
+
+        for (let index = 0; index < numberAppointment; index++) {
+            
+            timeEnd.setTime(date.getTime() +  3600000);
+
+            await db.appointment.create({
+                data: {
+                    piloteID: user?.id as string,
+                    type,
+                    startDate: date,
+                    endDate: timeEnd,
+                    recurrence,
+                    appointmentDate: dateEndReccurence
+                }
+            });
+
+            date.setTime(date.getTime() +  3600000);
+        }
+
+        return { success: "Disponibilité ajoutée" };
     }
 
     await db.appointment.create({
@@ -80,7 +104,8 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
             recurrence,
             appointmentDate: dateEndReccurence
         }
-    })
+    });
 
     return { success: "Disponibilité ajoutée" };
+
 }
