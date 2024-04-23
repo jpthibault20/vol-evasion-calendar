@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import listPlugin from '@fullcalendar/list';
-import { EventInput } from '@fullcalendar/core';
 import { getAppointments } from '@/data/appointments';
-import { User, appointmentType } from '@prisma/client';
+import frLocale from '@fullcalendar/core/locales/fr'
 
 
 
@@ -41,6 +40,7 @@ export const EventList = ({ reload, setIDAppointment, setViewInfo }) => {
         center: 'title',
         right: '',
       }}
+      locale={frLocale}
       eventClick={((info) => onClick(info))}
     />
   );

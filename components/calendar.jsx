@@ -2,11 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid'
 import { getAppointments } from '@/data/appointments';
 import frLocale from '@fullcalendar/core/locales/fr'
-import { appointmentType } from '@prisma/client';
 
 
 export function Calendar({ reload, setIDAppointment, setViewInfo }) {
