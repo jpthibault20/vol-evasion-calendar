@@ -9,21 +9,25 @@ generator client {
 
 enum UserRole {
   ADMIN
+  ELEVE
+  PILOTE
   USER
 }
 
 model User {
-  id            String    @id @default(cuid()) @map("_id")
+  id            String        @id @default(cuid()) @map("_id")
   name          String?
   firstName     String?
-  email         String?   @unique
+  email         String?       @unique
   emailVerified DateTime?
   phone         String?
   image         String?
   password      String?
-  adressUser    Adress?
-  role          UserRole  @default(USER)
+  address       Address?      @relation(fields: [addressId], references: [id], onDelete: Cascade)
+  addressId     String?       @unique
+  role          UserRole      @default(USER)
   accounts      Account[]
+  appointments  Appointment[]
 }
 
 model Account {
@@ -45,18 +49,14 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
-model Adress {
+model Address {
   id      String  @id @default(cuid()) @map("_id")
-  userId  String
+  User    User?
   number  String?
-  rue     String?
-  ville   String?
+  street  String?
+  city    String?
   zipCode String?
-  pays    String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId])
+  country String?
 }
 
 model VerificationToken {
@@ -75,4 +75,26 @@ model PasswordResetToken {
   expires DateTime
 
   @@unique([email, token])
+}
+
+enum appointmentType {
+  COURS   @map("Cours")
+  BAPTEME @map("Bapteme")
+  ALL     @map("Cours / Bapteme")
+}
+
+model Appointment {
+  id               String           @id @default(cuid()) @map("_id")
+  interAppointment Int?
+  type             appointmentType?
+  piloteID         String
+  vehiculeID       String?
+  studentID        String?
+  recurrence       Boolean?
+  recurenceID      String?
+  startDate        DateTime?
+  endDate          DateTime?
+  appointmentDate  DateTime?
+
+  pilote User @relation(fields: [piloteID], references: [id])
 }

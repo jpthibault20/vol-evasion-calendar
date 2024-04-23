@@ -1,4 +1,4 @@
-import { Navbar } from "./_components/navbar";
+import { Sidebar } from "./_components/sidebar";
 
 interface ProtectedLayoutProps {
   children: React.ReactNode;
@@ -6,9 +6,11 @@ interface ProtectedLayoutProps {
 
 const ProtectedLayout = ({ children }: ProtectedLayoutProps) => {
   return ( 
-    <div className="h-full w-full flex flex-col gap-y-10 items-center justify-center bg-[url('/planeBackground.jpg')]">
-      <Navbar />
-      {children}
+    <div className="h-full w-full flex bg[#FFF8ED]]">
+      <Sidebar />
+      <div className="w-full">
+        {children}
+      </div>
     </div>
    );
 }

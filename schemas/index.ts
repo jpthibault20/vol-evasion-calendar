@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { UserRole } from "@prisma/client";
+import { UserRole, appointmentType } from "@prisma/client";
 
 export const SettingsSchema = z.object({
   name: z.optional(z.string()),
@@ -72,3 +72,13 @@ export const RegisterSchema = z.object({
     message: "tel Invalide" 
   }),
 });
+
+export const NewAppointment = z.object({
+  type: z.enum([appointmentType.COURS, appointmentType.BAPTEME, appointmentType.ALL]),
+  date: z.date(),
+  timeStart: z.date(),
+  timeEnd: z.date(),
+  recurrence: z.boolean(),
+  dateEndReccurence: z.date().optional(),
+
+})
