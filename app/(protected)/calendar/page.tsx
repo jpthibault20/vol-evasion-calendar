@@ -6,8 +6,11 @@ import { Calendar } from "@/components/calendar"
 import { RoleGate } from '@/components/auth/role-gate';
 import { UserRole } from '@prisma/client';
 import { AppointmentForm } from '@/components/appointment/AppointmentForm';
+import { InfoAppointment } from '@/components/appointment/InfoAppointment';
 
 const CalendarPage = () => {
+  const [viewInfo, setViewInfo] = useState(false);
+  const [idAppointment, setIDAppointment] = useState("");
   const [showForm, setShowForm] = useState(false);
 
   const toggleForm = () => {
@@ -19,7 +22,7 @@ const CalendarPage = () => {
 
       <div className="w-3/4">
         <h1 className="text-3xl font-bold mb-4 text-center">Calendrier</h1>
-        <Calendar reload={showForm}/>
+        <Calendar reload={showForm} setIDAppointment={setIDAppointment} setViewInfo={setViewInfo} />
       </div>
 
       <RoleGate allowedRole={UserRole.PILOTE}>
@@ -31,11 +34,16 @@ const CalendarPage = () => {
         </button>
 
         {showForm && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <AppointmentForm setShowForm={setShowForm} showForm={showForm} />
+          </div>
+        )}
+      </RoleGate>
+      {viewInfo && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <AppointmentForm setShowForm={setShowForm} showForm={showForm}/>
+          <InfoAppointment viewInfo={viewInfo} setViewInfo={setViewInfo} ID={idAppointment} setID={setIDAppointment} />
         </div>
       )}
-      </RoleGate>
 
     </div>
 

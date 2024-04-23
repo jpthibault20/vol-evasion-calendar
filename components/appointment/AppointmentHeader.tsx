@@ -22,19 +22,16 @@ export const Header = ({
   return (
     <div className="w-full flex flex-col gap-y-4 items-center justify-center">
       <div className="flex w-full justify-end ">
-            <button onClick={() => {setShowForm(!showForm)}}>
-                 <X />
-            </button>
-        </div>
+        <button onClick={() => { setShowForm(!showForm) }}>
+          <X />
+        </button>
+      </div>
       <div className={cn(
-          "font-semibold text-black drop-shadow-md text-center",
-          font.className,
-        )}>
-          <h1 className="text-4xl ">Nouvelle disponibilitée</h1>
-        </div>
-      <p className="text-muted-foreground text-sm">
-        {label}
-      </p>
+        "font-semibold text-black drop-shadow-md text-center",
+        font.className,
+      )}>
+        <h1 className="text-4xl ">{label}</h1>
+      </div>
     </div>
   );
 };

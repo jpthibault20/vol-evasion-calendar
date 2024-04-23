@@ -8,7 +8,9 @@ import { getAppointments } from '@/data/appointments';
 import frLocale from '@fullcalendar/core/locales/fr'
 import { appointmentType } from '@prisma/client';
 
-export function Calendar({ reload }) {
+
+export function Calendar({ reload, setIDAppointment, setViewInfo }) {
+
   const [appointments, setAppointments] = useState([]);
 
   useEffect(() => {
@@ -19,12 +21,20 @@ export function Calendar({ reload }) {
     fetchAppointments();
   }, [reload]);
 
+
+
   const events = appointments.map((appointment) => ({
     title: appointment.type,
+    id: appointment.id,
     start: appointment.startDate,
     end: appointment.endDate,
   }));
 
+
+  const onClick = (info) => {
+    setIDAppointment(info.event.id);
+    setViewInfo(true);
+  }
 
   return (
     <div className="container mx-auto">
@@ -34,15 +44,18 @@ export function Calendar({ reload }) {
         events={events}
         nowIndicator={true}
         locale={frLocale}
-        firstDay={1} 
+        firstDay={1}
         slotLabelFormat={{
           hour: 'numeric',
           minute: '2-digit',
           omitZeroMinute: false,
-          meridiem: false 
+          meridiem: false
         }}
         timeZone="Europe/Paris"
         allDaySlot={false}
+        eventClick={((info) => {
+          onClick(info);
+        })}
       />
     </div>
   );

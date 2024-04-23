@@ -53,7 +53,7 @@ export const AppointmentForm = ({ setShowForm, showForm }: AppointmentFormProps)
         values.timeStart = timeAppointmentStart as Date;
         values.timeEnd = timeAppointmentEnd as Date;
         values.dateEndReccurence = dateAppointment as Date;
-        
+
         setError("");
         setSuccess("");
 
@@ -62,7 +62,7 @@ export const AppointmentForm = ({ setShowForm, showForm }: AppointmentFormProps)
                 .then((data) => {
                     setError(data.error);
                     setSuccess(data.success);
-                    if(data.success)    {
+                    if (data.success) {
                         setShowForm(false);
                         toast("Disponibilité ajouté !", {
                             action: {
@@ -71,18 +71,18 @@ export const AppointmentForm = ({ setShowForm, showForm }: AppointmentFormProps)
                             },
                         })
                     }
-                    
 
 
-        });
-    
-    })
+
+                });
+
+        })
     }
 
 
     return (
         <div>
-            <AppointmentCardWrapper headerLabel="Nouvelle disponibilitée ?" setShowForm={setShowForm} showForm={showForm}>
+            <AppointmentCardWrapper headerLabel="Nouvelle disponibilitée" setShowForm={setShowForm} showForm={showForm}>
                 <Form {...form}>
                     <form
                         onSubmit={form.handleSubmit(onSubmit)}
@@ -275,7 +275,7 @@ export const AppointmentForm = ({ setShowForm, showForm }: AppointmentFormProps)
                                                         <Calendar
                                                             mode="single"
                                                             selected={dateAppointment}
-                                                            onSelect={ (data) => {
+                                                            onSelect={(data) => {
                                                                 setDateAppointment(data);
                                                                 setPopoverCalendarAppointment(false);
                                                             }}
