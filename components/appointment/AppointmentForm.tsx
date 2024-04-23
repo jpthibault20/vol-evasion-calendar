@@ -63,7 +63,7 @@ export const AppointmentForm = ({ setShowForm, showForm }: AppointmentFormProps)
                     setError(data.error);
                     setSuccess(data.success);
                     if(data.success)    {
-                        setShowForm(false);
+                        // setShowForm(false);
                         toast("Disponibilité ajouté !", {
                             action: {
                                 label: "X",

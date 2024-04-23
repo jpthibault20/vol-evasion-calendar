@@ -24,7 +24,7 @@ model User {
   image         String?
   password      String?
   address       Address?      @relation(fields: [addressId], references: [id], onDelete: Cascade)
-  addressId     String?        @unique
+  addressId     String?       @unique
   role          UserRole      @default(USER)
   accounts      Account[]
   appointments  Appointment[]
@@ -78,9 +78,9 @@ model PasswordResetToken {
 }
 
 enum appointmentType {
-  COURS @map("Cours")
+  COURS   @map("Cours")
   BAPTEME @map("Bapteme")
-  ALL @map("Cours / Bapteme")
+  ALL     @map("Cours / Bapteme")
 }
 
 model Appointment {
@@ -91,6 +91,7 @@ model Appointment {
   vehiculeID       String?
   studentID        String?
   recurrence       Boolean?
+  recurenceID      String?
   startDate        DateTime?
   endDate          DateTime?
   appointmentDate  DateTime?
