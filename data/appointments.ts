@@ -2,10 +2,17 @@
 
 import { db } from "@/lib/db";
 
-export const getAppoitments = async (client: boolean) => {
+export const getAppointments = async (client: boolean) => {
   try {
-    const user = await db.appointment.findMany();
-    return user;
+    const appointments = await db.appointment.findMany();
+    const newAppointments = appointments.map(appointment => ({
+      ...appointment,
+      timeStart: new Date(appointment.startDate!.getTime() - 7200000 ),
+      timeEnd: new Date(appointment.endDate!.getTime() - 7200000 ),
+    }));
+
+
+    return newAppointments
   } catch {
     return null;
   }

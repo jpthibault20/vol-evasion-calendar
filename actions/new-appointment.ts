@@ -36,8 +36,8 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
 
     timeStart.setHours(timeStart.getHours() + 2);  // hours gmt paris
     if (new Date().getDate() == timeStart.getDate() && new Date().getMonth() == timeStart.getMonth() && new Date().getFullYear() == timeStart.getFullYear()) {
-        console.log("date : ", new Date())
-        console.log("timeStart : ", timeStart)
+        // console.log("date : ", new Date())
+        // console.log("timeStart : ", timeStart)
         if (new Date().getHours() >= timeStart.getHours()) {
             return { error: "Horaire début erroné (min + 1h)" }
         }

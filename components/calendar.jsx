@@ -3,14 +3,17 @@
 import { useState, useEffect } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import { getAppoitments } from '@/data/appointments';
+import timeGridPlugin from '@fullcalendar/timegrid'
+import { getAppointments } from '@/data/appointments';
+import frLocale from '@fullcalendar/core/locales/fr'
+import { appointmentType } from '@prisma/client';
 
-export function Calendar({reload}) {
+export function Calendar({ reload }) {
   const [appointments, setAppointments] = useState([]);
 
   useEffect(() => {
     async function fetchAppointments() {
-      const data = await getAppoitments(reload);
+      const data = await getAppointments(reload);
       setAppointments(data);
     }
     fetchAppointments();
@@ -22,12 +25,24 @@ export function Calendar({reload}) {
     end: appointment.endDate,
   }));
 
+
   return (
     <div className="container mx-auto">
       <FullCalendar
-        plugins={[dayGridPlugin]}
-        initialView="dayGridWeek"
+        plugins={[timeGridPlugin]}
+        initialView="timeGridWeek"
         events={events}
+        nowIndicator={true}
+        locale={frLocale}
+        firstDay={1} 
+        slotLabelFormat={{
+          hour: 'numeric',
+          minute: '2-digit',
+          omitZeroMinute: false,
+          meridiem: false 
+        }}
+        timeZone="Europe/Paris"
+        allDaySlot={false}
       />
     </div>
   );
