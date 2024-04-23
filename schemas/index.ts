@@ -1,23 +1,6 @@
 import * as z from "zod";
 import { UserRole, appointmentType } from "@prisma/client";
 
-// Définissez le fuseau horaire souhaité
-const timezone = 'Europe/Paris';
-
-// Créez un schéma personnalisé pour valider et transformer les objets Date
-const DateWithTimezoneSchema = z.preprocess((arg) => {
-  if (typeof arg === "string") {
-    return new Date(arg);
-  } else if (arg instanceof Date) {
-    return arg;
-  } else {
-    return new Date();
-  }
-}, z.date().refine((date) => !isNaN(date.getTime()), "Invalid Date"))
-  .transform((date) => {
-    return new Date(date.toLocaleString('en-US', { timeZone: timezone }));
-  });
-
 export const SettingsSchema = z.object({
   name: z.optional(z.string()),
   firstName: z.optional(z.string()),
@@ -92,9 +75,10 @@ export const RegisterSchema = z.object({
 
 export const NewAppointment = z.object({
   type: z.enum([appointmentType.COURS, appointmentType.BAPTEME, appointmentType.ALL]),
-  date: DateWithTimezoneSchema,
-  timeStart: DateWithTimezoneSchema,
-  timeEnd: DateWithTimezoneSchema,
+  date: z.date(),
+  timeStart: z.date(),
+  timeEnd: z.date(),
   recurrence: z.boolean(),
-  dateEndReccurence: DateWithTimezoneSchema.optional(),
-});
+  dateEndReccurence: z.date().optional(),
+
+})
