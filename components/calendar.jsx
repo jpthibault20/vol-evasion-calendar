@@ -15,7 +15,7 @@ export function Calendar({ reload, setIDAppointment, setViewInfo }) {
 
   useEffect(() => {
     async function fetchAppointments() {
-      const data = await getAppointments(reload);
+      const data = await getAppointments();
       setAppointments(data);
     }
     fetchAppointments();
@@ -53,9 +53,7 @@ export function Calendar({ reload, setIDAppointment, setViewInfo }) {
         }}
         timeZone="Europe/Paris"
         allDaySlot={false}
-        eventClick={((info) => {
-          onClick(info);
-        })}
+        eventClick={((info) => onClick(info))}
       />
     </div>
   );

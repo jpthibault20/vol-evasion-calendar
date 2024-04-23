@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db";
 
-export const getAppointments = async (client: boolean) => {
+export const getAppointments = async (client?: boolean) => {
   try {
     const appointments = await db.appointment.findMany();
     const newAppointments = appointments.map(appointment => ({

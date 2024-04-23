@@ -3,10 +3,12 @@
 import React, { useState } from 'react';
 import { PlusIcon } from 'lucide-react';
 import { Calendar } from "@/components/calendar"
+import { EventList } from "@/components/AppointmentsList"
 import { RoleGate } from '@/components/auth/role-gate';
 import { UserRole } from '@prisma/client';
 import { AppointmentForm } from '@/components/appointment/AppointmentForm';
 import { InfoAppointment } from '@/components/appointment/InfoAppointment';
+
 
 const CalendarPage = () => {
   const [viewInfo, setViewInfo] = useState(false);
@@ -20,9 +22,14 @@ const CalendarPage = () => {
   return (
     <div className="w-full flex flex-col items-center">
 
-      <div className="w-3/4">
-        <h1 className="text-3xl font-bold mb-4 text-center">Calendrier</h1>
+      <div className="w-3/4 hidden md:block"> 
+        <h1 className="text-3xl font-bold mb-4 text-center ">Calendrier</h1>
         <Calendar reload={showForm} setIDAppointment={setIDAppointment} setViewInfo={setViewInfo} />
+      </div>
+
+      <div className="w-3/4 md:hidden">
+        <h1 className="text-3xl font-bold mb-4 text-center ">Calendrier</h1>
+        <EventList reload={showForm} setIDAppointment={setIDAppointment} setViewInfo={setViewInfo} />
       </div>
 
       <RoleGate allowedRole={UserRole.PILOTE}>
