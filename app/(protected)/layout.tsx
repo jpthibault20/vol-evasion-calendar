@@ -6,12 +6,16 @@ interface ProtectedLayoutProps {
 
 const ProtectedLayout = ({ children }: ProtectedLayoutProps) => {
   return (
-    <div className="h-full w-full flex bg-zinc-100">
+
+    <div className="h-max w-full flex ">
       <Sidebar />
-      <div className="w-full">
+      <div className="w-full h-full ">
         {children}
       </div>
     </div>
+
+
+
   );
 }
 
