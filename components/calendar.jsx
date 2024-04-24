@@ -21,12 +21,40 @@ export function Calendar({ reload, setIDAppointment, setViewInfo }) {
 
 
 
-  const events = appointments.map((appointment) => ({
-    title: appointment.type,
-    id: appointment.id,
-    start: appointment.startDate,
-    end: appointment.endDate,
-  }));
+  const events = appointments.map((appointment) => {
+    let eventColor;
+  
+    switch (appointment.type) {
+      case "ALL":
+        eventColor = "green";
+        break;
+      case "BAPTEME":
+        eventColor = "blue";
+        break;
+      case "COURS":
+        eventColor = "brown";
+        break;
+      default:
+        eventColor = "gray";
+    }
+  
+    return {
+      title: appointment.type,
+      id: appointment.id,
+      start: appointment.startDate,
+      end: appointment.endDate,
+      color: eventColor,
+    };
+  });
+
+
+  // const events = appointments.map((appointment) => ({
+  //   title: appointment.type,
+  //   id: appointment.id,
+  //   start: appointment.startDate,
+  //   end: appointment.endDate,
+
+  // }));
 
 
   const onClick = (info) => {
