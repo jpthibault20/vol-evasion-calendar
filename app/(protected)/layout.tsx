@@ -5,14 +5,14 @@ interface ProtectedLayoutProps {
 };
 
 const ProtectedLayout = ({ children }: ProtectedLayoutProps) => {
-  return ( 
-    <div className="h-full w-full flex bg[#FFF8ED]]">
+  return (
+    <div className="h-full w-full flex bg-zinc-100">
       <Sidebar />
       <div className="w-full">
         {children}
       </div>
     </div>
-   );
+  );
 }
- 
+
 export default ProtectedLayout;
