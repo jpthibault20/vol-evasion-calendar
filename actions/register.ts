@@ -32,6 +32,14 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     return{error: "Tel invalide"}
   }
 
+  const adressID = randomUUID();
+
+  await db.address.create({
+    data: {
+      id: adressID
+    }
+  })
+
   await db.user.create({
     data: {
       name,
@@ -39,7 +47,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
       email,
       password: hashedPassword,
       phone,
-      addressId: randomUUID()
+      addressId: adressID
     },
   });
 

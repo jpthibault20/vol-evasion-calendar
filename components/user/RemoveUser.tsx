@@ -1,7 +1,7 @@
 
-import { startTransition, useCallback, useEffect, useState } from "react"
-import { CardWrapper } from "../CardWrapper"
-import { Button } from "../ui/button"
+import { useEffect, useState } from "react"
+import { CardWrapper } from "@/components/CardWrapper"
+import { Button } from "@/components/ui/button"
 
 import { User } from "@prisma/client"
 import { getUserById, removeUserById } from "@/actions/user"
