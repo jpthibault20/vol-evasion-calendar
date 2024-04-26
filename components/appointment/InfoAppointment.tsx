@@ -4,6 +4,7 @@ import { AppointmentCardWrapper } from "./AppointmentCardWrapper";
 import { useState, useEffect } from "react";
 import { Appointment, appointmentType } from "@prisma/client";
 import { format } from "path";
+import { Spinner } from "../ui/spinner";
 
 
 interface InfoAppointmentProps {
@@ -46,7 +47,7 @@ export function InfoAppointment({ viewInfo, setViewInfo, ID, setID }: InfoAppoin
     <div>
       <AppointmentCardWrapper headerLabel={"Info dispo"} setShowForm={setViewInfo} showForm={viewInfo}>
         {isLoading ? (
-          <p>Chargement...</p>
+          <Spinner>Loading...</Spinner>
         ) : appointment ? (
           <>
             <p>ID : {appointment.id}</p>

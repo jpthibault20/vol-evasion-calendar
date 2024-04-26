@@ -20,6 +20,7 @@ import { FormSuccess } from "../form-success";
 import { newAppointment } from "@/actions/new-appointment";
 import { Toaster } from "@/components/ui/sonner"
 import { toast } from "sonner";
+import { fr } from 'date-fns/locale/fr';
 
 
 interface AppointmentFormProps {
@@ -78,6 +79,10 @@ export const AppointmentForm = ({ setShowForm, showForm }: AppointmentFormProps)
 
         })
     }
+
+
+
+
 
 
     return (
@@ -148,6 +153,8 @@ export const AppointmentForm = ({ setShowForm, showForm }: AppointmentFormProps)
                                                 <PopoverContent className="w-auto p-0">
                                                     <Calendar
                                                         mode="single"
+                                                        weekStartsOn={1}
+                                                        locale={fr}
                                                         selected={field.value ? new Date(field.value) : undefined}
                                                         onSelect={(date) => {
                                                             field.onChange(date);
@@ -274,6 +281,8 @@ export const AppointmentForm = ({ setShowForm, showForm }: AppointmentFormProps)
                                                     <PopoverContent className="w-auto p-0">
                                                         <Calendar
                                                             mode="single"
+                                                            weekStartsOn={1}
+                                                            locale={fr}
                                                             selected={dateAppointment}
                                                             onSelect={(data) => {
                                                                 setDateAppointment(data);

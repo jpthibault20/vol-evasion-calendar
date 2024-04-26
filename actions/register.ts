@@ -8,6 +8,7 @@ import { RegisterSchema } from "@/schemas";
 import { getUserByEmail } from "@/data/user";
 import { sendVerificationEmail } from "@/lib/mail";
 import { generateVerificationToken } from "@/lib/tokens";
+import { randomUUID } from "crypto";
 
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
   
@@ -31,13 +32,22 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     return{error: "Tel invalide"}
   }
 
+  const adressID = randomUUID();
+
+  await db.address.create({
+    data: {
+      id: adressID
+    }
+  })
+
   await db.user.create({
     data: {
       name,
       firstName,
       email,
       password: hashedPassword,
-      phone
+      phone,
+      addressId: adressID
     },
   });
 

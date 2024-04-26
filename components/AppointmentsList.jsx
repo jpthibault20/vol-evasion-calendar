@@ -18,12 +18,31 @@ export const EventList = ({ reload, setIDAppointment, setViewInfo }) => {
   }, [reload]);
 
 
-  const events = appointments.map((appointment) => ({
-    title: appointment.type,
-    id: appointment.id,
-    start: appointment.startDate,
-    end: appointment.endDate,
-  }));
+  const events = appointments.map((appointment) => {
+    let eventColor;
+  
+    switch (appointment.type) {
+      case "ALL":
+        eventColor = "green";
+        break;
+      case "BAPTEME":
+        eventColor = "blue";
+        break;
+      case "COURS":
+        eventColor = "brown";
+        break;
+      default:
+        eventColor = "gray";
+    }
+  
+    return {
+      title: appointment.type,
+      id: appointment.id,
+      start: appointment.startDate,
+      end: appointment.endDate,
+      color: eventColor,
+    };
+  });
 
   const onClick = (info) => {
     setIDAppointment(info.event.id);
@@ -41,6 +60,7 @@ export const EventList = ({ reload, setIDAppointment, setViewInfo }) => {
         right: '',
       }}
       locale={frLocale}
+      timeZone="Europe/Paris"
       eventClick={((info) => onClick(info))}
     />
   );

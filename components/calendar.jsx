@@ -5,28 +5,64 @@ import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid'
 import { getAppointments } from '@/data/appointments';
 import frLocale from '@fullcalendar/core/locales/fr'
+import { Spinner } from '@/components/ui/spinner';
 
 
 export function Calendar({ reload, setIDAppointment, setViewInfo }) {
 
   const [appointments, setAppointments] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchAppointments() {
-      const data = await getAppointments();
-      setAppointments(data);
-    }
-    fetchAppointments();
+    setIsLoading(true);
+    getAppointments() 
+      .then((data) => {
+        setAppointments(data);
+      })
+      .catch((error) => {
+        console.log("une erreur es survenu : ", error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      })
   }, [reload]);
 
 
 
-  const events = appointments.map((appointment) => ({
-    title: appointment.type,
-    id: appointment.id,
-    start: appointment.startDate,
-    end: appointment.endDate,
-  }));
+  const events = appointments.map((appointment) => {
+    let eventColor;
+  
+    switch (appointment.type) {
+      case "ALL":
+        eventColor = "green";
+        break;
+      case "BAPTEME":
+        eventColor = "blue";
+        break;
+      case "COURS":
+        eventColor = "brown";
+        break;
+      default:
+        eventColor = "gray";
+    }
+  
+    return {
+      title: appointment.type,
+      id: appointment.id,
+      start: appointment.startDate,
+      end: appointment.endDate,
+      color: eventColor,
+    };
+  });
+
+
+  // const events = appointments.map((appointment) => ({
+  //   title: appointment.type,
+  //   id: appointment.id,
+  //   start: appointment.startDate,
+  //   end: appointment.endDate,
+
+  // }));
 
 
   const onClick = (info) => {
@@ -53,6 +89,12 @@ export function Calendar({ reload, setIDAppointment, setViewInfo }) {
         allDaySlot={false}
         eventClick={((info) => onClick(info))}
       />
+      {isLoading && (
+        <Spinner>
+        chargement ...
+      </Spinner>
+      )}
+      
     </div>
   );
 }
