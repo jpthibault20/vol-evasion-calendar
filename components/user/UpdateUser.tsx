@@ -49,7 +49,7 @@ export const UpdateUser = ({ show, setShow, ID, reload, setReload }: UpdateUserP
             fetchData();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [ID]);
+    }, [ID, reload]);
 
 
     useEffect(() => {
@@ -67,25 +67,32 @@ export const UpdateUser = ({ show, setShow, ID, reload, setReload }: UpdateUserP
             formData.forEach((value, key) => {
                 values[key] = value;
             });
+
             updateUserAction(user!.id, adress!.id, values)
                 .then((data) => {
                     if (data.success) {
                         setSuccess(data.success);
+                        toast("Utilisateur modifié !", {
+                            action: {
+                                label: "X",
+                                onClick: () => console.log("Undo"),
+                            },
+                        })
                     }
                     if (data.error) {
                         setError(data.error);
+                        toast("Oups, il y a eu un problème !", {
+                            action: {
+                                label: "X",
+                                onClick: () => console.log("Undo"),
+                            },
+                        })
                     }
                 })
                 .catch(() => setError("Une erreur est survenue"))
                 .finally(() => {
                     setShow(false);
                     setReload(!reload);
-                    toast("Utilisateur modifié !", {
-                        action: {
-                            label: "X",
-                            onClick: () => console.log("Undo"),
-                        },
-                    })
                 });
         });
     };
@@ -169,7 +176,7 @@ export const UpdateUser = ({ show, setShow, ID, reload, setReload }: UpdateUserP
                                     <div>
                                         <label>Pays</label>
                                         <Input
-                                            name="adressCountrie"
+                                            name="adressCountry"
                                             placeholder="Pays"
                                             defaultValue={adress?.country || ""}
                                             disabled={isPending} />
