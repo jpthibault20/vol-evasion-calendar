@@ -52,8 +52,7 @@ model Account {
 model Address {
   id      String  @id @default(cuid()) @map("_id")
   User    User?
-  number  String?
-  street  String?
+  adress  String?
   city    String?
   zipCode String?
   country String?

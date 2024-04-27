@@ -1,21 +1,19 @@
-"use client"
-
-import { useEffect, useState, useTransition } from "react"
-import { CardWrapper } from "@/components/CardWrapper"
-import { getAdressById, getUserById } from "@/actions/user"
-
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { updateUser } from "@/schemas"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Address, User, UserRole } from "@prisma/client"
-import { Input } from "@/components/ui/input"
-import { Spinner } from '@/components/ui/spinner';
-import { FormError } from "@/components/form-error"
-import { FormSuccess } from "@/components/form-success"
-import { Button } from "@/components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useEffect, useState, useTransition } from "react";
+import { CardWrapper } from "@/components/CardWrapper";
+import { getAdressById, getUserById } from "@/actions/user";
+import { updateUserAction } from "@/actions/updateUser";
+import { Address, User, UserRole } from "@prisma/client";
+import { Spinner } from "@/components/ui/spinner";
+import { FormError } from "@/components/form-error";
+import { FormSuccess } from "@/components/form-success";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { updateUser } from "@/schemas";
 
 interface UpdateUserProps {
     ID: string
@@ -50,271 +48,163 @@ export const UpdateUser = ({ show, setShow, ID }: UpdateUserProps) => {
         };
 
         if (ID) {
+            setSuccess("");
+            setError("");
             fetchData();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ID]);
 
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        startTransition(() => {
+            const formData = new FormData(event.currentTarget);
+            const values: any = {};
+            formData.forEach((value, key) => {
+                values[key] = value;
+            });
+            updateUserAction(user!.id, adress!.id, values)
+                .then((data) => {
+                    if (data.success) {
+                        setSuccess(data.success);
+                    }
+                    if (data.error) {
+                        setError(data.error);
+                    }
+                })
+                .catch(() => setError("Une erreur est survenue"));
+        });
+    };
 
     const form = useForm<z.infer<typeof updateUser>>({
-        resolver: zodResolver(updateUser),
-        defaultValues: {
-            firstName: user?.firstName || undefined,
-            name: user?.name || undefined,
-            email: user?.email || undefined,
-            phone: user?.phone || undefined,
-            role: user?.role,
-            adressNumber: adress?.number || undefined,
-            adressStreet: adress?.street || undefined,
-            adressCity: adress?.city || undefined,
-            adressZipCode: adress?.zipCode || undefined,
-            adressCountry: adress?.country || undefined,
-        }
+        resolver: zodResolver(updateUser)
     });
-
-    const onSubmit = (values: z.infer<typeof updateUser>) => {
-        console.log(values);
-    }
 
     if (show) {
         return (
             <div className="fixed inset-0 z-50 flex items-center justify-center">
                 <CardWrapper headerLabel={"Modifier un utilisateur"} setShowForm={setShow} showForm={show}>
                     {!isLoading ? (
-                        <Form {...form}>
-                            <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
-                                <div className="space-y-4">
-                                    <FormField
-                                        control={form.control}
+                        <form className="space-y-6" onSubmit={handleSubmit}>
+                            <div className="space-y-4">
+                                <div>
+                                    <label>Nom</label>
+                                    <Input
                                         name="name"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Nom</FormLabel>
-                                                <FormControl>
-                                                    <Input
-                                                        {...field}
-                                                        placeholder="Doe"
-                                                        defaultValue={user?.name || ""}
-                                                        disabled={isPending}
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
+                                        placeholder="Nom"
+                                        defaultValue={user?.name || 'null'}
+                                        disabled={isPending} />
+                                </div>
+                                <div>
+                                    <label>prenom</label>
+                                    <Input
+                                        name="Prenom"
+                                        placeholder="Prenom"
+                                        defaultValue={user?.firstName || ""} disabled={isPending} />
+                                </div>
 
-                                    <FormField
-                                        control={form.control}
-                                        name="firstName"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Prenom</FormLabel>
-                                                <FormControl>
-                                                    <Input
-                                                        {...field}
-                                                        placeholder="John"
-                                                        defaultValue={user?.firstName || ""}
-                                                        disabled={isPending}
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-
-                                    <FormField
-                                        control={form.control}
+                                <div>
+                                    <label>Mail</label>
+                                    <Input
                                         name="email"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Mail</FormLabel>
-                                                <FormControl>
-                                                    <Input
-                                                        {...field}
-                                                        placeholder="John@Doe.com"
-                                                        defaultValue={user?.email || ""}
-                                                        disabled={isPending}
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
+                                        placeholder="Mail"
+                                        defaultValue={user?.email || ""}
+                                        disabled={isPending} />
+                                </div>
 
-                                    <FormField
-                                        control={form.control}
+                                <div>
+                                    <label>Téléphone</label>
+                                    <Input
                                         name="phone"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Téléphone</FormLabel>
-                                                <FormControl>
-                                                    <Input
-                                                        {...field}
-                                                        placeholder="06xxxxxxxx"
-                                                        defaultValue={user?.phone || ""}
-                                                        disabled={isPending}
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
+                                        placeholder="Tel"
+                                        defaultValue={user?.phone || ""}
+                                        disabled={isPending} />
+                                </div>
+
+                                <div className="space-y-4">
 
                                     <div>
-                                        <div className="flex">
-                                            <FormField
-                                                control={form.control}
-                                                name="adressNumber"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel>Numéro</FormLabel>
-                                                        <FormControl>
-                                                            <Input
-                                                                {...field}
-                                                                placeholder="19"
-                                                                defaultValue={adress?.number || ""}
-                                                                disabled={isPending}
-                                                            />
-                                                        </FormControl>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <FormField
-                                                control={form.control}
-                                                name="adressStreet"
-                                                render={({ field }) => (
-                                                    <FormItem className="ml-6">
-                                                        <FormLabel>Nom de rue, place, ...</FormLabel>
-                                                        <FormControl>
-                                                            <Input
-                                                                {...field}
-                                                                placeholder="rue des jardins"
-                                                                defaultValue={adress?.street || ""}
-                                                                disabled={isPending}
-                                                            />
-                                                        </FormControl>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                        </div>
-                                        <div className="flex">
-                                            <FormField
-                                                control={form.control}
-                                                name="adressCity"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel>Ville</FormLabel>
-                                                        <FormControl>
-                                                            <Input
-                                                                {...field}
-                                                                placeholder="Metz"
-                                                                defaultValue={adress?.city || ""}
-                                                                disabled={isPending}
-                                                            />
-                                                        </FormControl>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <FormField
-                                                control={form.control}
-                                                name="adressZipCode"
-                                                render={({ field }) => (
-                                                    <FormItem className="ml-6">
-                                                        <FormLabel>Code postale</FormLabel>
-                                                        <FormControl>
-                                                            <Input
-                                                                {...field}
-                                                                placeholder="57000"
-                                                                defaultValue={adress?.zipCode || ""}
-                                                                disabled={isPending}
-                                                            />
-                                                        </FormControl>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                        </div>
-
-                                        <FormField
-                                            control={form.control}
-                                            name="adressCountry"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel>Pays</FormLabel>
-                                                    <FormControl>
-                                                        <Input
-                                                            {...field}
-                                                            placeholder="France"
-                                                            defaultValue={adress?.country || ""}
-                                                            disabled={isPending}
-                                                        />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
+                                        <label>Adresse</label>
+                                        <Input
+                                            name="adress"
+                                            placeholder="Adresse"
+                                            defaultValue={adress?.adress || ""}
+                                            disabled={isPending} />
                                     </div>
 
-                                    <FormField
-                                        control={form.control}
-                                        name="role"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Role</FormLabel>
-                                                <Select
-                                                    disabled={isPending}
-                                                    onValueChange={field.onChange}
-                                                    defaultValue={user?.role}
-                                                >
-                                                    <FormControl>
-                                                        <SelectTrigger>
-                                                            <SelectValue placeholder="Select a role"/>
-                                                        </SelectTrigger>
-                                                    </FormControl>
-                                                    <SelectContent>
-                                                        <SelectItem value={UserRole.ADMIN}>
-                                                            Admin
-                                                        </SelectItem>
-                                                        <SelectItem value={UserRole.PILOTE}>
-                                                            Pilote
-                                                        </SelectItem>
-                                                        <SelectItem value={UserRole.ELEVE}>
-                                                            Eleve
-                                                        </SelectItem>
-                                                        <SelectItem value={UserRole.USER}>
-                                                            User
-                                                        </SelectItem>
-                                                    </SelectContent>
-                                                </Select>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
+
+
+                                    <div className="flex space-x-4">
+                                        <div>
+                                            <label>Ville</label>
+                                            <Input
+                                                name="adressCity"
+                                                placeholder="Ville"
+                                                defaultValue={adress?.city || ""}
+                                                disabled={isPending} />
+                                        </div>
+
+                                        <div>
+                                            <label>Code postale</label>
+                                            <Input
+                                                name="adressZipCode"
+                                                placeholder="Code postale"
+                                                defaultValue={adress?.zipCode || ""}
+                                                disabled={isPending} />
+                                        </div>
+
+
+
+                                    </div>
+                                    <div>
+                                        <label>Pays</label>
+                                        <Input
+                                            name="adressCountrie"
+                                            placeholder="Pays"
+                                            defaultValue={adress?.country || ""}
+                                            disabled={isPending} />
+                                    </div>
+                                    <div>
+                                        <div className="relative">
+                                            <label>Role</label>
+                                            <select
+                                                name="Role"
+                                                className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 rounded-md bg-white text-gray-900 disabled:bg-gray-100 disabled:text-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                                                defaultValue={user?.role}
+                                                disabled={isPending}
+                                            >
+                                                <option value={UserRole.ADMIN}>Admin</option>
+                                                <option value={UserRole.PILOTE}>Pilote</option>
+                                                <option value={UserRole.ELEVE}>Eleve</option>
+                                                <option value={UserRole.USER}>User</option>
+                                            </select>
+                                            <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                                                <svg className="w-5 h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                </svg>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
 
                                 </div>
+
+
+
+
                                 <FormError message={error} />
                                 <FormSuccess message={success} />
-                                <Button
-                                    disabled={isPending}
-                                    type="submit"
-                                >
-                                    Enregistrer
-                                </Button>
-                            </form>
-                        </Form>
+                                <Button disabled={isPending} type="submit">Enregistrer</Button>
+                            </div>
+                        </form>
                     ) : (
                         <Spinner>Loading...</Spinner>
                     )}
-
                 </CardWrapper>
             </div>
-
         );
-    };
+    }
 
     return null;
-}
-
+};
