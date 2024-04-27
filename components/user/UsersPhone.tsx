@@ -12,6 +12,7 @@ export const UsersPhone = () => {
     const [users, setUsers] = useState<User[]>([]);
     const [userID, setUserID] = useState("");
     const [showUpdateUser, setShowUpdateUser] = useState(false);
+    const [reload, setReload] = useState(true);
 
     useEffect(() => {
         getAllUsers()
