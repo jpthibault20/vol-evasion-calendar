@@ -61,7 +61,7 @@ export const UsersPhone = () => {
                 ))}
             </div>
 
-            <UpdateUser ID={userID} show={showUpdateUser} setShow={setShowUpdateUser} />
+            <UpdateUser ID={userID} show={showUpdateUser} setShow={setShowUpdateUser} setReload={setReload} reload={reload}/>
         </div>
     );
 };
