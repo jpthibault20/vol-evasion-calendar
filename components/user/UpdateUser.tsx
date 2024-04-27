@@ -7,21 +7,18 @@ import { Spinner } from "@/components/ui/spinner";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { updateUser } from "@/schemas";
+import { toast } from "sonner";
 
 interface UpdateUserProps {
-    ID: string
-    show: boolean
-    setShow: (load: boolean) => void
+    ID: string,
+    show: boolean,
+    setShow: (load: boolean) => void,
+    reload: boolean,
+    setReload: (load: boolean) => void,
 }
 
-export const UpdateUser = ({ show, setShow, ID }: UpdateUserProps) => {
+export const UpdateUser = ({ show, setShow, ID, reload, setReload }: UpdateUserProps) => {
     const [user, setUser] = useState<User | null>(null);
     const [adress, setAdress] = useState<Address | null>(null);
     const [isPending, startTransition] = useTransition();
@@ -48,12 +45,18 @@ export const UpdateUser = ({ show, setShow, ID }: UpdateUserProps) => {
         };
 
         if (ID) {
-            setSuccess("");
-            setError("");
+
             fetchData();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ID]);
+
+
+    useEffect(() => {
+        setSuccess("");
+        setError("");
+    }, [show])
+
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -73,17 +76,23 @@ export const UpdateUser = ({ show, setShow, ID }: UpdateUserProps) => {
                         setError(data.error);
                     }
                 })
-                .catch(() => setError("Une erreur est survenue"));
+                .catch(() => setError("Une erreur est survenue"))
+                .finally(() => {
+                    setShow(false);
+                    setReload(!reload);
+                    toast("Utilisateur modifié !", {
+                        action: {
+                            label: "X",
+                            onClick: () => console.log("Undo"),
+                        },
+                    })
+                });
         });
     };
 
-    const form = useForm<z.infer<typeof updateUser>>({
-        resolver: zodResolver(updateUser)
-    });
-
     if (show) {
         return (
-            <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto pt-52 md:pt-0">
                 <CardWrapper headerLabel={"Modifier un utilisateur"} setShowForm={setShow} showForm={show}>
                     {!isLoading ? (
                         <form className="space-y-6" onSubmit={handleSubmit}>

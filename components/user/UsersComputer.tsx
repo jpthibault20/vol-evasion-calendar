@@ -107,7 +107,7 @@ const UserManagement = () => {
                 <span>Showing  total Users : {users.length}</span>
             </div>
 
-            <UpdateUser ID={userID} show={showUpdateUser} setShow={setShowUpdateUser} />
+            <UpdateUser ID={userID} show={showUpdateUser} setShow={setShowUpdateUser} setReload={setReload} reload={reload}/>
 
             <RemoveUser ID={userID} show={showRemoveUser} setShow={setShowRemoveUser} setReload={setReload} reload={reload} />
 

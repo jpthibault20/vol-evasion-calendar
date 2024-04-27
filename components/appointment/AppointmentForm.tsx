@@ -18,7 +18,6 @@ import TimePicker from "@/components/appointment/TimePicker"
 import { FormError } from "../form-error";
 import { FormSuccess } from "../form-success";
 import { newAppointment } from "@/actions/new-appointment";
-import { Toaster } from "@/components/ui/sonner"
 import { toast } from "sonner";
 import { fr } from 'date-fns/locale/fr';
 
