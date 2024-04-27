@@ -84,14 +84,5 @@ export const NewAppointment = z.object({
 })
 
 export const updateUser = z.object({
-  firstName: z.string().optional(),
-  name: z.string().optional(),
-  email: z.string().email({ message: "Adresse mail attendue" }).optional(),
-  phone: z.string().min(10, { message: "tel Invalide" }).max(11, { message: "tel Invalide" }).optional(),
-  role: z.enum([UserRole.ADMIN, UserRole.PILOTE, UserRole.ELEVE, UserRole.USER]).optional(),
-  adressNumber: z.string().optional(),
-  adressStreet: z.string().optional(),
-  adressCity: z.string().optional(),
-  adressZipCode: z.string().optional(),
-  adressCountry: z.string().optional(),
+  role: z.enum([UserRole.USER, UserRole.ELEVE, UserRole.PILOTE, UserRole.ADMIN])
 })

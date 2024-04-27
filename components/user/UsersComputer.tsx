@@ -2,8 +2,8 @@
 import Image from 'next/image';
 import img from "@/public/userProfil.png"
 import { useEffect, useState } from 'react';
-import { User } from '@prisma/client';
-import { getAllUsers } from '@/actions/user';
+import { Address, User } from '@prisma/client';
+import { getAllAdress, getAllUsers } from '@/actions/user';
 import { UpdateUser } from './UpdateUser';
 import { RemoveUser } from './RemoveUser';
 import { Info } from 'lucide-react';
@@ -11,6 +11,7 @@ import { InfoUser } from './InfoUser';
 
 const UserManagement = () => {
     const [users, setUsers] = useState<User[]>([]);
+    const [adress, setAdress] = useState<Address[]>([]);
     const [userID, setUserID] = useState("");
     const [showUpdateUser, setShowUpdateUser] = useState(false);
     const [showRemoveUser, setShowRemoveUser] = useState(false);
@@ -36,6 +37,13 @@ const UserManagement = () => {
         getAllUsers()
             .then(data => {
                 setUsers(data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        getAllAdress()
+            .then(data => {
+                setAdress(data);
             })
             .catch(error => {
                 console.error(error);
@@ -107,7 +115,7 @@ const UserManagement = () => {
                 <span>Showing  total Users : {users.length}</span>
             </div>
 
-            <UpdateUser ID={userID} show={showUpdateUser} setShow={setShowUpdateUser} />
+            <UpdateUser ID={userID} show={showUpdateUser} setShow={setShowUpdateUser} setReload={setReload} reload={reload}/>
 
             <RemoveUser ID={userID} show={showRemoveUser} setShow={setShowRemoveUser} setReload={setReload} reload={reload} />
 

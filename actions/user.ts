@@ -7,6 +7,11 @@ export const getAllUsers = async () => {
   return users;
 }
 
+export const getAllAdress = async () => {
+  const users = await db.address.findMany();
+  return users;
+}
+
 export const removeUserById = async (id: string) => {
   try {
     const deletedUser = await db.user.delete({
