@@ -30,7 +30,7 @@ const UserManagement = () => {
 
     const infoUser = (ID: string) => {
         setUserID(ID);
-        setshowInfoUser(true);
+        setShowUpdateUser(true);
     }
 
     useEffect(() => {
@@ -115,7 +115,7 @@ const UserManagement = () => {
                 <span>Showing  total Users : {users.length}</span>
             </div>
 
-            <UpdateUser ID={userID} show={showUpdateUser} setShow={setShowUpdateUser} setReload={setReload} reload={reload}/>
+            <UpdateUser ID={userID} show={showUpdateUser} setShow={setShowUpdateUser} setReload={setReload} reload={reload} />
 
             <RemoveUser ID={userID} show={showRemoveUser} setShow={setShowRemoveUser} setReload={setReload} reload={reload} />
 
