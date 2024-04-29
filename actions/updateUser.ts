@@ -63,7 +63,7 @@ export const updateUserAction = async (userID: string, adressID: string, data: d
         }
     };
 
-    if (data.Role != dataUser?.role) {
+    if (data.Role != dataUser?.role && data.Role) {
         const res = await updateRole(userID, data.Role);
 
         if (res.error) {
