@@ -34,6 +34,7 @@ export const login = async (
 
   if (!existingUser.emailVerified) {
     const verificationToken = await generateVerificationToken(
+      existingUser.id,
       existingUser.email,
     );
 
