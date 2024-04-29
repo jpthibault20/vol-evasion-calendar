@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { getUserByEmail } from "@/data/user";
+import { getUserByEmail, getUserById } from "@/data/user";
 import { getVerificationTokenByToken } from "@/data/verificiation-token";
 
 export const newVerification = async (token: string) => {
@@ -17,8 +17,7 @@ export const newVerification = async (token: string) => {
     return { error: "Le jeton a expiré !" };
   }
 
-  const existingUser = await getUserByEmail(existingToken.email);
-
+  const existingUser = await getUserById(existingToken.userID);
   if (!existingUser) {
     return { error: "Le mail n'existe pas !" };
   }

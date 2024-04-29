@@ -109,7 +109,7 @@ export const UpdateUser = ({ show, setShow, ID, reload, setReload }: UpdateUserP
                                     <Input
                                         name="name"
                                         placeholder="Nom"
-                                        defaultValue={user?.name || 'null'}
+                                        defaultValue={user?.name || ''}
                                         disabled={isPending} />
                                 </div>
                                 <div>

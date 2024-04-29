@@ -1,10 +1,11 @@
 "use server"
 
-
-import { getUserById } from "@/data/user";
+import { sendVerificationEmail } from "@/lib/mail";
+import { getUserByEmail, getUserById } from "@/data/user";
 import { getAdressById } from "./user";
 import { db } from "@/lib/db";
 import { UserRole } from "@prisma/client";
+import { generateVerificationToken } from "@/lib/tokens";
 
 interface dataInterface {
     name: string,
@@ -26,7 +27,7 @@ export const updateUserAction = async (userID: string, adressID: string, data: d
     const dataUser = await getUserById(userID);
     const dataAdress = await getAdressById(adressID);
 
-    if (data.name != dataUser?.name) {
+    if (data.name != dataUser?.name && data.name != null) {
         const res = await updateName(userID, data.name);
 
         if (res.error) {
@@ -35,7 +36,7 @@ export const updateUserAction = async (userID: string, adressID: string, data: d
         }
     };
 
-    if (data.Prenom != dataUser?.firstName) {
+    if (data.Prenom != dataUser?.firstName && data.Prenom != null) {
         const res = await updateFirstName(userID, data.Prenom);
 
         if (res.error) {
@@ -44,7 +45,7 @@ export const updateUserAction = async (userID: string, adressID: string, data: d
         }
     };
 
-    if (data.email != dataUser?.email) {
+    if (data.email != dataUser?.email && data.email != null) {
         const res = await updateEmail(userID, data.email);
 
         if (res.error) {
@@ -71,7 +72,7 @@ export const updateUserAction = async (userID: string, adressID: string, data: d
         }
     };
 
-    if (data.adressCity != dataAdress?.city) {
+    if (data.adressCity != dataAdress?.city && data.adressCity) {
         const res = await updateCity(adressID, data.adressCity);
 
         if (res.error) {
@@ -80,7 +81,7 @@ export const updateUserAction = async (userID: string, adressID: string, data: d
         }
     };
 
-    if (data.adress != dataAdress?.adress) {
+    if (data.adress != dataAdress?.adress && data.adress) {
         const res = await updateAdress(adressID, data.adress);
 
         if (res.error) {
@@ -89,7 +90,7 @@ export const updateUserAction = async (userID: string, adressID: string, data: d
         }
     };
 
-if (data.adressZipCode != dataAdress?.zipCode) {
+if (data.adressZipCode != dataAdress?.zipCode && data.adressZipCode) {
     const res = await updateZipCode(adressID, data.adressZipCode);
 
     if (res.error) {
@@ -98,7 +99,7 @@ if (data.adressZipCode != dataAdress?.zipCode) {
     }
 };
 
-if (data.adressCountry != dataAdress?.zipCode) {
+if (data.adressCountry != dataAdress?.country && data.adressCountry) {
     const res = await updateCountry(adressID, data.adressCountry);
 
     if (res.error) {
@@ -147,16 +148,19 @@ export const updateFirstName = async (ID: string, FirstName: string) => {
 
 export const updateEmail = async (ID: string, Email: string) => {
     if (Email.includes("@") && Email.includes(".") && Email.length >= 8) {
-        try {
-            await db.user.update({
-                where: { id: ID },
-                data: { email: Email }
-            });
-        } catch (error) {
-            return { error: "Oups, une erreur s'est produite." }
-        }
 
-        return { success: "Le mail a été mis à jour." };
+        const existingUser = await getUserByEmail(Email);
+
+        if (existingUser && existingUser.id !== ID) {
+          return { error: "Mail déja utilisé" }
+        }
+        const verificationToken = await generateVerificationToken( Email, ID );
+        await sendVerificationEmail(
+          verificationToken.email,
+          verificationToken.token,
+        );
+        
+        return { success: "Mail de vérification envoyé !" };
     }
     return { error: "Le mail n'est pas valide." }
 };
