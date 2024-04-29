@@ -12,3 +12,5 @@
 - uniformiser toutes les pages
 
 - sur l'affichage téléphone afficher uniquement un humburger
+
+- refonte de l'affichage d'acceuil une fois connecté pour optimiser l'affichage sur le téléphone
