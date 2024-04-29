@@ -19,7 +19,7 @@ export const newVerification = async (token: string) => {
 
   const existingUser = await getUserById(existingToken.userID);
   if (!existingUser) {
-    return { error: "Le mail n'existe pas !" };
+    return { error: "Le compte n'existe pas !" };
   }
 
   await db.user.update({

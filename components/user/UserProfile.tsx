@@ -75,7 +75,7 @@ export const UserProfile = ({ user, adress, reload, setReload }: UserProfileProp
     <form className="mx-auto max-w-3xl py-12 px-4 sm:px-6 lg:py-16 lg:px-8" onSubmit={handleSubmit}>
       <div className="space-y-8 divide-y divide-gray-200 dark:divide-gray-800">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-50">Profile</h2>
+          <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-50">Profil</h2>
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             Vos informations personel
           </p>
