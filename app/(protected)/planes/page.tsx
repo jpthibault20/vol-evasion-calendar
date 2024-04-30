@@ -1,9 +1,16 @@
+import { RoleGate } from '@/components/auth/role-gate'
 import React from 'react'
 
 const planes = () => {
   return (
     <div>
-      planes page
+      <RoleGate allowedRole={'PILOTE'} noAccesPage={true}>
+        <div className="flex justify-center items-center h-screen">
+          <p className="text-center">
+            planes page
+          </p>
+        </div>
+      </RoleGate>
     </div>
   )
 }

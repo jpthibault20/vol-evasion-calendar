@@ -2,18 +2,14 @@
 
 import { UserRole } from "@prisma/client";
 import { useCurrentRole } from "@/hooks/use-current-role";
-import { FormError } from "@/components/form-error";
-import { Divide } from "lucide-react";
 
 interface RoleGateProps {
   children: React.ReactNode;
   allowedRole: UserRole;
+  noAccesPage?: boolean;
 };
 
-export const RoleGate = ({
-  children,
-  allowedRole,
-}: RoleGateProps) => {
+export const RoleGate = ({ children, allowedRole, noAccesPage}: RoleGateProps) => {
   const role = useCurrentRole();
 
   switch (allowedRole) {
@@ -43,6 +39,15 @@ export const RoleGate = ({
   }
   
   if (role !== allowedRole) {
-    return null
+    if (noAccesPage == true) {
+      return (
+        <div className="flex justify-center items-center h-screen">
+            <p className="text-center">
+                Vous n&apos;êtes pas autorisé à accéder à cette page...
+            </p>
+        </div>
+      )
+    }
+    return 
   }
 };

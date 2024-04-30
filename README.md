@@ -1,8 +1,5 @@
 ##TODO
 
-- modifier les acces au différents routes 
-    si un eleve entre l'url /student il y a acces 
-
 - Ajouter la modification du grade
     élève : débutant / breveté / laché
     pilote : cours / baptèmes / ...

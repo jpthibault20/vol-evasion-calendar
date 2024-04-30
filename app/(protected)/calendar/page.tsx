@@ -20,6 +20,7 @@ const CalendarPage = () => {
   };
 
   return (
+    <RoleGate allowedRole={'PILOTE'} noAccesPage={true}>
     <div className="w-full flex flex-col items-center">
 
       <div className="w-3/4 hidden md:block"> 
@@ -53,6 +54,7 @@ const CalendarPage = () => {
       )}
 
     </div>
+    </RoleGate>
 
   );
 };
