@@ -53,7 +53,7 @@ export const UsersPhone = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
                 {users.map((user, index) => (
-                    <div key={index} className="flex bg-white dark:bg-zinc-700 p-4 rounded-lg shadow-md relative justify-between">
+                    <div key={index} className="flex bg-white dark:bg-zinc-700 p-4 rounded-lg shadow-md  justify-between">
                         <button   onClick={() => updateUser(user.id)}>
                         <Image
                             src={img}
