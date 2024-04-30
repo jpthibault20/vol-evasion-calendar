@@ -30,11 +30,11 @@ export const SidebarPhone = () => {
 
             {/* Sidebar */}
             <div
-                className={`fixed top-0 right-0 h-screen bg-white shadow-lg transition-transform duration-300 z-10 ${showSidebar ? 'translate-x-0' : 'translate-x-full'
+                className={`fixed top-0 right-0 h-full bg-white shadow-lg transition-transform duration-300 z-10 ${showSidebar ? 'translate-x-0' : 'translate-x-full'
                     }`}
             >
                 {/* Contenu de la sidebar */}
-                <div className="p-4 h-full">
+                <div className="p-4">
                     <div>
                         <nav>
                             <ul>
