@@ -48,7 +48,8 @@ export const UserProfile = ({ user, adress, reload, setReload }: UserProfileProp
         .then((data) => {
           if (data.success) {
             setSuccess(data.success);
-            toast("Utilisateur mis à jour !", {
+            setReload(!reload)
+            toast(success || "Utilisateur mis à jour !", {
               action: {
                 label: "X",
                 onClick: () => console.log("Undo"),
@@ -57,7 +58,7 @@ export const UserProfile = ({ user, adress, reload, setReload }: UserProfileProp
           }
           if (data.error) {
             setError(data.error);
-            toast("Oups, il y a eu un problème !", {
+            toast(error || "Oups, il y a eu un problème !", {
               action: {
                 label: "X",
                 onClick: () => console.log("Undo"),
@@ -66,7 +67,6 @@ export const UserProfile = ({ user, adress, reload, setReload }: UserProfileProp
           }
         })
         .catch(() => setError("Une erreur est survenue"))
-        .finally(() => setReload(!reload))
     });
   };
 
@@ -266,7 +266,7 @@ export const UserProfile = ({ user, adress, reload, setReload }: UserProfileProp
                     name='passwordConfirmation'
                     placeholder='******'
                     disabled={isPending}
-                    type={visibilityPassword}
+                    type={visibilityPasswordValidation}
                     className='bg-white'
                   />
                   <Button className="absolute bottom-1 right-1 h-7 w-7" size="icon" variant="ghost" type="button" onClick={onClickVisibilityValidationPassword}>

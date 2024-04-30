@@ -5,6 +5,7 @@ import { getUserByEmail, getUserById } from "@/data/user";
 import { getAdressById } from "./user";
 import { db } from "@/lib/db";
 import { UserRole } from "@prisma/client";
+import bcrypt from "bcryptjs";
 import { generateVerificationToken } from "@/lib/tokens";
 
 interface dataInterface {
@@ -17,6 +18,8 @@ interface dataInterface {
     adressZipCode: string,
     adressCountry: string,
     Role: UserRole,
+    password: string,
+    passwordConfirmation: string
 }
 
 export const updateUserAction = async (userID: string, adressID: string, data: dataInterface) => {
@@ -32,7 +35,7 @@ export const updateUserAction = async (userID: string, adressID: string, data: d
 
         if (res.error) {
             console.log(res);
-            return { error: "Oups, une erreur s'est produite." }
+            return { error: res.error }
         }
     };
 
@@ -41,7 +44,7 @@ export const updateUserAction = async (userID: string, adressID: string, data: d
 
         if (res.error) {
             console.log(res);
-            return { error: "Oups, une erreur s'est produite." }
+            return { error: res.error }
         }
     };
 
@@ -50,7 +53,7 @@ export const updateUserAction = async (userID: string, adressID: string, data: d
 
         if (res.error) {
             console.log(res);
-            return { error: "Oups, une erreur s'est produite." };
+            return { error: res.error };
         }
     };
 
@@ -59,7 +62,7 @@ export const updateUserAction = async (userID: string, adressID: string, data: d
 
         if (res.error) {
             console.log(res);
-            return { error: "Oups, une erreur s'est produite." };
+            return { error: res.error };
         }
     };
 
@@ -68,7 +71,7 @@ export const updateUserAction = async (userID: string, adressID: string, data: d
 
         if (res.error) {
             console.log(res);
-            return { error: "Oups, une erreur s'est produite." };
+            return { error: res.error };
         }
     };
 
@@ -77,7 +80,7 @@ export const updateUserAction = async (userID: string, adressID: string, data: d
 
         if (res.error) {
             console.log(res);
-            return { error: "Oups, une erreur s'est produite." };
+            return { error: res.error };
         }
     };
 
@@ -86,7 +89,7 @@ export const updateUserAction = async (userID: string, adressID: string, data: d
 
         if (res.error) {
             console.log(res);
-            return { error: "Oups, une erreur s'est produite." };
+            return { error: res.error };
         }
     };
 
@@ -95,7 +98,7 @@ if (data.adressZipCode != dataAdress?.zipCode && data.adressZipCode) {
 
     if (res.error) {
         console.log(res);
-        return { error: "Oups, une erreur s'est produite." };
+        return { error: res.error };
     }
 };
 
@@ -104,9 +107,18 @@ if (data.adressCountry != dataAdress?.country && data.adressCountry) {
 
     if (res.error) {
         console.log(res);
-        return { error: "Oups, une erreur s'est produite." };
+        return { error: res.error };
     }
 };
+
+if (data.password && data.passwordConfirmation) {
+   const res = await updatePassword(userID, data.password, data.passwordConfirmation);
+
+   if (res.error) {
+        console.log(res);
+        return { error: res.error };
+   }
+}
 
 return { success: "Utilisateur mis à jour" }
 };
@@ -259,4 +271,26 @@ export const updateCountry = async (ID: string, Country: string) => {
         return { success: "Le pays a été mis à jour." };
     }
     return { error: "Le pays n'est pas valide." }
+}
+
+export const updatePassword = async (ID: string, password: string, passwordConfirmation: string) => {
+    if (password == passwordConfirmation) {
+        if (password.length >= 6) {
+            const hashedPassword = await bcrypt.hash(password, 10);
+
+            try {
+                await db.user.update({
+                    where: { id: ID },
+                    data: { password: hashedPassword }
+                });
+            } catch (error) {
+                return { error: "Oups, une erreur s'est produite." }
+            }
+
+
+            return {success: "Mot de passe mis a jour !"}
+        }
+        return {error: "6 caractères requis pour le mot de passe !"}
+    }
+    return {error: "Les mots de passe ne correspondent pas !"}
 }
