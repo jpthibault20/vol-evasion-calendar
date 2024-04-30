@@ -1,10 +1,12 @@
 "use server"
 
-
-import { getUserById } from "@/data/user";
+import { sendVerificationEmail } from "@/lib/mail";
+import { getUserByEmail, getUserById } from "@/data/user";
 import { getAdressById } from "./user";
 import { db } from "@/lib/db";
 import { UserRole } from "@prisma/client";
+import bcrypt from "bcryptjs";
+import { generateVerificationToken } from "@/lib/tokens";
 
 interface dataInterface {
     name: string,
@@ -16,6 +18,8 @@ interface dataInterface {
     adressZipCode: string,
     adressCountry: string,
     Role: UserRole,
+    password: string,
+    passwordConfirmation: string
 }
 
 export const updateUserAction = async (userID: string, adressID: string, data: dataInterface) => {
@@ -26,30 +30,30 @@ export const updateUserAction = async (userID: string, adressID: string, data: d
     const dataUser = await getUserById(userID);
     const dataAdress = await getAdressById(adressID);
 
-    if (data.name != dataUser?.name) {
+    if (data.name != dataUser?.name && data.name != null) {
         const res = await updateName(userID, data.name);
 
         if (res.error) {
             console.log(res);
-            return { error: "Oups, une erreur s'est produite." }
+            return { error: res.error }
         }
     };
 
-    if (data.Prenom != dataUser?.firstName) {
+    if (data.Prenom != dataUser?.firstName && data.Prenom != null) {
         const res = await updateFirstName(userID, data.Prenom);
 
         if (res.error) {
             console.log(res);
-            return { error: "Oups, une erreur s'est produite." }
+            return { error: res.error }
         }
     };
 
-    if (data.email != dataUser?.email) {
+    if (data.email != dataUser?.email && data.email != null) {
         const res = await updateEmail(userID, data.email);
 
         if (res.error) {
             console.log(res);
-            return { error: "Oups, une erreur s'est produite." };
+            return { error: res.error };
         }
     };
 
@@ -58,54 +62,63 @@ export const updateUserAction = async (userID: string, adressID: string, data: d
 
         if (res.error) {
             console.log(res);
-            return { error: "Oups, une erreur s'est produite." };
+            return { error: res.error };
         }
     };
 
-    if (data.Role != dataUser?.role) {
+    if (data.Role != dataUser?.role && data.Role) {
         const res = await updateRole(userID, data.Role);
 
         if (res.error) {
             console.log(res);
-            return { error: "Oups, une erreur s'est produite." };
+            return { error: res.error };
         }
     };
 
-    if (data.adressCity != dataAdress?.city) {
+    if (data.adressCity != dataAdress?.city && data.adressCity) {
         const res = await updateCity(adressID, data.adressCity);
 
         if (res.error) {
             console.log(res);
-            return { error: "Oups, une erreur s'est produite." };
+            return { error: res.error };
         }
     };
 
-    if (data.adress != dataAdress?.adress) {
+    if (data.adress != dataAdress?.adress && data.adress) {
         const res = await updateAdress(adressID, data.adress);
 
         if (res.error) {
             console.log(res);
-            return { error: "Oups, une erreur s'est produite." };
+            return { error: res.error };
         }
     };
 
-if (data.adressZipCode != dataAdress?.zipCode) {
+if (data.adressZipCode != dataAdress?.zipCode && data.adressZipCode) {
     const res = await updateZipCode(adressID, data.adressZipCode);
 
     if (res.error) {
         console.log(res);
-        return { error: "Oups, une erreur s'est produite." };
+        return { error: res.error };
     }
 };
 
-if (data.adressCountry != dataAdress?.zipCode) {
+if (data.adressCountry != dataAdress?.country && data.adressCountry) {
     const res = await updateCountry(adressID, data.adressCountry);
 
     if (res.error) {
         console.log(res);
-        return { error: "Oups, une erreur s'est produite." };
+        return { error: res.error };
     }
 };
+
+if (data.password && data.passwordConfirmation) {
+   const res = await updatePassword(userID, data.password, data.passwordConfirmation);
+
+   if (res.error) {
+        console.log(res);
+        return { error: res.error };
+   }
+}
 
 return { success: "Utilisateur mis à jour" }
 };
@@ -147,16 +160,19 @@ export const updateFirstName = async (ID: string, FirstName: string) => {
 
 export const updateEmail = async (ID: string, Email: string) => {
     if (Email.includes("@") && Email.includes(".") && Email.length >= 8) {
-        try {
-            await db.user.update({
-                where: { id: ID },
-                data: { email: Email }
-            });
-        } catch (error) {
-            return { error: "Oups, une erreur s'est produite." }
-        }
 
-        return { success: "Le mail a été mis à jour." };
+        const existingUser = await getUserByEmail(Email);
+
+        if (existingUser && existingUser.id !== ID) {
+          return { error: "Mail déja utilisé" }
+        }
+        const verificationToken = await generateVerificationToken( Email, ID );
+        await sendVerificationEmail(
+          verificationToken.email,
+          verificationToken.token,
+        );
+        
+        return { success: "Mail de vérification envoyé !" };
     }
     return { error: "Le mail n'est pas valide." }
 };
@@ -255,4 +271,26 @@ export const updateCountry = async (ID: string, Country: string) => {
         return { success: "Le pays a été mis à jour." };
     }
     return { error: "Le pays n'est pas valide." }
+}
+
+export const updatePassword = async (ID: string, password: string, passwordConfirmation: string) => {
+    if (password == passwordConfirmation) {
+        if (password.length >= 6) {
+            const hashedPassword = await bcrypt.hash(password, 10);
+
+            try {
+                await db.user.update({
+                    where: { id: ID },
+                    data: { password: hashedPassword }
+                });
+            } catch (error) {
+                return { error: "Oups, une erreur s'est produite." }
+            }
+
+
+            return {success: "Mot de passe mis a jour !"}
+        }
+        return {error: "6 caractères requis pour le mot de passe !"}
+    }
+    return {error: "Les mots de passe ne correspondent pas !"}
 }

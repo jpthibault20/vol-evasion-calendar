@@ -11,7 +11,6 @@ import { InfoUser } from './InfoUser';
 
 const UserManagement = () => {
     const [users, setUsers] = useState<User[]>([]);
-    const [adress, setAdress] = useState<Address[]>([]);
     const [userID, setUserID] = useState("");
     const [showUpdateUser, setShowUpdateUser] = useState(false);
     const [showRemoveUser, setShowRemoveUser] = useState(false);
@@ -41,14 +40,6 @@ const UserManagement = () => {
             .catch(error => {
                 console.error(error);
             });
-        getAllAdress()
-            .then(data => {
-                setAdress(data);
-            })
-            .catch(error => {
-                console.error(error);
-            });
-
     }, [reload]);
 
 
@@ -112,7 +103,7 @@ const UserManagement = () => {
                 </table>
             </div>
             <div className="flex justify-between items-center py-4">
-                <span>Showing  total Users : {users.length}</span>
+                <span>Total Users : {users.length}</span>
             </div>
 
             <UpdateUser ID={userID} show={showUpdateUser} setShow={setShowUpdateUser} setReload={setReload} reload={reload} />

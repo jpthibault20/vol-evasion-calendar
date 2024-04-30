@@ -13,10 +13,12 @@ export const getAllAdress = async () => {
 }
 
 export const removeUserById = async (id: string) => {
+  const user = await getUserById(id);
+
   try {
-    const deletedUser = await db.user.delete({
-      where: { id }
-    })
+    await db.address.delete({where: {id: user?.addressId as string}})
+
+    await db.user.delete({where: { id }})
     return { succes: "Utilisateur suprimé" };
   } catch (error) {
     return { error: "Il y a eu une erreur" };

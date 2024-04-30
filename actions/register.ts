@@ -33,6 +33,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
   }
 
   const adressID = randomUUID();
+  const userID = randomUUID();
 
   await db.address.create({
     data: {
@@ -42,6 +43,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
 
   await db.user.create({
     data: {
+      id: userID,
       name,
       firstName,
       email,
@@ -51,7 +53,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     },
   });
 
-  const verificationToken = await generateVerificationToken(email);
+  const verificationToken = await generateVerificationToken(email, userID);
   await sendVerificationEmail(
     verificationToken.email,
     verificationToken.token,
