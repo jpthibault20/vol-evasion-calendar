@@ -76,7 +76,7 @@ export const SidebarPhone = () => {
                         </nav>
                     </div>
                     {/* Ajout de styles pour centrer la div LogoutButton en bas de la page */}
-                    <div className="absolute bottom-0 left-0 right-0 p-4 text-start">
+                    <div className="absolute bottom-10 left-0 right-0 p-4 text-start">
                         <LogoutButton>
                             <div className={`inline-flex items-center p-2 rounded-md hover:bg-gray-100 justify-start`}>
                                 <LogOut className="w-6 h-6" />
