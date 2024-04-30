@@ -30,11 +30,11 @@ export const SidebarPhone = () => {
 
             {/* Sidebar */}
             <div
-                className={`fixed top-0 right-0 h-screen bg-white shadow-lg transition-transform duration-300 z-10 ${showSidebar ? 'translate-x-0' : 'translate-x-full'
+                className={`fixed top-0 right-0 h-full bg-white shadow-lg transition-transform duration-300 z-10 ${showSidebar ? 'translate-x-0' : 'translate-x-full'
                     }`}
             >
                 {/* Contenu de la sidebar */}
-                <div className="p-4 h-full">
+                <div className="p-4">
                     <div>
                         <nav>
                             <ul>
@@ -76,7 +76,7 @@ export const SidebarPhone = () => {
                         </nav>
                     </div>
                     {/* Ajout de styles pour centrer la div LogoutButton en bas de la page */}
-                    <div className="absolute bottom-0 left-0 right-0 p-4 text-start">
+                    <div className="absolute bottom-10 left-0 right-0 p-4 text-start">
                         <LogoutButton>
                             <div className={`inline-flex items-center p-2 rounded-md hover:bg-gray-100 justify-start`}>
                                 <LogOut className="w-6 h-6" />
