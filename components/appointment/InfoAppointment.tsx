@@ -39,7 +39,7 @@ export function InfoAppointment({ viewInfo, setViewInfo, ID, setID }: InfoAppoin
   if (!viewInfo) {
     return null;
   }
-
+  
   const formattedDateStart = appointment?.startDate?.toLocaleString('fr-FR');
   const formattedDateEnd = appointment?.endDate?.toLocaleString('fr-FR');
 

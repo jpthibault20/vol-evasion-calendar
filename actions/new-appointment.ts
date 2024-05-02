@@ -74,7 +74,6 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
         return { error: "Un problème es survenue" }
     }
 
-
     if (!recurrence) {
         // checked if apppointment with same date in db
         const appointmentAlreadyExiste = await db.appointment.findMany({
@@ -92,7 +91,7 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
         };
 
         const useDateStart = date;
-        const useDateEnd = new Date(useDateStart.getFullYear(), useDateStart.getMonth(), useDateStart.getDay(), useDateStart.getHours() + 1, useDateStart.getMinutes());
+        const useDateEnd = new Date(useDateStart.getTime() + 3600000 );
 
         while (useDateStart < timeEnd) {
             await db.appointment.create({

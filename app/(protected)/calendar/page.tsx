@@ -20,40 +20,42 @@ const CalendarPage = () => {
   };
 
   return (
-    <RoleGate allowedRole={'PILOTE'} noAccesPage={true}>
-    <div className="w-full flex flex-col items-center">
+    <RoleGate allowedRole={UserRole.USER} noAccesPage={true}>
+      <div className="w-full flex flex-col items-center space-y-8 md:divide-y md: divide-gray-200 md:dark:divide-gray-800 md:pt-8">
 
-      <div className="w-3/4 hidden md:block"> 
-        <h1 className="text-3xl font-bold mb-4 text-center ">Calendrier</h1>
-        <Calendar reload={showForm} setIDAppointment={setIDAppointment} setViewInfo={setViewInfo} />
-      </div>
+        <div className='hidden md:block'>
+          <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-50">Calendrier</h2>
+        </div>
 
-      <div className="w-3/4 md:hidden">
-        <h1 className="text-3xl font-bold mb-4 text-center ">Calendrier</h1>
-        <EventList reload={showForm} setIDAppointment={setIDAppointment} setViewInfo={setViewInfo} />
-      </div>
+        <div className="w-3/4 hidden md:block md:pt-8">
+          <Calendar reload={showForm} setIDAppointment={setIDAppointment} setViewInfo={setViewInfo} />
+        </div>
 
-      <RoleGate allowedRole={UserRole.PILOTE}>
-        <button
-          onClick={toggleForm}
-          className="fixed bottom-6 right-6 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded-full"
-        >
-          <PlusIcon size={24} />
-        </button>
+        <div className="w-3/4 md:hidden">
+          <EventList reload={showForm} setIDAppointment={setIDAppointment} setViewInfo={setViewInfo} />
+        </div>
 
-        {showForm && (
+        <RoleGate allowedRole={UserRole.PILOTE}>
+          <button
+            onClick={toggleForm}
+            className="fixed bottom-6 right-6 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded-full"
+          >
+            <PlusIcon size={24} />
+          </button>
+
+          {showForm && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center">
+              <AppointmentForm setShowForm={setShowForm} showForm={showForm} />
+            </div>
+          )}
+        </RoleGate>
+        {viewInfo && (
           <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <AppointmentForm setShowForm={setShowForm} showForm={showForm} />
+            <InfoAppointment viewInfo={viewInfo} setViewInfo={setViewInfo} ID={idAppointment} setID={setIDAppointment} />
           </div>
         )}
-      </RoleGate>
-      {viewInfo && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <InfoAppointment viewInfo={viewInfo} setViewInfo={setViewInfo} ID={idAppointment} setID={setIDAppointment} />
-        </div>
-      )}
 
-    </div>
+      </div>
     </RoleGate>
 
   );

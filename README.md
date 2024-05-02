@@ -14,3 +14,4 @@
 
 - branche dev / prod db
 
+- bug affichage caliendrier horaire début minuit / toute la journé sur affichage téléphone, a voir sur les autres affichages
