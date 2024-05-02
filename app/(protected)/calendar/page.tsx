@@ -49,13 +49,14 @@ const CalendarPage = () => {
             </div>
           )}
         </RoleGate>
-        {viewInfo && (
+        
+
+      </div>
+      {viewInfo && (
           <div className="fixed inset-0 z-50 flex items-center justify-center">
             <InfoAppointment viewInfo={viewInfo} setViewInfo={setViewInfo} ID={idAppointment} setID={setIDAppointment} />
           </div>
         )}
-
-      </div>
     </RoleGate>
 
   );

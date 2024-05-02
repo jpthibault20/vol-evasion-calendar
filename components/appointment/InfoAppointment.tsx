@@ -2,9 +2,11 @@
 import { getAppointments } from "@/actions/get-appointment";
 import { AppointmentCardWrapper } from "./AppointmentCardWrapper";
 import { useState, useEffect } from "react";
-import { Appointment, appointmentType } from "@prisma/client";
-import { format } from "path";
+import { Appointment, User } from "@prisma/client";
 import { Spinner } from "../ui/spinner";
+import { getUserById } from "@/actions/user";
+import { Booking } from "./booking";
+
 
 
 interface InfoAppointmentProps {
@@ -17,6 +19,8 @@ interface InfoAppointmentProps {
 export function InfoAppointment({ viewInfo, setViewInfo, ID, setID }: InfoAppointmentProps) {
   const [appointment, setAppointment] = useState<Appointment | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [pilote, setPilote] = useState<User | null>(null);
+
 
   useEffect(() => {
     if (viewInfo) {
@@ -24,37 +28,57 @@ export function InfoAppointment({ viewInfo, setViewInfo, ID, setID }: InfoAppoin
       getAppointments(ID)
         .then(data => {
           setAppointment(data);
-          setIsLoading(false);
+
         })
         .catch(error => {
           console.error(error);
-          setIsLoading(false);
-        });
+
+        })
     } else {
       setAppointment(null);
-      setIsLoading(false);
+
     }
   }, [viewInfo, ID]);
+
+  useEffect(() => {
+    if (appointment) {
+      getUserById(appointment.piloteID)
+        .then((data) => {
+          setPilote(data);
+          setIsLoading(false);
+        })
+    }
+  }, [appointment]);
 
   if (!viewInfo) {
     return null;
   }
-  
-  const formattedDateStart = appointment?.startDate?.toLocaleString('fr-FR');
-  const formattedDateEnd = appointment?.endDate?.toLocaleString('fr-FR');
+
 
   return (
-    <div>
-      <AppointmentCardWrapper headerLabel={"Info dispo"} setShowForm={setViewInfo} showForm={viewInfo}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto pt-20 md:pt-0">
+      <AppointmentCardWrapper headerLabel={"Réservez votre vol"} setShowForm={setViewInfo} showForm={viewInfo}>
         {isLoading ? (
           <Spinner>Loading...</Spinner>
         ) : appointment ? (
           <>
-            <p>ID : {appointment.id}</p>
-            <p>Type : {appointment.type}</p>
-            <p>Pilote ID : {appointment.piloteID}</p>
-            <p>Début : {formattedDateStart}</p>
-            <p>Fin : {formattedDateEnd}</p>
+
+
+
+
+
+
+
+            <Booking appointment={appointment} pilote={pilote} />
+           
+
+
+
+
+
+
+
+
           </>
         ) : (
           <p>Aucune donnée disponible.</p>
