@@ -36,12 +36,6 @@ export const sendNotificationBooking = async (email: string, studentFirstname: s
   const formatedStartDate = startDate.toLocaleString('fr-FR');
   const formatedEndDate = endDate.toLocaleString('fr-FR');
 
-  console.log(email);
-  console.log(studentFirstname);
-  console.log(studentLastname);
-  console.log(formatedStartDate);
-  console.log(formatedEndDate);
-
   await resend.emails.send({
     from: 'Acme <onboarding@resend.dev>',
     to: email,
