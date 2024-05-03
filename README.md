@@ -19,3 +19,5 @@
 - nouvelle page "mes dispo" pour les pilotes
 
 - taille calendrier téléphone h-full
+
+- refont login phone view
