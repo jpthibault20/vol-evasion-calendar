@@ -13,10 +13,11 @@ interface InfoAppointmentProps {
   viewInfo: boolean,
   setViewInfo: (load: boolean) => void,
   ID: string,
-  setID: (load: string) => void,
+  reload: boolean,
+  setReload: (load: boolean) => void,
 }
 
-export function InfoAppointment({ viewInfo, setViewInfo, ID, setID }: InfoAppointmentProps) {
+export function InfoAppointment({ viewInfo, setViewInfo, ID, reload, setReload }: InfoAppointmentProps) {
   const [appointment, setAppointment] = useState<Appointment | null>(null);
   const [pilote, setPilote] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -55,7 +56,6 @@ export function InfoAppointment({ viewInfo, setViewInfo, ID, setID }: InfoAppoin
     return null;
   }
 
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto pt-20 md:pt-0">
       <AppointmentCardWrapper headerLabel={"Réservez votre vol"} setShowForm={setViewInfo} showForm={viewInfo}>
@@ -63,23 +63,7 @@ export function InfoAppointment({ viewInfo, setViewInfo, ID, setID }: InfoAppoin
           <Spinner>Loading...</Spinner>
         ) : appointment ? (
           <>
-
-
-
-
-
-
-
-            <Booking appointment={appointment} pilote={pilote} />
-           
-
-
-
-
-
-
-
-
+            <Booking appointment={appointment} pilote={pilote} setReload={setReload} reload={reload} setViewInfo={setViewInfo}/>
           </>
         ) : (
           <p>Aucune donnée disponible.</p>

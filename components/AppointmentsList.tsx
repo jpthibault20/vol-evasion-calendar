@@ -20,11 +20,11 @@ export const EventList = ({ setIDAppointment, setViewInfo, appointments }: Event
   const events = appointments.map((appointment: Appointment) => {
   
     return {
-      title: appointment.piloteFirstname || "",
+      title: appointment.studentID ? "Réservé" : "thibault",
       id: appointment.id || "",
       start: appointment.startDate || "",
       end: appointment.endDate || "",
-      color: appointment.color || "",
+      color: appointment.studentID ? "#CECECE" : appointment.color || "",
     };
   });
 

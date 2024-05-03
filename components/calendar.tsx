@@ -17,17 +17,17 @@ export function Calendar({ setIDAppointment, appointments, setViewInfo }: Calend
   const events = appointments.map((appointment: Appointment) => {
   
     return {
-      title: appointment.piloteFirstname || "",
+      title: appointment.studentID ? "Réservé" : "thibault",
       id: appointment.id || "",
       start: appointment.startDate || "",
       end: appointment.endDate || "",
-      color: appointment.color || "",
+      color: appointment.studentID ? "#CECECE" : appointment.color || "",
     };
   });
 
 
   const onClick = (info: EventClickArg) => {
-    setIDAppointment(info.event.id);
+  setIDAppointment(info.event.id);
     setViewInfo(true);
   }
 

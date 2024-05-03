@@ -14,4 +14,8 @@
 
 - branche dev / prod db
 
-- bug affichage caliendrier horaire début minuit / toute la journé sur affichage téléphone, a voir sur les autres affichages
+- création dispo téléphone affichage bug
+
+- nouvelle page "mes dispo" pour les pilotes
+
+- taille calendrier téléphone h-full

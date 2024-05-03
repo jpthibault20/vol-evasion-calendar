@@ -80,13 +80,10 @@ const CalendarPage = () => {
           </>
         )}
 
-
-
-
       </div>
       {viewInfo && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <InfoAppointment viewInfo={viewInfo} setViewInfo={setViewInfo} ID={idAppointment} setID={setIDAppointment} />
+          <InfoAppointment viewInfo={viewInfo} setViewInfo={setViewInfo} ID={idAppointment} setReload={setReload} reload={reload}/>
         </div>
       )}
     </RoleGate>
