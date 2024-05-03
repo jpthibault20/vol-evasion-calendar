@@ -27,7 +27,7 @@ export function Calendar({ setIDAppointment, appointments, setViewInfo }: Calend
 
 
   const onClick = (info: EventClickArg) => {
-  setIDAppointment(info.event.id);
+    setIDAppointment(info.event.id);
     setViewInfo(true);
   }
 

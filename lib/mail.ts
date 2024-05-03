@@ -31,3 +31,22 @@ export const sendVerificationEmail = async (
     html: `<p>Click <a href="${confirmLink}">here</a> to confirm email.</p>`
   });
 };
+
+export const sendNotificationBooking = async (email: string, studentFirstname: string, studentLastname: string, startDate: Date, endDate: Date) => {
+  const formatedStartDate = startDate.toLocaleString('fr-FR');
+  const formatedEndDate = endDate.toLocaleString('fr-FR');
+
+  console.log(email);
+  console.log(studentFirstname);
+  console.log(studentLastname);
+  console.log(formatedStartDate);
+  console.log(formatedEndDate);
+
+  await resend.emails.send({
+    from: 'Acme <onboarding@resend.dev>',
+    to: email,
+    subject: "vol Réservé",
+    html: `<p>${studentFirstname} ${studentLastname} à réservé un vol : ${formatedStartDate} -> ${formatedEndDate}</p>`
+  });
+
+}
