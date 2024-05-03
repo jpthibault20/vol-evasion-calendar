@@ -73,7 +73,9 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
     if (!user?.id) {
         return { error: "Un problème es survenue" }
     }
-
+    if (!user.color) {
+        return { error: "Un problème es survenue" }
+    }
 
     if (!recurrence) {
         // checked if apppointment with same date in db
@@ -88,16 +90,18 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
         });
 
         if (appointmentAlreadyExiste.length !== 0) {
-            return { error: "Un disponibilité déja avec c'est dates" }
+            return { error: "Un disponibilité existe déja avec c'est dates" }
         };
 
         const useDateStart = date;
-        const useDateEnd = new Date(useDateStart.getFullYear(), useDateStart.getMonth(), useDateStart.getDay(), useDateStart.getHours() + 1, useDateStart.getMinutes());
+        const useDateEnd = new Date(useDateStart.getTime() + 3600000 );
 
         while (useDateStart < timeEnd) {
             await db.appointment.create({
                 data: {
                     piloteID: user?.id as string,
+                    piloteFirstname: user.firstname as string,
+                    color: user.color,
                     type,
                     startDate: useDateStart,
                     endDate: useDateEnd,
@@ -143,7 +147,9 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
                 await db.appointment.create({
                     data: {
                         piloteID: user?.id as string,
+                        piloteFirstname: user.name as string,
                         type,
+                        color: user.color,
                         startDate: useStartDate,
                         endDate: useEndDate,
                         recurrence,

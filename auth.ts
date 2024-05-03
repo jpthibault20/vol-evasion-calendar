@@ -51,14 +51,13 @@ export const {
       if (token.role && session.user) {
         session.user.role = token.role as UserRole;
       }
-      if (session.user) {
-        session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
-      }
 
       if (session.user) {
         session.user.name = token.name;
+        session.user.firstname = token.firstname as string;
         session.user.email = token.email as string;
         session.user.isOAuth = token.isOAuth as boolean; 
+        session.user.color = token.color as string;
       }
       return session;
     },
@@ -72,8 +71,10 @@ export const {
 
       token.isOAuth = !!existingAccount;
       token.name = existingUser.name;
+      token.firstname = existingUser.firstName;
       token.email = existingUser.email;
       token.role = existingUser.role;
+      token.color = existingUser.color;
 
       return token;
     }

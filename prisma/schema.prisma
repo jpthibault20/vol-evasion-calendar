@@ -21,6 +21,7 @@ model User {
   email         String?       @unique
   emailVerified DateTime?
   phone         String?
+  color         String?       @default("")
   image         String?
   password      String?
   address       Address?      @relation(fields: [addressId], references: [id], onDelete: Cascade)
@@ -88,6 +89,8 @@ model Appointment {
   interAppointment Int?
   type             appointmentType?
   piloteID         String
+  piloteFirstname  String           @default("")
+  color            String?          @default("")
   vehiculeID       String?
   studentID        String?
   recurrence       Boolean?

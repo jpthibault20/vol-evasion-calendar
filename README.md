@@ -14,3 +14,8 @@
 
 - branche dev / prod db
 
+- création dispo téléphone affichage bug
+
+- nouvelle page "mes dispo" pour les pilotes
+
+- taille calendrier téléphone h-full

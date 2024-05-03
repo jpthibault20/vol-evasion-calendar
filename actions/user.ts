@@ -1,6 +1,7 @@
 "use server"
 
 import { db } from "@/lib/db";
+import { User } from "@prisma/client";
 
 export const getAllUsers = async () => {
   const users = await db.user.findMany();
