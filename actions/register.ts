@@ -9,6 +9,7 @@ import { getUserByEmail } from "@/data/user";
 import { sendVerificationEmail } from "@/lib/mail";
 import { generateVerificationToken } from "@/lib/tokens";
 import { randomUUID } from "crypto";
+import randomColor from "randomcolor";
 
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
   
@@ -49,7 +50,8 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
       email,
       password: hashedPassword,
       phone,
-      addressId: adressID
+      addressId: adressID,
+      color: randomColor()
     },
   });
 

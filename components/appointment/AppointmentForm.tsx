@@ -25,9 +25,11 @@ import { fr } from 'date-fns/locale/fr';
 interface AppointmentFormProps {
     setShowForm: (load: boolean) => void;
     showForm: boolean;
+    setReload: (load: boolean) => void;
+    reload: boolean;
 }
 
-export const AppointmentForm = ({ setShowForm, showForm }: AppointmentFormProps) => {
+export const AppointmentForm = ({ setShowForm, showForm, setReload, reload }: AppointmentFormProps) => {
     const [error, setError] = useState<string | undefined>();
     const [success, setSuccess] = useState<string | undefined>();
     const [isPending, startTransition] = useTransition();
@@ -64,6 +66,7 @@ export const AppointmentForm = ({ setShowForm, showForm }: AppointmentFormProps)
                     setSuccess(data.success);
                     if (data.success) {
                         setShowForm(false);
+                        setReload(!reload);
                         toast("Disponibilité ajouté !", {
                             action: {
                                 label: "X",

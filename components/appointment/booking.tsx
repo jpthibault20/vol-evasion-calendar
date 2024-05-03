@@ -16,7 +16,6 @@ interface bookingProps {
 export const Booking = ({ appointment, pilote }: bookingProps) => {
 
   const user = useCurrentUser();
-
   const formattedDateStart = appointment?.startDate?.toLocaleString('fr-FR');
   const formattedDateEnd = appointment?.endDate?.toLocaleString('fr-FR');
 

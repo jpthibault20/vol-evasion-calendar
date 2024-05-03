@@ -18,8 +18,9 @@ interface InfoAppointmentProps {
 
 export function InfoAppointment({ viewInfo, setViewInfo, ID, setID }: InfoAppointmentProps) {
   const [appointment, setAppointment] = useState<Appointment | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [pilote, setPilote] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  
 
 
   useEffect(() => {

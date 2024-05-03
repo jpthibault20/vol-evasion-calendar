@@ -1,62 +1,56 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, RefObject } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import listPlugin from '@fullcalendar/list';
 import { getAppointments } from '@/data/appointments';
 import frLocale from '@fullcalendar/core/locales/fr'
 import { ChevronLeft } from 'lucide-react';
+import { Appointment } from '@prisma/client';
+import { EventClickArg } from '@fullcalendar/core/index.js';
 
-export const EventList = ({ reload, setIDAppointment, setViewInfo }) => {
-  const [appointments, setAppointments] = useState([]);
-  const calendarRef = useRef(null);
+interface EventListProp {
+  setIDAppointment: (load: string) => void;
+  setViewInfo: (load: boolean) => void;
+  appointments: Appointment[];
+}
 
-  useEffect(() => {
-    async function fetchAppointments() {
-      const data = await getAppointments();
-      setAppointments(data);
-    }
-    fetchAppointments();
-  }, [reload]);
+export const EventList = ({ setIDAppointment, setViewInfo, appointments }: EventListProp) => {
+  const calendarRef: RefObject<FullCalendar> = useRef(null);
 
-  const events = appointments.map((appointment) => {
-    let eventColor;
-    switch (appointment.type) {
-      case "ALL":
-        eventColor = "green";
-        break;
-      case "BAPTEME":
-        eventColor = "blue";
-        break;
-      case "COURS":
-        eventColor = "brown";
-        break;
-      default:
-        eventColor = "gray";
-    }
 
+  const events = appointments.map((appointment: Appointment) => {
+  
     return {
-      title: appointment.type,
-      id: appointment.id,
-      start: appointment.startDate,
-      end: appointment.endDate,
-      color: eventColor,
+      title: appointment.piloteFirstname || "",
+      id: appointment.id || "",
+      start: appointment.startDate || "",
+      end: appointment.endDate || "",
+      color: appointment.color || "",
     };
   });
 
-  const onClick = (info) => {
+  const onClick = (info: EventClickArg) => {
     setIDAppointment(info.event.id);
     setViewInfo(true);
   }
 
   const handlePrevButtonClick = () => {
-    calendarRef.current.getApi().prev();
+    if (calendarRef.current) { 
+      calendarRef.current.getApi().prev();
+    }
   };
 
   const handleNextButtonClick = () => {
-    calendarRef.current.getApi().next();
+    if (calendarRef.current) { 
+      calendarRef.current.getApi().next();
+    }
+    
   };
 
   const handleTodayButtonClick = () => {
-    calendarRef.current.getApi().today();
+    if (calendarRef.current) { 
+      calendarRef.current.getApi().today();
+    }
+    
   };
 
   return (

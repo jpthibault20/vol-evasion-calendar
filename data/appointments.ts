@@ -1,6 +1,7 @@
 "use server"
 
 import { db } from "@/lib/db";
+import { Appointment } from "@prisma/client";
 
 export const getAppointments = async (client?: boolean) => {
   try {
