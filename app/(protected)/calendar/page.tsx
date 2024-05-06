@@ -1,21 +1,19 @@
 "use client"
 
 import React, { useEffect, useState } from 'react';
-import { PlusIcon } from 'lucide-react';
 import { Calendar } from "@/components/calendar"
 import { EventList } from "@/components/AppointmentsList"
 import { RoleGate } from '@/components/auth/role-gate';
 import { Appointment, UserRole } from '@prisma/client';
-import { AppointmentForm } from '@/components/appointment/AppointmentForm';
 import { InfoAppointment } from '@/components/appointment/InfoAppointment';
 import { getAppointments } from '@/actions/get-appoitments';
 import { Spinner } from '@/components/ui/spinner';
+import { AddToCalendar } from '@/components/AddToCalendar';
 
 
 const CalendarPage = () => {
   const [viewInfo, setViewInfo] = useState(false);
   const [idAppointment, setIDAppointment] = useState("");
-  const [showForm, setShowForm] = useState(false);
   const [reload, setReload] = useState(false);
 
 
@@ -33,10 +31,6 @@ const CalendarPage = () => {
     setIsLoading(false)
 
   }, [reload]);
-
-  const toggleForm = () => {
-    setShowForm(!showForm);
-  };
 
   return (
     <RoleGate allowedRole={UserRole.USER} noAccesPage={true}>
@@ -64,18 +58,8 @@ const CalendarPage = () => {
             </div>
 
             <RoleGate allowedRole={UserRole.PILOTE}>
-              <button
-                onClick={toggleForm}
-                className="fixed bottom-6 right-6 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded-full"
-              >
-                <PlusIcon size={24} />
-              </button>
+            <AddToCalendar setReload={setReload} reload={reload}/>
 
-              {showForm && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center">
-                  <AppointmentForm setShowForm={setShowForm} showForm={showForm} setReload={setReload} reload={reload} />
-                </div>
-              )}
             </RoleGate>
           </>
         )}
