@@ -20,4 +20,4 @@
 
 - taille calendrier téléphone h-full
 
-- refont login phone view
+- refont login phone view pas de card pour phone view

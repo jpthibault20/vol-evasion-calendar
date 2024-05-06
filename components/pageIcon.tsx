@@ -1,4 +1,4 @@
-import { User, Calendar, Plane, GraduationCap } from 'lucide-react'
+import { User, Calendar, Plane, GraduationCap, BetweenHorizontalEnd } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 
 interface pageIconProps {
@@ -14,13 +14,17 @@ export const PageIcon = ({ location }: pageIconProps) => {
             setIcon(<Calendar />);
             setTitle("Calendrier")
         }
+        if (location.includes("appointments")) {
+            setIcon(<BetweenHorizontalEnd  />);
+            setTitle("Mes vols")
+        }
         if (location.includes("account")) {
             setIcon(<User />);
             setTitle("Mon Profil")
         }
         if (location.includes("planes")) {
             setIcon(<Plane />);
-            setTitle("Mes véhicules")
+            setTitle("Mes ULM")
         }
         if (location.includes("students")) {
             setIcon(<GraduationCap />);
