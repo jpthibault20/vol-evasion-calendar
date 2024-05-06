@@ -1,13 +1,32 @@
 "use client"
+
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent } from './ui/dropdown-menu'
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
 import { Button } from './ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
-import { CalendarDays, CheckIcon, UserPlusIcon, X, XIcon } from 'lucide-react'
+import { CalendarDays, CheckIcon, Info, UserPlusIcon, X } from 'lucide-react'
 import { Calendar } from './ui/calendar'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
+import { useEffect, useState } from 'react'
+import { FormattedAppointment, getAppointmentsWithPilotID } from '@/actions/appointment'
+import { useCurrentUser } from '@/hooks/use-current-user'
+import { Appointment } from '@prisma/client'
 
 export const PrivatAppointments = () => {
+    const [appointments, setAppointments] = useState<FormattedAppointment[]>()
+    const user = useCurrentUser();
+
+    useEffect(() => {
+        if (user) {
+            getAppointmentsWithPilotID(user.id as string)
+                .then((data) => {
+                    setAppointments(data);
+                })
+                .catch((err) => {console.log(err);})
+                .finally(() => { })
+        }
+    }, [])
+    console.log(appointments);
     return (
         <div>
             <div className="p-4  flex items-center justify-between">
@@ -16,23 +35,23 @@ export const PrivatAppointments = () => {
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button className="px-4 py-2 rounded-md transition-colors " variant="outline">
-                                    Recurring
+                                    Récurence
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
-                                <DropdownMenuCheckboxItem>Recurring</DropdownMenuCheckboxItem>
-                                <DropdownMenuCheckboxItem>Non-recurring</DropdownMenuCheckboxItem>
+                                <DropdownMenuCheckboxItem>Reccurent</DropdownMenuCheckboxItem>
+                                <DropdownMenuCheckboxItem>Occasionel</DropdownMenuCheckboxItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button className="px-4 py-2 rounded-md transition-colors " variant="outline">
-                                    Available
+                                    Disponibilité
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
-                                <DropdownMenuCheckboxItem>Available</DropdownMenuCheckboxItem>
-                                <DropdownMenuCheckboxItem>Not Available</DropdownMenuCheckboxItem>
+                                <DropdownMenuCheckboxItem>Disponible</DropdownMenuCheckboxItem>
+                                <DropdownMenuCheckboxItem>Reservé</DropdownMenuCheckboxItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
@@ -41,7 +60,7 @@ export const PrivatAppointments = () => {
                             <PopoverTrigger asChild>
                                 <Button className="px-4 py-2 rounded-md flex items-center gap-2" variant="outline">
                                     <CalendarDays className="w-5 h-5" />
-                                    <span className='hidden md:block'>Search by date</span>
+                                    <span className='hidden md:block'>Recherche par date</span>
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent className="p-0">
@@ -70,73 +89,25 @@ export const PrivatAppointments = () => {
                             <TableCell>08:00</TableCell>
                             <TableCell>10:00</TableCell>
                             <TableCell>
-                                <div className="flex justify-center">
+                                <div className="">
                                     <CheckIcon className="text-green-500" />
+                                    {/* <X className="text-red-500" /> */}
                                 </div>
                             </TableCell>
                             <TableCell>
-                                <div className="flex justify-center">
-                                    <UserPlusIcon className="text-blue-500" />
-                                </div>
-                            </TableCell>
-                            <TableCell>
-                                <Button variant="destructive">Supprimer</Button>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>15/04/2023</TableCell>
-                            <TableCell>11:00</TableCell>
-                            <TableCell>12:30</TableCell>
-                            <TableCell>
-                                <div className="flex justify-center">
-                                    <XIcon className="text-red-500" />
-                                </div>
-                            </TableCell>
-                            <TableCell>
-                                <div className="flex justify-center">
-                                    <CheckIcon className="text-green-500" />
+                                <div className="flex space-x-4">
+                                    {/* <UserPlusIcon className="text-blue-500" /> */}
+                                    <p className='place-content-center'>Jean DUPONT</p>
+                                    <button>
+                                        <Info />
+                                    </button>
                                 </div>
                             </TableCell>
                             <TableCell>
                                 <Button variant="destructive">Supprimer</Button>
                             </TableCell>
                         </TableRow>
-                        <TableRow>
-                            <TableCell>16/04/2023</TableCell>
-                            <TableCell>13:00</TableCell>
-                            <TableCell>15:00</TableCell>
-                            <TableCell>
-                                <div className="flex justify-center">
-                                    <CheckIcon className="text-green-500" />
-                                </div>
-                            </TableCell>
-                            <TableCell>
-                                <div className="flex justify-center">
-                                    <X className="text-red-500" />
-                                </div>
-                            </TableCell>
-                            <TableCell>
-                                <Button variant="destructive">Supprimer</Button>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>17/04/2023</TableCell>
-                            <TableCell>09:30</TableCell>
-                            <TableCell>11:00</TableCell>
-                            <TableCell>
-                                <div className="flex justify-center">
-                                    <XIcon className="text-red-500" />
-                                </div>
-                            </TableCell>
-                            <TableCell>
-                                <div className="flex justify-center">
-                                    <UserPlusIcon className="text-blue-500" />
-                                </div>
-                            </TableCell>
-                            <TableCell>
-                                <Button variant="destructive">Supprimer</Button>
-                            </TableCell>
-                        </TableRow>
+
                     </TableBody>
                 </Table>
             </div>
