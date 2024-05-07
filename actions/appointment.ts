@@ -3,7 +3,6 @@
 import { db } from "@/lib/db";
 import { getAppointments } from "./get-appointment";
 import { sendNotificationBooking } from "@/lib/mail";
-import { useCurrentUser } from "@/hooks/use-current-user";
 import { currentUser } from "@/lib/auth";
 import { getUserById } from "./user";
 import { Appointment, appointmentType } from "@prisma/client";
@@ -14,12 +13,15 @@ export interface FormattedAppointment {
     studentID: string | null;
     studentName: string;
     Date: string;
+    fullDate: Date | null;
     startTime: String;
     endTime: String;
+    endRecurence: string | null;
+    recurencID: string | null;
     flightType: appointmentType | null;
 }
 
-export const bookAppointment = async (appointmentID: string, userID: string, flightType: string) => {
+export const bookAppointment = async (appointmentID: string, userID: string, flightType: appointmentType) => {
     const appointment = await getAppointments(appointmentID);
     const studentUser = await currentUser();
 
@@ -44,7 +46,9 @@ export const bookAppointment = async (appointmentID: string, userID: string, fli
     try {
         await db.appointment.update({
             where: { id: appointmentID },
-            data: { studentID: userID }
+            data: { studentID: userID,
+                    type: flightType
+             }
         });
     } catch (error) {
         console.log(error);
@@ -63,9 +67,14 @@ export const getAppointmentsWithPilotID = async (piloteID: string) => {
         }
     });
 
-    const formattedAppointments: FormattedAppointment[] = await Promise.all(appointments.map(async (appointment: Appointment) => {
-        const { id, piloteID, studentID, startDate, endDate, type } = appointment;
+    const date = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 2, 0, 0); // 2 for local time europe
 
+    const upcomingAppointments = appointments.filter(
+        (appointment) => appointment.startDate !== null && appointment.startDate >= date
+    );
+
+    const formattedAppointments: FormattedAppointment[] = await Promise.all(upcomingAppointments.map(async (appointment: Appointment) => {
+        const { id, piloteID, studentID, startDate, endDate, type, appointmentDate, recurenceID } = appointment;
         const studentUser = await getUserById(studentID || "");
 
         const formattedStartDate = startDate?.toLocaleDateString('fr-FR', {
@@ -89,19 +98,55 @@ export const getAppointmentsWithPilotID = async (piloteID: string) => {
             minute: '2-digit'
         });
 
+        const formatedEndRecurence = appointmentDate?.toLocaleDateString('fr-FR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+        })
         return {
             id,
             piloteID,
             studentID,
             studentName: `${studentUser?.firstName} ${studentUser?.name}`,
             Date: formattedStartDate || "",
+            fullDate: startDate,
             startTime: formattedStartTime || "",
             endTime: formattedEndTime || "",
-            flightType: type
+            flightType: type,
+            endRecurence: formatedEndRecurence || null,
+            recurencID: recurenceID
         };
 
 
     })
     );
     return formattedAppointments;
+}
+
+export const removeAppointmentByIDAndReccurencID = async (ID: string, reccurenceID?: string) => {
+    if (reccurenceID) {
+        try {
+            await db.appointment.deleteMany({
+                where: {
+                    recurenceID: reccurenceID
+                }
+            })
+        } catch (error) {
+            console.log(error);
+            return {error: "Erreur dans la suppression de la recurence"}
+        }
+        return;
+    }
+
+    try {
+        await db.appointment.delete({
+            where: {
+                id: ID
+            }
+        })
+    } catch (error) {
+        console.log(error);
+        return {error: "Erreur dans la suppression de la recurence"}
+    }
+    return;
 }

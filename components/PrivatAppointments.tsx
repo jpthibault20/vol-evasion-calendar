@@ -10,23 +10,51 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { useEffect, useState } from 'react'
 import { FormattedAppointment, getAppointmentsWithPilotID } from '@/actions/appointment'
 import { useCurrentUser } from '@/hooks/use-current-user'
-import { Appointment } from '@prisma/client'
+import { compareAsc } from 'date-fns'
+import { Spinner } from './ui/spinner'
 
-export const PrivatAppointments = () => {
+interface PrivatAppointmentsProps{
+    reload: boolean,
+    setReload: (load: boolean) => void,
+    setRemovedAppointments: (load: boolean) => void,
+    setID: (load: string) => void,
+    setReccurenceID: (load: string) => void,
+}
+export const PrivatAppointments = ({reload, setReload, setRemovedAppointments, setID, setReccurenceID}: PrivatAppointmentsProps) => {
     const [appointments, setAppointments] = useState<FormattedAppointment[]>()
+    const [isLoading, setIsLoading] = useState<Boolean>(true);
     const user = useCurrentUser();
 
     useEffect(() => {
         if (user) {
+            setIsLoading(true);
             getAppointmentsWithPilotID(user.id as string)
                 .then((data) => {
                     setAppointments(data);
                 })
-                .catch((err) => {console.log(err);})
-                .finally(() => { })
+                .catch((err) => { console.log(err); })
+                .finally(() => { setIsLoading(false) })
         }
-    }, [])
-    console.log(appointments);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [reload])
+
+    const buttonSubmitDelete = (ID: string, RecurrenceID: string | null) => {
+        setID(ID);
+        if(RecurrenceID) setReccurenceID(RecurrenceID);
+        setRemovedAppointments(true);
+        
+    }
+
+    const sortAppointments = (appointments: FormattedAppointment[]) => {
+        return appointments.sort((a, b) => {
+            const dateA = a.fullDate || new Date(0);
+            const dateB = b.fullDate || new Date(0);
+            return compareAsc(dateA, dateB);
+        });
+    }
+
+    const sortedAppointments = sortAppointments(appointments || []);
+
     return (
         <div>
             <div className="p-4  flex items-center justify-between">
@@ -70,48 +98,77 @@ export const PrivatAppointments = () => {
                     </div>
                 </div>
             </div>
-            <div className="border rounded-lg bg-white">
+            {isLoading ? (
+                <Spinner>chargement ...</Spinner>
+            ) : (
+                <div className="border rounded-lg bg-white">
 
-                <Table className="w-full">
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Date</TableHead>
-                            <TableHead>Heure de début</TableHead>
-                            <TableHead>Heure de fin</TableHead>
-                            <TableHead>Récurrent</TableHead>
-                            <TableHead>Élève inscrit</TableHead>
-                            <TableHead>Action</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        <TableRow>
-                            <TableCell>14/04/2023</TableCell>
-                            <TableCell>08:00</TableCell>
-                            <TableCell>10:00</TableCell>
-                            <TableCell>
-                                <div className="">
-                                    <CheckIcon className="text-green-500" />
-                                    {/* <X className="text-red-500" /> */}
-                                </div>
-                            </TableCell>
-                            <TableCell>
-                                <div className="flex space-x-4">
-                                    {/* <UserPlusIcon className="text-blue-500" /> */}
-                                    <p className='place-content-center'>Jean DUPONT</p>
-                                    <button>
-                                        <Info />
-                                    </button>
-                                </div>
-                            </TableCell>
-                            <TableCell>
-                                <Button variant="destructive">Supprimer</Button>
-                            </TableCell>
-                        </TableRow>
+                    <Table className="w-full">
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Date</TableHead>
+                                <TableHead>Heure de début</TableHead>
+                                <TableHead>Heure de fin</TableHead>
+                                <TableHead>Récurrent / Fin</TableHead>
+                                <TableHead>Élève inscrit</TableHead>
+                                <TableHead>Type de vol</TableHead>
+                                <TableHead>Action</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {sortedAppointments?.map((appointment, index) => (
+                                <TableRow key={index}>
+                                    <TableCell>{appointment.Date}</TableCell>
+                                    <TableCell>{appointment.startTime}</TableCell>
+                                    <TableCell>{appointment.endTime}</TableCell>
+                                    <TableCell>
+                                        <div className="">
+                                            {appointment.endRecurence ? (
+                                                <div className='flex space-x-4'>
+                                                    <CheckIcon className="text-green-500" />
+                                                    <p>{appointment.endRecurence}</p>
+                                                </div>
 
-                    </TableBody>
-                </Table>
-            </div>
+                                            ) : (
+                                                <X className="text-red-500" />
+                                            )}
+                                        </div>
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className="flex">
+                                            {appointment.studentID ? (
+                                                <p className='place-content-center'>{appointment.studentName}</p>
+                                            ) : (
+                                                <button>
+                                                    <UserPlusIcon className="text-blue-500" />
+                                                </button>
+                                            )}
+
+                                        </div>
+                                    </TableCell>
+                                    <TableCell>
+                                        {appointment.studentID ? (
+                                            appointment.flightType
+                                        ) : (
+                                            <p>...</p>
+                                        )}
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className='flex space-x-4'>
+                                            <Button variant="destructive" onClick={() => buttonSubmitDelete(appointment.id, appointment.recurencID)}>Supprimer</Button>
+                                            {/* <Button variant="modify">Modifier</Button> */}
+
+                                        </div>
+
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
+
+
+            )}
         </div>
-
     )
 };

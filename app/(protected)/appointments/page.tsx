@@ -3,9 +3,15 @@
 import { AddToCalendar } from '@/components/AddToCalendar'
 import {PrivatAppointments} from '@/components/PrivatAppointments'
 import { RoleGate } from '@/components/auth/role-gate'
+import { RemoveAppointments } from '@/components/removeAppointment(s)'
 import React, { useState } from 'react'
 
 const Appointments = () => {
+    const [ID, setID] = useState("");
+    const [recurenceID, setRcurenceID] = useState("");
+    const [removedAppointments, setRemovedAppointments] = useState<boolean>(false);
+    const [modifyAppointments, setModifyAppointments] = useState<boolean>(false);
+    const [addUserAppointments, setAddUserAppointments] = useState<boolean>(false);
     const [reload, setReload] = useState(false);
     
     return (
@@ -18,11 +24,12 @@ const Appointments = () => {
                     </div>
 
                     <div className='p-6 w-full'>
-                        <PrivatAppointments />
+                        <PrivatAppointments setReload={setReload} reload={reload} setRemovedAppointments={setRemovedAppointments} setReccurenceID={setRcurenceID} setID={setID} />
                     </div>
                 </div>
 
                 <AddToCalendar setReload={setReload} reload={reload}/>
+                <RemoveAppointments setReload={setReload} reload={reload} removedAppointments={removedAppointments} setRemovedAppointments={setRemovedAppointments} ID={ID} recurenceID={recurenceID} />
 
             </RoleGate>
         </div>
