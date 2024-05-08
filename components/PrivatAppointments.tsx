@@ -13,14 +13,15 @@ import { useCurrentUser } from '@/hooks/use-current-user'
 import { compareAsc } from 'date-fns'
 import { Spinner } from './ui/spinner'
 
-interface PrivatAppointmentsProps{
+interface PrivatAppointmentsProps {
     reload: boolean,
     setReload: (load: boolean) => void,
     setRemovedAppointments: (load: boolean) => void,
     setID: (load: string) => void,
     setReccurenceID: (load: string) => void,
+    setAddUserAppointments: (load: boolean) => void
 }
-export const PrivatAppointments = ({reload, setReload, setRemovedAppointments, setID, setReccurenceID}: PrivatAppointmentsProps) => {
+export const PrivatAppointments = ({ reload, setReload, setRemovedAppointments, setID, setReccurenceID, setAddUserAppointments }: PrivatAppointmentsProps) => {
     const [appointments, setAppointments] = useState<FormattedAppointment[]>()
     const [isLoading, setIsLoading] = useState<Boolean>(true);
     const user = useCurrentUser();
@@ -40,9 +41,14 @@ export const PrivatAppointments = ({reload, setReload, setRemovedAppointments, s
 
     const buttonSubmitDelete = (ID: string, RecurrenceID: string | null) => {
         setID(ID);
-        if(RecurrenceID) setReccurenceID(RecurrenceID);
+        if (RecurrenceID) setReccurenceID(RecurrenceID);
         setRemovedAppointments(true);
-        
+
+    }
+
+    const buttonSubmitAddUser = (ID: string) => {
+        setID(ID);
+        setAddUserAppointments(true);
     }
 
     const sortAppointments = (appointments: FormattedAppointment[]) => {
@@ -139,7 +145,7 @@ export const PrivatAppointments = ({reload, setReload, setRemovedAppointments, s
                                             {appointment.studentID ? (
                                                 <p className='place-content-center'>{appointment.studentName}</p>
                                             ) : (
-                                                <button>
+                                                <button onClick={() => buttonSubmitAddUser(appointment.id)}>
                                                     <UserPlusIcon className="text-blue-500" />
                                                 </button>
                                             )}

@@ -1,9 +1,10 @@
 "use client"
 
 import { AddToCalendar } from '@/components/AddToCalendar'
-import {PrivatAppointments} from '@/components/PrivatAppointments'
+import { PrivatAppointments } from '@/components/PrivatAppointments'
 import { RoleGate } from '@/components/auth/role-gate'
 import { RemoveAppointments } from '@/components/removeAppointment(s)'
+import { AddStudent } from "@/components/addStudentToAppointment"
 import React, { useState } from 'react'
 
 const Appointments = () => {
@@ -13,7 +14,7 @@ const Appointments = () => {
     const [modifyAppointments, setModifyAppointments] = useState<boolean>(false);
     const [addUserAppointments, setAddUserAppointments] = useState<boolean>(false);
     const [reload, setReload] = useState(false);
-    
+
     return (
         <div>
             <RoleGate allowedRole={'PILOTE'} noAccesPage={true}>
@@ -24,12 +25,34 @@ const Appointments = () => {
                     </div>
 
                     <div className='p-6 w-full'>
-                        <PrivatAppointments setReload={setReload} reload={reload} setRemovedAppointments={setRemovedAppointments} setReccurenceID={setRcurenceID} setID={setID} />
+                        <PrivatAppointments
+                            setReload={setReload}
+                            reload={reload}
+                            setRemovedAppointments={setRemovedAppointments}
+                            setReccurenceID={setRcurenceID}
+                            setID={setID}
+                            setAddUserAppointments={setAddUserAppointments}
+                        />
                     </div>
                 </div>
 
-                <AddToCalendar setReload={setReload} reload={reload}/>
-                <RemoveAppointments setReload={setReload} reload={reload} removedAppointments={removedAppointments} setRemovedAppointments={setRemovedAppointments} ID={ID} recurenceID={recurenceID} />
+                <AddToCalendar
+                    setReload={setReload}
+                    reload={reload}
+                />
+                <AddStudent
+                    view={addUserAppointments}
+                    setView={setAddUserAppointments}
+                    appointmentID={ID}
+                />
+                <RemoveAppointments
+                    setReload={setReload}
+                    reload={reload}
+                    removedAppointments={removedAppointments}
+                    setRemovedAppointments={setRemovedAppointments}
+                    ID={ID}
+                    recurenceID={recurenceID}
+                />
 
             </RoleGate>
         </div>

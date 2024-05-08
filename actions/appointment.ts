@@ -150,3 +150,16 @@ export const removeAppointmentByIDAndReccurencID = async (ID: string, reccurence
     }
     return;
 }
+
+export const getAppointment = async (ID: string) => {
+    try {
+        const appointment = await db.appointment.findUnique({where:{id: ID}});
+        
+        appointment?.endDate?.setHours(appointment.endDate.getHours()-2);
+        appointment?.startDate?.setHours(appointment.startDate.getHours()-2);
+        
+        return appointment
+    } catch (error) {
+        return null;
+    }
+}
