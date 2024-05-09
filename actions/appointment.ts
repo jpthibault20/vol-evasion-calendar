@@ -3,36 +3,52 @@
 import { db } from "@/lib/db";
 import { getAppointments } from "./get-appointment";
 import { sendNotificationBooking } from "@/lib/mail";
-import { useCurrentUser } from "@/hooks/use-current-user";
 import { currentUser } from "@/lib/auth";
 import { getUserById } from "./user";
+import { Appointment, appointmentType } from "@prisma/client";
 
-export const bookAppointment = async(appointmentID: string, userID: string, flightType: string) => {
+export interface FormattedAppointment {
+    id: string;
+    piloteID: string;
+    studentID: string | null;
+    studentName: string;
+    Date: string;
+    fullDate: Date | null;
+    startTime: String;
+    endTime: String;
+    endRecurence: string | null;
+    recurencID: string | null;
+    flightType: appointmentType | null;
+}
+
+export const bookAppointment = async (appointmentID: string, userID: string, flightType: appointmentType) => {
     const appointment = await getAppointments(appointmentID);
-    const studentUser = await currentUser();    
+    const studentUser = await currentUser();
 
     if (!userID) {
-        return {error: "Utilisateur introuvable"}
+        return { error: "Utilisateur introuvable" }
     }
 
     if (!appointment) {
-        return {error: "Réservation introuvable"}
+        return { error: "Réservation introuvable" }
     }
 
     if (!flightType) {
-        return {error: "type de vol invalide"}
+        return { error: "type de vol invalide" }
     }
 
     if (appointment.studentID) {
-        return {error: "réservation plus disponible "}
+        return { error: "réservation plus disponible " }
     }
 
-const piloteUser = await getUserById(appointment?.piloteID);
+    const piloteUser = await getUserById(appointment?.piloteID);
 
     try {
         await db.appointment.update({
             where: { id: appointmentID },
-            data: { studentID: userID }
+            data: { studentID: userID,
+                    type: flightType
+             }
         });
     } catch (error) {
         console.log(error);
@@ -41,5 +57,109 @@ const piloteUser = await getUserById(appointment?.piloteID);
 
     await sendNotificationBooking(piloteUser?.email as string, studentUser?.firstname as string, studentUser?.name as string, appointment.startDate as Date, appointment.endDate as Date);
 
-    return {success: "Réservation réussie"}
+    return { success: "Réservation réussie" }
 };
+
+export const getAppointmentsWithPilotID = async (piloteID: string) => {
+    const appointments = await db.appointment.findMany({
+        where: {
+            piloteID: piloteID
+        }
+    });
+
+    const date = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 2, 0, 0); // 2 for local time europe
+
+    const upcomingAppointments = appointments.filter(
+        (appointment) => appointment.startDate !== null && appointment.startDate >= date
+    );
+
+    const formattedAppointments: FormattedAppointment[] = await Promise.all(upcomingAppointments.map(async (appointment: Appointment) => {
+        const { id, piloteID, studentID, startDate, endDate, type, appointmentDate, recurenceID } = appointment;
+        const studentUser = await getUserById(studentID || "");
+
+        const formattedStartDate = startDate?.toLocaleDateString('fr-FR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        });
+        // Créer une copie de la date de début pour éviter de modifier l'objet original
+        const startDateCopy = new Date(startDate || "");
+        startDateCopy.setHours(startDate!.getHours() - 2);
+        const formattedStartTime = startDateCopy.toLocaleTimeString('fr-FR', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        // Créer une copie de la date de fin pour éviter de modifier l'objet original
+        const endDateCopy = new Date(endDate || "");
+        endDateCopy.setHours(endDate!.getHours() - 2);
+        const formattedEndTime = endDateCopy.toLocaleTimeString('fr-FR', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        const formatedEndRecurence = appointmentDate?.toLocaleDateString('fr-FR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+        })
+        return {
+            id,
+            piloteID,
+            studentID,
+            studentName: `${studentUser?.firstName} ${studentUser?.name}`,
+            Date: formattedStartDate || "",
+            fullDate: startDate,
+            startTime: formattedStartTime || "",
+            endTime: formattedEndTime || "",
+            flightType: type,
+            endRecurence: formatedEndRecurence || null,
+            recurencID: recurenceID
+        };
+
+
+    })
+    );
+    return formattedAppointments;
+}
+
+export const removeAppointmentByIDAndReccurencID = async (ID: string, reccurenceID?: string) => {
+    if (reccurenceID) {
+        try {
+            await db.appointment.deleteMany({
+                where: {
+                    recurenceID: reccurenceID
+                }
+            })
+        } catch (error) {
+            console.log(error);
+            return {error: "Erreur dans la suppression de la recurence"}
+        }
+        return;
+    }
+
+    try {
+        await db.appointment.delete({
+            where: {
+                id: ID
+            }
+        })
+    } catch (error) {
+        console.log(error);
+        return {error: "Erreur dans la suppression de la recurence"}
+    }
+    return;
+}
+
+export const getAppointment = async (ID: string) => {
+    try {
+        const appointment = await db.appointment.findUnique({where:{id: ID}});
+        
+        appointment?.endDate?.setHours(appointment.endDate.getHours()-2);
+        appointment?.startDate?.setHours(appointment.startDate.getHours()-2);
+        
+        return appointment
+    } catch (error) {
+        return null;
+    }
+}

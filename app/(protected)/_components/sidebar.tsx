@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Calendar, Plane, User, LogOut, ChevronsRight, ChevronsLeft, GraduationCap } from 'lucide-react';
+import { Calendar, Plane, User, LogOut, ChevronsRight, ChevronsLeft, GraduationCap, BetweenHorizontalEnd } from 'lucide-react';
 import { LogoutButton } from '@/components/auth/logout-button';
 import { RoleGate } from "@/components/auth/role-gate";
 import { UserRole } from "@prisma/client";
@@ -52,6 +52,14 @@ export const Sidebar = () => {
                     <div className={`flex items-center p-2 rounded-md hover:bg-gray-800 ${isOpen ? 'justify-start' : 'justify-center'}`}>
                       <Plane className="w-6 h-6" />
                       {isOpen && <span className="ml-2">Avions</span>}
+                    </div>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/appointments">
+                    <div className={`flex items-center p-2 rounded-md hover:bg-gray-800 ${isOpen ? 'justify-start' : 'justify-center'}`}>
+                      <BetweenHorizontalEnd className="w-6 h-6" />
+                      {isOpen && <span className="ml-2">Mes vols</span>}
                     </div>
                   </Link>
                 </li>

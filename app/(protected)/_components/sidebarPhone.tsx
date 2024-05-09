@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { PageIcon } from '@/components/pageIcon';
-import { Calendar, GraduationCap, LogOut, Menu, Plane, User } from 'lucide-react';
+import { BetweenHorizontalEnd, Calendar, GraduationCap, LogOut, Menu, Plane, User } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { RoleGate } from '@/components/auth/role-gate';
@@ -51,10 +51,20 @@ export const SidebarPhone = () => {
                                         <Link href="/planes" onClick={() => setShowSidebar(!showSidebar)}>
                                             <div className={`flex items-center p-2 rounded-md hover:bg-gray-100 justify-start`}>
                                                 <Plane className="w-6 h-6" />
-                                                <span className="ml-2">Avions</span>
+                                                <span className="ml-2">Mes ULM</span>
                                             </div>
                                         </Link>
                                     </li>
+
+                                    <li>
+                                        <Link href="/appointments" onClick={() => setShowSidebar(!showSidebar)}>
+                                            <div className={`flex items-center p-2 rounded-md hover:bg-gray-100 justify-start`}>
+                                                <BetweenHorizontalEnd  className="w-6 h-6" />
+                                                <span className="ml-2">Mes vols</span>
+                                            </div>
+                                        </Link>
+                                    </li>
+
                                     <li>
                                         <Link href="/students" onClick={() => setShowSidebar(!showSidebar)}>
                                             <div className={`flex items-center p-2 rounded-md hover:bg-gray-100 justify-start`}>
