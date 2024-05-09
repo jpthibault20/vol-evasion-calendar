@@ -5,7 +5,7 @@ import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import { Button } from '../ui/button'
-import { Appointment, User } from '@prisma/client'
+import { Appointment, User, appointmentType } from '@prisma/client'
 import { useCurrentUser } from '@/hooks/use-current-user'
 import { bookAppointment } from '@/actions/appointment'
 import { FormSuccess } from '../form-success'
@@ -24,19 +24,19 @@ export const Booking = ({ appointment, pilote, reload, setReload, setViewInfo }:
   const [error, setError] = useState("");
 
   const user = useCurrentUser();
-  
+
   const formattedDateStart = appointment?.startDate?.toLocaleString('fr-FR');
   const formattedDateEnd = appointment?.endDate?.toLocaleString('fr-FR');
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); // Empêche le rechargement de la page
-  
+
     const formData = new FormData(event.currentTarget);
     const flightType = formData.get('type');
 
     if (appointment?.id && user?.id) {
-      bookAppointment(appointment.id, user.id, flightType as string)
-        .then((data)=>{
+      bookAppointment(appointment.id, user.id, flightType as appointmentType)
+        .then((data) => {
           if (data.success) {
             setSuccess(data.success);
             toast(success || "Réservation réussie !", {
@@ -52,7 +52,7 @@ export const Booking = ({ appointment, pilote, reload, setReload, setViewInfo }:
             setError(data.error);
           }
         })
-        .catch((err)=>{
+        .catch((err) => {
           setError("Une erreur est survenue");
           console.log(err);
         })
@@ -60,7 +60,7 @@ export const Booking = ({ appointment, pilote, reload, setReload, setViewInfo }:
 
         })
     }
-    
+
   };
 
 
@@ -114,20 +114,20 @@ export const Booking = ({ appointment, pilote, reload, setReload, setViewInfo }:
                 </SelectContent>
               </Select>
             </div>
-            <FormSuccess message={success}/>
-            <FormError message={error}/>
+            <FormSuccess message={success} />
+            <FormError message={error} />
             {appointment?.studentID == null ? (
               <Button className="w-full" type="submit">
-              Réserver
-            </Button>
-            ):(
+                Réserver
+              </Button>
+            ) : (
               <div>
                 <p className='text-center font-semibold text-gray-700'>
                   vol déja reservé
                 </p>
               </div>
             )}
-            
+
           </form>
         </div>
       </div>
