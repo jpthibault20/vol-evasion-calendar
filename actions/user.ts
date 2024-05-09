@@ -69,7 +69,7 @@ export const removeStudentUser = async(appointmentID: string) => {
   try {
     await db.appointment.update({
       where: {id: appointmentID},
-      data: {studentID: ""}
+      data: {studentID: null}
     })
   } catch (error) {
     console.log(error);
