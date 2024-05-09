@@ -6,12 +6,13 @@ import { RoleGate } from '@/components/auth/role-gate'
 import { RemoveAppointments } from '@/components/removeAppointment(s)'
 import { AddStudent } from "@/components/addStudentToAppointment"
 import React, { useState } from 'react'
+import { RemoveUserApppointment } from '@/components/removeUserAppointment'
 
 const Appointments = () => {
     const [ID, setID] = useState("");
     const [recurenceID, setRcurenceID] = useState("");
     const [removedAppointments, setRemovedAppointments] = useState<boolean>(false);
-    const [modifyAppointments, setModifyAppointments] = useState<boolean>(false);
+    const [removeUserAppointments, setRemoveUserAppointments] = useState<boolean>(false);
     const [addUserAppointments, setAddUserAppointments] = useState<boolean>(false);
     const [reload, setReload] = useState(false);
 
@@ -32,6 +33,7 @@ const Appointments = () => {
                             setReccurenceID={setRcurenceID}
                             setID={setID}
                             setAddUserAppointments={setAddUserAppointments}
+                            setRemoveUser={setRemoveUserAppointments}
                         />
                     </div>
                 </div>
@@ -44,6 +46,8 @@ const Appointments = () => {
                     view={addUserAppointments}
                     setView={setAddUserAppointments}
                     appointmentID={ID}
+                    setReload={setReload}
+                    reload={reload}
                 />
                 <RemoveAppointments
                     setReload={setReload}
@@ -53,6 +57,12 @@ const Appointments = () => {
                     ID={ID}
                     recurenceID={recurenceID}
                 />
+                <RemoveUserApppointment
+                    view={removeUserAppointments}
+                    setView={setRemoveUserAppointments}
+                    reload={reload}
+                    setReload={setReload}
+                    appointmentID={ID} />
 
             </RoleGate>
         </div>

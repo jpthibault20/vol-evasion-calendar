@@ -26,20 +26,20 @@ export const RemoveAppointments = ({ reload, setReload, removedAppointments, set
         }
 
 
-        if(deleteReccurence) {
-           removeAppointmentByIDAndReccurencID(ID, recurenceID)
-            .catch((err) => {
-                if (err) setError(err);
-            }) 
+        if (deleteReccurence) {
+            removeAppointmentByIDAndReccurencID(ID, recurenceID)
+                .catch((err) => {
+                    if (err) setError(err);
+                })
         }
         else {
             removeAppointmentByIDAndReccurencID(ID)
-             .catch((err) => {
-                 if (err) setError(err);
-             }) 
-         }
+                .catch((err) => {
+                    if (err) setError(err);
+                })
+        }
 
-        
+
 
         setRemovedAppointments(false)
         setReload(!reload);
@@ -49,32 +49,32 @@ export const RemoveAppointments = ({ reload, setReload, removedAppointments, set
         <div className="fixed inset-0 z-50 flex items-center justify-center">
             <CardWrapper headerLabel={"Supprimer un vol ?"} setShowForm={setRemovedAppointments} showForm={removedAppointments}>
                 <div className="space-y-4">
-                    <Button 
+                    <Button
                         className="w-full"
-                        onClick={() => { setRemovedAppointments(false)}}
+                        onClick={() => { setRemovedAppointments(false) }}
                     >
                         Annuler
                     </Button>
-                    <Button 
+                    <Button
                         className="w-full"
                         variant="destructive"
-                        onClick={()=>{onClickButtonRemove(false)}}
+                        onClick={() => { onClickButtonRemove(false) }}
                     >
                         Supprimer ce vol uniquement
                     </Button>
 
-                    <Button 
+                    <Button
                         className="w-full"
                         variant="destructive"
-                        onClick={()=>{onClickButtonRemove(true)}}
+                        onClick={() => { onClickButtonRemove(true) }}
                     >
                         Supprimer toute la récurence
                     </Button>
 
-                    <FormError message={error}/>
+                    <FormError message={error} />
                 </div>
 
-                
+
             </CardWrapper>
 
         </div>

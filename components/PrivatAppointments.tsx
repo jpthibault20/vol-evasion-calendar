@@ -4,7 +4,7 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent } from './u
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
 import { Button } from './ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
-import { CalendarDays, CheckIcon, Info, UserPlusIcon, X } from 'lucide-react'
+import { CalendarDays, CheckIcon, Info, UserPlusIcon, UserX, X } from 'lucide-react'
 import { Calendar } from './ui/calendar'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
 import { useEffect, useState } from 'react'
@@ -15,13 +15,14 @@ import { Spinner } from './ui/spinner'
 
 interface PrivatAppointmentsProps {
     reload: boolean,
-    setReload: (load: boolean) => void,
-    setRemovedAppointments: (load: boolean) => void,
-    setID: (load: string) => void,
-    setReccurenceID: (load: string) => void,
-    setAddUserAppointments: (load: boolean) => void
+    setReload: (load: boolean) => void;
+    setRemovedAppointments: (load: boolean) => void;
+    setID: (load: string) => void;
+    setReccurenceID: (load: string) => void;
+    setAddUserAppointments: (load: boolean) => void;
+    setRemoveUser: (load: boolean) => void;
 }
-export const PrivatAppointments = ({ reload, setReload, setRemovedAppointments, setID, setReccurenceID, setAddUserAppointments }: PrivatAppointmentsProps) => {
+export const PrivatAppointments = ({ reload, setReload, setRemovedAppointments, setID, setReccurenceID, setAddUserAppointments, setRemoveUser }: PrivatAppointmentsProps) => {
     const [appointments, setAppointments] = useState<FormattedAppointment[]>()
     const [isLoading, setIsLoading] = useState<Boolean>(true);
     const user = useCurrentUser();
@@ -49,6 +50,11 @@ export const PrivatAppointments = ({ reload, setReload, setRemovedAppointments, 
     const buttonSubmitAddUser = (ID: string) => {
         setID(ID);
         setAddUserAppointments(true);
+    }
+
+    const buttonRemoveUser = (ID: string) => {
+        setID(ID);
+        setRemoveUser(true)
     }
 
     const sortAppointments = (appointments: FormattedAppointment[]) => {
@@ -143,7 +149,13 @@ export const PrivatAppointments = ({ reload, setReload, setRemovedAppointments, 
                                     <TableCell>
                                         <div className="flex">
                                             {appointment.studentID ? (
-                                                <p className='place-content-center'>{appointment.studentName}</p>
+                                                <div className='flex space-x-2'>
+                                                    <p className='place-content-center'>{appointment.studentName}</p>
+                                                    <button className='text-red-600' onClick={() => buttonRemoveUser(appointment.id)}>
+                                                        <UserX />
+                                                    </button>
+                                                </div>
+
                                             ) : (
                                                 <button onClick={() => buttonSubmitAddUser(appointment.id)}>
                                                     <UserPlusIcon className="text-blue-500" />
