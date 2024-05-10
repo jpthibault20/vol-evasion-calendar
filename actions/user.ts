@@ -49,18 +49,3 @@ export const removeUserById = async (id: string) => {
 
 
 
-export const removeStudentUser = async(appointmentID: string) => {
-  if (!appointmentID) {
-    return {error: "Error ID"}
-  }
-  try {
-    await db.appointment.update({
-      where: {id: appointmentID},
-      data: {studentID: null}
-    })
-  } catch (error) {
-    console.log(error);
-    return { error: "Il y a eu une erreur" };
-  }
-  return {success: "Mise à jour effectué avec succes"};
-}

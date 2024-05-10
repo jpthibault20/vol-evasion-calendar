@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db";
 import { getAppointments } from "./get-appointment";
-import { sendNotificationBooking, sendStudentNotificationBooking } from "@/lib/mail";
+import { sendNotificationBooking, sendNotificationRemoveAppointment, sendStudentNotificationBooking } from "@/lib/mail";
 import { currentUser } from "@/lib/auth";
 import { getUserById } from "./user";
 import { Appointment, appointmentType } from "@prisma/client";
@@ -126,6 +126,21 @@ export const getAppointmentsWithPilotID = async (piloteID: string) => {
 
 export const removeAppointmentByIDAndReccurencID = async (ID: string, reccurenceID?: string) => {
     if (reccurenceID) {
+        const appointments = await db.appointment.findMany({
+            where: {
+                recurenceID: reccurenceID
+            }
+        })
+        await Promise.all(appointments.map(async (appointment) => {
+            if (appointment.studentID) {
+                const student = await db.user.findUnique({ where: { id: appointment.studentID } });
+                if (student) {
+                    sendNotificationRemoveAppointment(student.email as string, appointment.startDate as Date, appointment.endDate as Date);
+                }
+            }
+        }));
+
+
         try {
             await db.appointment.deleteMany({
                 where: {
@@ -138,6 +153,22 @@ export const removeAppointmentByIDAndReccurencID = async (ID: string, reccurence
         }
         return;
     }
+
+
+
+    const appointment = await db.appointment.findUnique({
+        where: {
+            id: ID
+        }
+    })
+    if (appointment?.studentID) {
+        const student = await db.user.findUnique({ where: { id: appointment.studentID } });
+        if (student) {
+
+            sendNotificationRemoveAppointment(student.email as string, appointment.startDate as Date, appointment.endDate as Date);
+        }
+    }
+
 
     try {
         await db.appointment.delete({
@@ -172,8 +203,8 @@ export const addUserToAppointment = async (appointmentID: string, userID: string
     try {
         await db.appointment.update({
             where: { id: appointmentID },
-            data: { 
-                studentID: userID, 
+            data: {
+                studentID: userID,
                 type: flyingType
             }
         });
@@ -184,4 +215,27 @@ export const addUserToAppointment = async (appointmentID: string, userID: string
 
     await sendStudentNotificationBooking(user?.email as string, appointment?.startDate as Date, appointment?.endDate as Date)
     return { success: "Mise à jour effectué avec succes" };
-} 
+}
+
+export const removeStudentUser = async (appointmentID: string) => {
+    if (!appointmentID) {
+        return { error: "Error ID" }
+    }
+
+    const appointment = await getAppointment(appointmentID);
+    if (appointment?.studentID) {
+        const user = await getUserById(appointment?.studentID);
+        await sendNotificationRemoveAppointment(user?.email as string, appointment.startDate as Date, appointment.endDate as Date)
+    }
+
+    try {
+        await db.appointment.update({
+            where: { id: appointmentID },
+            data: { studentID: null }
+        })
+    } catch (error) {
+        console.log(error);
+        return { error: "Il y a eu une erreur" };
+    }
+    return { success: "Mise à jour effectué avec succes" };
+}

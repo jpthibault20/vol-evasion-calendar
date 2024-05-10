@@ -1,10 +1,10 @@
 "use client"
 
-import { removeStudentUser } from "@/actions/user";
 import { CardWrapper } from "./CardWrapper";
 import { Button } from "./ui/button";
 import { FormError } from "./form-error";
 import { useState } from "react";
+import { removeStudentUser } from "@/actions/appointment";
 
 
 interface RemoveUserApppointmentProps {
