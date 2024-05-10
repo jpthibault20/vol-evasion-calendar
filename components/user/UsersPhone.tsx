@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { UpdateUser } from "./UpdateUser";
 import { X } from "lucide-react";
 import { RemoveUser } from "./RemoveUser";
+import { Spinner } from "../ui/spinner";
 
 export const UsersPhone = () => {
 
@@ -16,15 +17,18 @@ export const UsersPhone = () => {
     const [showUpdateUser, setShowUpdateUser] = useState(false);
     const [showRemoveUser, setShowRemoveUser] = useState(false);
     const [reload, setReload] = useState(true);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
+        setIsLoading(true);
         getAllUsers()
             .then(data => {
                 setUsers(data);
             })
             .catch(error => {
                 console.error(error);
-            });
+            })
+            .finally(()=>setIsLoading(false))
 
     }, [reload]);
 
@@ -50,8 +54,10 @@ export const UsersPhone = () => {
                     <option value="user">User</option>
                 </select>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-
+            {isLoading ? (
+                <Spinner>Chargelment ...</Spinner>
+            ):(
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {users.map((user, index) => (
                     <div key={index} className="flex bg-white dark:bg-zinc-700 p-4 rounded-lg shadow-md  justify-between">
                         <button   onClick={() => updateUser(user.id)}>
@@ -74,6 +80,8 @@ export const UsersPhone = () => {
                     
                 ))}
             </div>
+            )}
+            
 
             <UpdateUser ID={userID} show={showUpdateUser} setShow={setShowUpdateUser} setReload={setReload} reload={reload}/>
             <RemoveUser ID={userID} show={showRemoveUser} setShow={setShowRemoveUser} setReload={setReload} reload={reload} />

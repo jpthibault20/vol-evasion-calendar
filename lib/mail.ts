@@ -1,7 +1,6 @@
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-
 const domain = process.env.NEXT_PUBLIC_APP_URL;
 
 export const sendPasswordResetEmail = async (
@@ -41,6 +40,30 @@ export const sendNotificationBooking = async (email: string, studentFirstname: s
     to: email,
     subject: "vol Réservé",
     html: `<p>${studentFirstname} ${studentLastname} à réservé un vol : ${formatedStartDate} -> ${formatedEndDate}</p>`
+  });
+}
+
+export const sendStudentNotificationBooking = async (email: string, startDate: Date, endDate: Date) => {
+  const formatedStartDate = startDate.toLocaleString('fr-FR');
+  const formatedEndDate = endDate.toLocaleString('fr-FR');
+
+  await resend.emails.send({
+    from: 'Acme <onboarding@resend.dev>',
+    to: email,
+    subject: "vol Réservé",
+    html: `<p>Vous etes inscrit à un vol : ${formatedStartDate} -> ${formatedEndDate}</p>`
+  });
+}
+
+export const sendNotificationRemoveAppointment = async (email: string, startDate: Date, endDate: Date) => {
+  const formatedStartDate = startDate.toLocaleString('fr-FR');
+  const formatedEndDate = endDate.toLocaleString('fr-FR');
+
+  await resend.emails.send({
+    from: 'Acme <onboarding@resend.dev>',
+    to: email,
+    subject: "vol Annulé",
+    html: `<p>Le vol de ${formatedStartDate} -> ${formatedEndDate} à etait annulé</p>`
   });
 
 }

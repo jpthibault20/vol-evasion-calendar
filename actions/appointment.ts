@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db";
 import { getAppointments } from "./get-appointment";
-import { sendNotificationBooking } from "@/lib/mail";
+import { sendNotificationBooking, sendNotificationRemoveAppointment, sendStudentNotificationBooking } from "@/lib/mail";
 import { currentUser } from "@/lib/auth";
 import { getUserById } from "./user";
 import { Appointment, appointmentType } from "@prisma/client";
@@ -46,9 +46,10 @@ export const bookAppointment = async (appointmentID: string, userID: string, fli
     try {
         await db.appointment.update({
             where: { id: appointmentID },
-            data: { studentID: userID,
-                    type: flightType
-             }
+            data: {
+                studentID: userID,
+                type: flightType
+            }
         });
     } catch (error) {
         console.log(error);
@@ -125,6 +126,21 @@ export const getAppointmentsWithPilotID = async (piloteID: string) => {
 
 export const removeAppointmentByIDAndReccurencID = async (ID: string, reccurenceID?: string) => {
     if (reccurenceID) {
+        const appointments = await db.appointment.findMany({
+            where: {
+                recurenceID: reccurenceID
+            }
+        })
+        await Promise.all(appointments.map(async (appointment) => {
+            if (appointment.studentID) {
+                const student = await db.user.findUnique({ where: { id: appointment.studentID } });
+                if (student) {
+                    sendNotificationRemoveAppointment(student.email as string, appointment.startDate as Date, appointment.endDate as Date);
+                }
+            }
+        }));
+
+
         try {
             await db.appointment.deleteMany({
                 where: {
@@ -133,10 +149,26 @@ export const removeAppointmentByIDAndReccurencID = async (ID: string, reccurence
             })
         } catch (error) {
             console.log(error);
-            return {error: "Erreur dans la suppression de la recurence"}
+            return { error: "Erreur dans la suppression de la recurence" }
         }
         return;
     }
+
+
+
+    const appointment = await db.appointment.findUnique({
+        where: {
+            id: ID
+        }
+    })
+    if (appointment?.studentID) {
+        const student = await db.user.findUnique({ where: { id: appointment.studentID } });
+        if (student) {
+
+            sendNotificationRemoveAppointment(student.email as string, appointment.startDate as Date, appointment.endDate as Date);
+        }
+    }
+
 
     try {
         await db.appointment.delete({
@@ -146,20 +178,64 @@ export const removeAppointmentByIDAndReccurencID = async (ID: string, reccurence
         })
     } catch (error) {
         console.log(error);
-        return {error: "Erreur dans la suppression de la recurence"}
+        return { error: "Erreur dans la suppression de la recurence" }
     }
     return;
 }
 
 export const getAppointment = async (ID: string) => {
     try {
-        const appointment = await db.appointment.findUnique({where:{id: ID}});
-        
-        appointment?.endDate?.setHours(appointment.endDate.getHours()-2);
-        appointment?.startDate?.setHours(appointment.startDate.getHours()-2);
-        
+        const appointment = await db.appointment.findUnique({ where: { id: ID } });
+
+        appointment?.endDate?.setHours(appointment.endDate.getHours() - 2);
+        appointment?.startDate?.setHours(appointment.startDate.getHours() - 2);
+
         return appointment
     } catch (error) {
         return null;
     }
+}
+
+export const addUserToAppointment = async (appointmentID: string, userID: string, flyingType: appointmentType) => {
+    const appointment = await getAppointment(appointmentID);
+    const user = await getUserById(userID);
+
+    try {
+        await db.appointment.update({
+            where: { id: appointmentID },
+            data: {
+                studentID: userID,
+                type: flyingType
+            }
+        });
+    } catch (error) {
+        console.log(error);
+        return { error: "Il y a eu une erreur" };
+    }
+
+    await sendStudentNotificationBooking(user?.email as string, appointment?.startDate as Date, appointment?.endDate as Date)
+    return { success: "Mise à jour effectué avec succes" };
+}
+
+export const removeStudentUser = async (appointmentID: string) => {
+    if (!appointmentID) {
+        return { error: "Error ID" }
+    }
+
+    const appointment = await getAppointment(appointmentID);
+    if (appointment?.studentID) {
+        const user = await getUserById(appointment?.studentID);
+        await sendNotificationRemoveAppointment(user?.email as string, appointment.startDate as Date, appointment.endDate as Date)
+    }
+
+    try {
+        await db.appointment.update({
+            where: { id: appointmentID },
+            data: { studentID: null }
+        })
+    } catch (error) {
+        console.log(error);
+        return { error: "Il y a eu une erreur" };
+    }
+    return { success: "Mise à jour effectué avec succes" };
 }
