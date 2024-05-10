@@ -43,24 +43,24 @@ export const LoginForm = () => {
   });
 
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
-    // setError("");
-    // setSuccess("");
+    setError("");
+    setSuccess("");
 
-    // startTransition(() => {
-    //   login(values, callbackUrl)
-    //     .then((data) => {
-    //       if (data?.error) {
-    //         form.reset();
-    //         setError(data.error);
-    //       }
+    startTransition(() => {
+      login(values, callbackUrl)
+        .then((data) => {
+          if (data?.error) {
+            form.reset();
+            setError(data.error);
+          }
 
-    //       if (data?.success) {
-    //         form.reset();
-    //         setSuccess(data.success);
-    //       }
-    //     })
-    //     .catch(() => setError("Something went wrong"));
-    // });
+          if (data?.success) {
+            form.reset();
+            setSuccess(data.success);
+          }
+        })
+        .catch(() => setError("Something went wrong"));
+    });
   };
 
   return (
