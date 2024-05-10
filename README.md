@@ -12,8 +12,6 @@
 
 - branche dev / prod db
 
-- création dispo, téléphone affichage bug oversize
-
 - taille calendrier téléphone h-full
 
 - refont login phone view pas de card pour phone view

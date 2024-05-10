@@ -19,7 +19,7 @@ export const AddToCalendar = ({setReload, reload}: AddToCalendarProps) => {
     return (
         <div>
             {showForm && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center">
+                <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto pt-52 md:pt-0">
                   <AppointmentForm setShowForm={setShowForm} showForm={showForm} setReload={setReload} reload={reload} />
                 </div>
               )}
