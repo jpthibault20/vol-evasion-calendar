@@ -1,7 +1,6 @@
 "use server"
 
 import { db } from "@/lib/db";
-import { User, appointmentType } from "@prisma/client";
 
 export const getAllUsers = async () => {
   const users = await db.user.findMany();
@@ -48,19 +47,7 @@ export const removeUserById = async (id: string) => {
   return { succes: "Utilisateur suprimé" };
 }
 
-export const addUserToAppointment = async(appointmentID: string, userID: string) => {
-  try {
-    await db.appointment.update({
-      where: {id: appointmentID},
-      data: { studentID: userID}
-    });
-  } catch (error) {
-    console.log(error);
-    return { error: "Il y a eu une erreur" };
-  }
 
-  return {success: "Mise à jour effectué avec succes"};
-} 
 
 export const removeStudentUser = async(appointmentID: string) => {
   if (!appointmentID) {

@@ -42,5 +42,16 @@ export const sendNotificationBooking = async (email: string, studentFirstname: s
     subject: "vol Réservé",
     html: `<p>${studentFirstname} ${studentLastname} à réservé un vol : ${formatedStartDate} -> ${formatedEndDate}</p>`
   });
+}
 
+export const sendStudentNotificationBooking = async (email: string, startDate: Date, endDate: Date) => {
+  const formatedStartDate = startDate.toLocaleString('fr-FR');
+  const formatedEndDate = endDate.toLocaleString('fr-FR');
+
+  await resend.emails.send({
+    from: 'Acme <onboarding@resend.dev>',
+    to: email,
+    subject: "vol Réservé",
+    html: `<p>Vous etes inscrit à un vol : ${formatedStartDate} -> ${formatedEndDate}</p>`
+  });
 }

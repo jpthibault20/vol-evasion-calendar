@@ -17,7 +17,7 @@ export function Calendar({ setIDAppointment, appointments, setViewInfo }: Calend
   const events = appointments.map((appointment: Appointment) => {
   
     return {
-      title: appointment.studentID ? "Réservé" : "thibault",
+      title: appointment.studentID ? "Réservé" : appointment.piloteFirstname,
       id: appointment.id || "",
       start: appointment.startDate || "",
       end: appointment.endDate || "",
