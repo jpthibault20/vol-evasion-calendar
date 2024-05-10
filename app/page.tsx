@@ -10,7 +10,7 @@ const font = Poppins({
 export default function Home() {
   return (
     <main className="flex h-full flex-col items-center justify-center bg-[url('/planeBackground.jpg')]">
-       <LoginForm />
+       {/* <LoginForm /> */}
     </main>
   )
 }
