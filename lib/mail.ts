@@ -10,7 +10,7 @@ export const sendPasswordResetEmail = async (
   const resetLink = `${domain}/auth/new-password?token=${token}`
 
   await resend.emails.send({
-    from: 'Acme <onboarding@resend.dev>',
+    from: 'thibault@jp-developpement.com',
     to: email,
     subject: "Reset your password",
     html: `<p>Click <a href="${resetLink}">here</a> to reset password.</p>`
@@ -24,7 +24,7 @@ export const sendVerificationEmail = async (
   const confirmLink = `${domain}/auth/new-verification?token=${token}`;
 
   await resend.emails.send({
-    from: 'Acme <onboarding@resend.dev>',
+    from: 'thibault@jp-developpement.com',
     to: email,
     subject: "Confirm your email",
     html: `<p>Click <a href="${confirmLink}">here</a> to confirm email.</p>`
@@ -36,7 +36,7 @@ export const sendNotificationBooking = async (email: string, studentFirstname: s
   const formatedEndDate = endDate.toLocaleString('fr-FR');
 
   await resend.emails.send({
-    from: 'Acme <onboarding@resend.dev>',
+    from: 'thibault@jp-developpement.com',
     to: email,
     subject: "vol Réservé",
     html: `<p>${studentFirstname} ${studentLastname} à réservé un vol : ${formatedStartDate} -> ${formatedEndDate}</p>`
@@ -48,7 +48,7 @@ export const sendStudentNotificationBooking = async (email: string, startDate: D
   const formatedEndDate = endDate.toLocaleString('fr-FR');
 
   await resend.emails.send({
-    from: 'Acme <onboarding@resend.dev>',
+    from: 'thibault@jp-developpement.com',
     to: email,
     subject: "vol Réservé",
     html: `<p>Vous etes inscrit à un vol : ${formatedStartDate} -> ${formatedEndDate}</p>`
@@ -60,7 +60,7 @@ export const sendNotificationRemoveAppointment = async (email: string, startDate
   const formatedEndDate = endDate.toLocaleString('fr-FR');
 
   await resend.emails.send({
-    from: 'Acme <onboarding@resend.dev>',
+    from: 'thibault@jp-developpement.com',
     to: email,
     subject: "vol Annulé",
     html: `<p>Le vol de ${formatedStartDate} -> ${formatedEndDate} à etait annulé</p>`
