@@ -21,13 +21,13 @@ export default async function RootLayout({
   const session = await auth();
 
   return (
-    <SessionProvider session={session}>
+    // <SessionProvider session={session}>
       <html lang="fr">
         <body className={cn(inter.className, "bg-gray-100")}>
           <Toaster />
           {children}
         </body>
       </html>
-    </SessionProvider>
+    // </SessionProvider>
   )
 }
