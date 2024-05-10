@@ -8,6 +8,7 @@ import { UpdateUser } from './UpdateUser';
 import { RemoveUser } from './RemoveUser';
 import { Info } from 'lucide-react';
 import { InfoUser } from './InfoUser';
+import { Spinner } from '../ui/spinner';
 
 const UserManagement = () => {
     const [users, setUsers] = useState<User[]>([]);
@@ -16,6 +17,7 @@ const UserManagement = () => {
     const [showRemoveUser, setShowRemoveUser] = useState(false);
     const [showInfoUser, setshowInfoUser] = useState(false);
     const [reload, setReload] = useState(true);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const updateRole = (ID: string) => {
         setUserID(ID);
@@ -33,13 +35,15 @@ const UserManagement = () => {
     }
 
     useEffect(() => {
+        setIsLoading(true);
         getAllUsers()
             .then(data => {
                 setUsers(data);
             })
             .catch(error => {
                 console.error(error);
-            });
+            })
+            .finally(() => setIsLoading(false))
     }, [reload]);
 
 
@@ -59,7 +63,10 @@ const UserManagement = () => {
                     </select>
                 </div>
             </div>
-            <div className="bg-white shadow-md rounded my-6">
+            {isLoading ? (
+                <Spinner>Chargement</Spinner>
+            ) : (
+<div className="bg-white shadow-md rounded my-6">
                 <table className="text-left w-full border-collapse">
                     <thead>
                         <tr>
@@ -69,6 +76,7 @@ const UserManagement = () => {
                             <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Action</th>
                         </tr>
                     </thead>
+
                     <tbody>
                         {users.map((user, index) => (
                             <tr key={index} className="hover:bg-grey-lighter">
@@ -102,6 +110,8 @@ const UserManagement = () => {
                     </tbody>
                 </table>
             </div>
+            )}
+            
             <div className="flex justify-between items-center py-4">
                 <span>Total Users : {users.length}</span>
             </div>
