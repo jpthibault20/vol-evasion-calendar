@@ -1,3 +1,8 @@
+import MagicLinkEmail from "@/emails/MagicLink";
+import NotificationBookingPilote from "@/emails/NotificationBookingPilote";
+import NotificationBookingStudent from "@/emails/NotificationBookingStudent";
+import NotificationSudentRemove from "@/emails/NotificationSudentRemove"
+import ResetPassword from "@/emails/ResetPassword";
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -13,21 +18,17 @@ export const sendPasswordResetEmail = async (
     from: 'thibault@jp-developpement.com',
     to: email,
     subject: "Reset your password",
-    html: `<p>Click <a href="${resetLink}">here</a> to reset password.</p>`
+    react: ResetPassword({magicLink: resetLink})
   });
 };
 
-export const sendVerificationEmail = async (
-  email: string, 
-  token: string
-) => {
+export const sendVerificationEmail = async (email: string, token: string) => {
   const confirmLink = `${domain}/auth/new-verification?token=${token}`;
-
   await resend.emails.send({
     from: 'thibault@jp-developpement.com',
     to: email,
-    subject: "Confirm your email",
-    html: `<p>Click <a href="${confirmLink}">here</a> to confirm email.</p>`
+    subject: "Vol Evasion",
+    react: MagicLinkEmail({magicLink: confirmLink})
   });
 };
 
@@ -38,8 +39,8 @@ export const sendNotificationBooking = async (email: string, studentFirstname: s
   await resend.emails.send({
     from: 'thibault@jp-developpement.com',
     to: email,
-    subject: "vol Réservé",
-    html: `<p>${studentFirstname} ${studentLastname} à réservé un vol : ${formatedStartDate} -> ${formatedEndDate}</p>`
+    subject: "vol Evasion",
+    react: NotificationBookingPilote({startDate: formatedStartDate, endDate: formatedEndDate, name: studentLastname, firstName: studentFirstname})
   });
 }
 
@@ -50,8 +51,8 @@ export const sendStudentNotificationBooking = async (email: string, startDate: D
   await resend.emails.send({
     from: 'thibault@jp-developpement.com',
     to: email,
-    subject: "vol Réservé",
-    html: `<p>Vous etes inscrit à un vol : ${formatedStartDate} -> ${formatedEndDate}</p>`
+    subject: "vol Evasion",
+    react: NotificationBookingStudent({startDate: formatedStartDate, endDate: formatedEndDate})
   });
 }
 
@@ -62,8 +63,8 @@ export const sendNotificationRemoveAppointment = async (email: string, startDate
   await resend.emails.send({
     from: 'thibault@jp-developpement.com',
     to: email,
-    subject: "vol Annulé",
-    html: `<p>Le vol de ${formatedStartDate} -> ${formatedEndDate} à etait annulé</p>`
+    subject: "vol Evasion",
+    react: NotificationSudentRemove({startDate: formatedStartDate, endDate: formatedEndDate})
   });
 
 }

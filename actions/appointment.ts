@@ -57,6 +57,7 @@ export const bookAppointment = async (appointmentID: string, userID: string, fli
     }
 
     await sendNotificationBooking(piloteUser?.email as string, studentUser?.firstname as string, studentUser?.name as string, appointment.startDate as Date, appointment.endDate as Date);
+    await sendStudentNotificationBooking(studentUser?.email as string,  appointment.startDate as Date, appointment.endDate as Date);
 
     return { success: "Réservation réussie" }
 };
