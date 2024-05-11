@@ -54,7 +54,7 @@ export const EventList = ({ setIDAppointment, setViewInfo, appointments }: Event
   };
 
   return (
-    <div>
+    <div className='h-full'>
       <FullCalendar
         ref={calendarRef}
         plugins={[listPlugin]}
@@ -83,6 +83,7 @@ export const EventList = ({ setIDAppointment, setViewInfo, appointments }: Event
             click: handleTodayButtonClick,
           },
         }}
+        height="70vh"
       />
     </div>
   );

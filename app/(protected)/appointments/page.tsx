@@ -19,13 +19,13 @@ const Appointments = () => {
     return (
         <div>
             <RoleGate allowedRole={'PILOTE'} noAccesPage={true}>
-                <div className="w-full flex flex-col items-center space-y-8 md:divide-y md: divide-gray-200 md:dark:divide-gray-800 md:pt-8">
+                <div className="w-full md:space-y-8 flex flex-col items-center md:divide-y md:divide-gray-200 md:dark:divide-gray-800 md:pt-8">
 
                     <div className='hidden md:block'>
                         <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-50">Mes vols</h2>
                     </div>
 
-                    <div className='p-6 w-full'>
+                    <div className='px-6 pb-6 w-full'>
                         <PrivatAppointments
                             setReload={setReload}
                             reload={reload}
