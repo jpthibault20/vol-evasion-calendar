@@ -15,8 +15,6 @@ const CalendarPage = () => {
   const [viewInfo, setViewInfo] = useState(false);
   const [idAppointment, setIDAppointment] = useState("");
   const [reload, setReload] = useState(false);
-
-
   const [appointments, setAppointments] = useState<Appointment[]>();
   const [isLoading, setIsLoading] = useState(true);
 
