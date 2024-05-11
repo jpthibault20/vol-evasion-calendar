@@ -72,9 +72,9 @@ export const UserProfile = ({ user, adress, reload, setReload }: UserProfileProp
 
   return (
 
-    <form className="mx-auto max-w-3xl py-12 px-4 sm:px-6 lg:py-16 lg:px-8" onSubmit={handleSubmit}>
-      <div className="space-y-8 divide-y divide-gray-200 dark:divide-gray-800">
-        <div>
+    <form className="mx-auto max-w-3xl pb-6 md:pb-0 md:py-12 px-4 sm:px-6 lg:py-16 lg:px-8" onSubmit={handleSubmit}>
+      <div className="space-y-8 md:divide-y divide-gray-200 dark:divide-gray-800">
+        <div className='hidden md:block'>
           <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-50">Profil</h2>
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             Vos informations personel
@@ -282,7 +282,7 @@ export const UserProfile = ({ user, adress, reload, setReload }: UserProfileProp
         </div>
         <div className="pt-5">
           <div className="flex justify-end">
-            <Button type="submit">Save</Button>
+            <Button type="submit">Enregistrer</Button>
           </div>
         </div>
       </div>
