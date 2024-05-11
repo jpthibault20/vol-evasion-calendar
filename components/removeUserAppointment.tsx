@@ -3,7 +3,7 @@
 import { CardWrapper } from "./CardWrapper";
 import { Button } from "./ui/button";
 import { FormError } from "./form-error";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { removeStudentUser } from "@/actions/appointment";
 
 
@@ -18,19 +18,22 @@ interface RemoveUserApppointmentProps {
 
 export const RemoveUserApppointment = ({ view, setView, reload, setReload, appointmentID }: RemoveUserApppointmentProps) => {
     const [error, setError] = useState<string>("");
+    const [isPending, startTransition] = useTransition();
 
     const buttonDeleteSubmit = () => {
+        startTransition(() => {
+            removeStudentUser(appointmentID)
+                .then((data) => {
+                    if (data.error) {
+                        setError(data.error);
+                    }
+                    if (data.success) {
+                        setView(false);
+                        setReload(!reload);
+                    }
+                })
+        })
 
-        removeStudentUser(appointmentID)
-            .then((data) => {
-                if (data.error) {
-                    setError(data.error);
-                }
-                if (data.success) {
-                    setView(false);
-                    setReload(!reload);
-                }
-            })
 
     }
 
@@ -48,18 +51,27 @@ export const RemoveUserApppointment = ({ view, setView, reload, setReload, appoi
                 <div className="space-y-4">
                     <FormError message={error} />
                     <div className="flex w-full space-x-4">
-                        <Button className="w-full" onClick={() => setView(false)}>
+                        <Button
+                            className="w-full"
+                            onClick={() => setView(false)}
+                            disabled={isPending}
+                        >
                             Annuler
                         </Button>
 
-                        <Button className="w-full" variant="destructive" onClick={buttonDeleteSubmit}>
-                            Supprimer
-                        </Button>
-                    </div>
+                        <Button
+                            className="w-full"
+                            variant="destructive"
+                            onClick={buttonDeleteSubmit}
+                            disabled={isPending}
+                        >
+                        Supprimer
+                    </Button>
                 </div>
-
-
-            </CardWrapper>
         </div>
+
+
+            </CardWrapper >
+        </div >
     );
 }

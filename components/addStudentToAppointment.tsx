@@ -1,6 +1,6 @@
 "use client"
 
-import { startTransition, useEffect, useState } from "react";
+import { startTransition, useEffect, useState, useTransition } from "react";
 import { CardWrapper } from "./CardWrapper";
 import { Appointment, User, appointmentType } from "@prisma/client";
 import { Spinner } from "./ui/spinner";
@@ -23,6 +23,7 @@ export const AddStudent = ({ view, setView, appointmentID, reload, setReload }: 
     const [error, setError] = useState<string | undefined>();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [users, setUsers] = useState<User[] | null>(null);
+    const [isPending, startTransition] = useTransition();
 
     useEffect(() => {
         setIsLoading(true);
@@ -131,7 +132,12 @@ export const AddStudent = ({ view, setView, appointmentID, reload, setReload }: 
 
 
                             <FormError message={error} />
-                            <Button type="submit">Enregistrer</Button>
+                            <Button 
+                                type="submit"
+                                disabled={isPending}
+                            >
+                                Enregistrer
+                            </Button>
                         </form>
 
                     </div>
