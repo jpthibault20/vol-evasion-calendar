@@ -21,6 +21,14 @@ export interface FormattedAppointment {
     flightType: appointmentType | null;
 }
 
+function formatTime(date: Date) {
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+
+    return `${hours}:${minutes}:${seconds}`
+}
+
 export const bookAppointment = async (appointmentID: string, userID: string, flightType: appointmentType) => {
     const appointment = await getAppointments(appointmentID);
     const studentUser = await currentUser();
@@ -57,7 +65,7 @@ export const bookAppointment = async (appointmentID: string, userID: string, fli
     }
 
     await sendNotificationBooking(piloteUser?.email as string, studentUser?.firstname as string, studentUser?.name as string, appointment.startDate as Date, appointment.endDate as Date);
-    await sendStudentNotificationBooking(studentUser?.email as string,  appointment.startDate as Date, appointment.endDate as Date);
+    await sendStudentNotificationBooking(studentUser?.email as string, appointment.startDate as Date, appointment.endDate as Date);
 
     return { success: "Réservation réussie" }
 };
@@ -87,18 +95,12 @@ export const getAppointmentsWithPilotID = async (piloteID: string) => {
         // Créer une copie de la date de début pour éviter de modifier l'objet original
         const startDateCopy = new Date(startDate || "");
         startDateCopy.setHours(startDate!.getHours() - 2);
-        const formattedStartTime = startDateCopy.toLocaleTimeString('fr-FR', {
-            hour: '2-digit',
-            minute: '2-digit'
-        });
+        const formattedStartTime = formatTime(startDateCopy);
 
         // Créer une copie de la date de fin pour éviter de modifier l'objet original
         const endDateCopy = new Date(endDate || "");
         endDateCopy.setHours(endDate!.getHours() - 2);
-        const formattedEndTime = endDateCopy.toLocaleTimeString('fr-FR', {
-            hour: '2-digit',
-            minute: '2-digit'
-        });
+        const formattedEndTime = formatTime(endDateCopy);
 
         const formatedEndRecurence = appointmentDate?.toLocaleDateString('fr-FR', {
             year: 'numeric',
