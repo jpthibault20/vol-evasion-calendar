@@ -55,6 +55,7 @@ export const AppointmentForm = ({ setShowForm, showForm, setReload, reload }: Ap
         values.timeStart = timeAppointmentStart as Date;
         values.timeEnd = timeAppointmentEnd as Date;
         values.dateEndReccurence = dateAppointment as Date;
+        console.log(values.timeStart);
 
         setError("");
         setSuccess("");
