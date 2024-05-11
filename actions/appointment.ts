@@ -93,13 +93,13 @@ export const getAppointmentsWithPilotID = async (piloteID: string) => {
             day: '2-digit'
         });
         // Créer une copie de la date de début pour éviter de modifier l'objet original
-        const startDateCopy = new Date(startDate || "");
-        startDateCopy.setHours(startDate!.getHours() - 2);
+        const startDateCopy = new Date(startDate!.getTime() - 7200000  || "");
+        // startDateCopy.setHours(startDate!.getHours() - 2);
         const formattedStartTime = formatTime(startDateCopy);
 
         // Créer une copie de la date de fin pour éviter de modifier l'objet original
-        const endDateCopy = new Date(endDate || "");
-        endDateCopy.setHours(endDate!.getHours() - 2);
+        const endDateCopy = new Date(endDate!.getTime() - 7200000 || "");
+        // endDateCopy.setHours(endDate!.getHours() - 2);
         const formattedEndTime = formatTime(endDateCopy);
 
         const formatedEndRecurence = appointmentDate?.toLocaleDateString('fr-FR', {
@@ -107,6 +107,8 @@ export const getAppointmentsWithPilotID = async (piloteID: string) => {
             month: '2-digit',
             day: '2-digit',
         })
+
+        console.log(formattedStartTime)
         return {
             id,
             piloteID,
