@@ -16,10 +16,12 @@ interface RemoveAppointmentsProps {
 
 export const RemoveAppointments = ({ reload, setReload, removedAppointments, setRemovedAppointments, ID, recurenceID }: RemoveAppointmentsProps) => {
     const [error, setError] = useState("");
+    const [isPensding, setIsPending] = useState<boolean>(false);
     if (!removedAppointments) return null;
 
     const onClickButtonRemove = (deleteReccurence: boolean) => {
         setError("");
+        setIsPending(true);
         if (deleteReccurence && !recurenceID) {
             setError("Ce vol n'es pas une reccurence")
             return;
@@ -31,12 +33,14 @@ export const RemoveAppointments = ({ reload, setReload, removedAppointments, set
                 .catch((err) => {
                     if (err) setError(err);
                 })
+                .finally(()=>setIsPending(false))
         }
         else {
             removeAppointmentByIDAndReccurencID(ID)
                 .catch((err) => {
                     if (err) setError(err);
                 })
+                .finally(()=>setIsPending(false))
         }
 
 
@@ -51,6 +55,7 @@ export const RemoveAppointments = ({ reload, setReload, removedAppointments, set
                 <div className="space-y-4">
                     <Button
                         className="w-full"
+                        disabled={isPensding}
                         onClick={() => { setRemovedAppointments(false) }}
                     >
                         Annuler
@@ -58,6 +63,7 @@ export const RemoveAppointments = ({ reload, setReload, removedAppointments, set
                     <Button
                         className="w-full"
                         variant="destructive"
+                        disabled={isPensding}
                         onClick={() => { onClickButtonRemove(false) }}
                     >
                         Supprimer ce vol uniquement
@@ -66,6 +72,7 @@ export const RemoveAppointments = ({ reload, setReload, removedAppointments, set
                     <Button
                         className="w-full"
                         variant="destructive"
+                        disabled={isPensding}
                         onClick={() => { onClickButtonRemove(true) }}
                     >
                         Supprimer toute la récurence
