@@ -14,6 +14,7 @@ export const publicRoutes = [
  * @type {string[]}
  */
 export const authRoutes = [
+  "/auth/login",
   "/auth/register",
   "/auth/error",
   "/auth/reset",
@@ -31,4 +32,4 @@ export const apiAuthPrefix = "/api/auth";
  * The default redirect path after logging in
  * @type {string}
  */
-export const DEFAULT_LOGIN_REDIRECT: string = "/calendar";
+export const DEFAULT_LOGIN_REDIRECT = "/calendar";

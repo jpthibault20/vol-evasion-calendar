@@ -15,7 +15,7 @@ export const {
   signOut,
 } = NextAuth({
   pages: {
-    signIn: "/",
+    signIn: "/auth/login",
     error: "/auth/error",
   },
   events: {
@@ -56,7 +56,6 @@ export const {
         session.user.name = token.name;
         session.user.firstname = token.firstname as string;
         session.user.email = token.email as string;
-        session.user.isOAuth = token.isOAuth as boolean; 
         session.user.color = token.color as string;
       }
       return session;
