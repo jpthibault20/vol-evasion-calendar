@@ -106,6 +106,7 @@ export const AddStudent = ({ view, setView, appointmentID, reload, setReload }: 
                                 <label>Liste des élève</label>
                                 <select
                                     name="userID"
+                                    disabled={isPending}
                                     className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 rounded-md bg-white text-gray-900 disabled:bg-gray-100 disabled:text-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                                 >
                                     {users?.map((user, index) => (
@@ -120,6 +121,7 @@ export const AddStudent = ({ view, setView, appointmentID, reload, setReload }: 
                                 <label>Type de vole</label>
                                 <select
                                     name="flyingType"
+                                    disabled={isPending}
                                     className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 rounded-md bg-white text-gray-900 disabled:bg-gray-100 disabled:text-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                                 >
                                     {flyingType?.map((flyingType, index) => (
