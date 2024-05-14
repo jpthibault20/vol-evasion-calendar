@@ -14,6 +14,7 @@ const Appointments = () => {
     const [removedAppointments, setRemovedAppointments] = useState<boolean>(false);
     const [removeUserAppointments, setRemoveUserAppointments] = useState<boolean>(false);
     const [addUserAppointments, setAddUserAppointments] = useState<boolean>(false);
+    const [isReccurence, setIsReccurence] = useState<boolean>(false);
     const [reload, setReload] = useState(false);
 
     return (
@@ -34,6 +35,7 @@ const Appointments = () => {
                             setID={setID}
                             setAddUserAppointments={setAddUserAppointments}
                             setRemoveUser={setRemoveUserAppointments}
+                            setIsRecurence={setIsReccurence}
                         />
                     </div>
                 </div>
@@ -56,6 +58,7 @@ const Appointments = () => {
                     setRemovedAppointments={setRemovedAppointments}
                     ID={ID}
                     recurenceID={recurenceID}
+                    isReccurence={isReccurence}
                 />
                 <RemoveUserApppointment
                     view={removeUserAppointments}

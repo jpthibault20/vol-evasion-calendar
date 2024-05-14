@@ -12,9 +12,10 @@ interface RemoveAppointmentsProps {
     setRemovedAppointments: (load: boolean) => void;
     ID: string;
     recurenceID: string;
+    isReccurence: boolean;
 }
 
-export const RemoveAppointments = ({ reload, setReload, removedAppointments, setRemovedAppointments, ID, recurenceID }: RemoveAppointmentsProps) => {
+export const RemoveAppointments = ({ reload, setReload, removedAppointments, setRemovedAppointments, ID, recurenceID, isReccurence }: RemoveAppointmentsProps) => {
     const [error, setError] = useState("");
     const [isPensding, setIsPending] = useState<boolean>(false);
     if (!removedAppointments) return null;
@@ -68,8 +69,8 @@ export const RemoveAppointments = ({ reload, setReload, removedAppointments, set
                     >
                         Supprimer ce vol uniquement
                     </Button>
-
-                    <Button
+                    {isReccurence && (
+                        <Button
                         className="w-full"
                         variant="destructive"
                         disabled={isPensding}
@@ -77,6 +78,8 @@ export const RemoveAppointments = ({ reload, setReload, removedAppointments, set
                     >
                         Supprimer toute la récurence
                     </Button>
+                    )}
+                    
 
                     <FormError message={error} />
                 </div>
