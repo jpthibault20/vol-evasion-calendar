@@ -47,5 +47,3 @@ export const removeUserById = async (id: string) => {
   return { succes: "Utilisateur suprimé" };
 }
 
-
-

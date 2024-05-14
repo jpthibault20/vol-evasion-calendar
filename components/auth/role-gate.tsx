@@ -2,6 +2,8 @@
 
 import { UserRole } from "@prisma/client";
 import { useCurrentRole } from "@/hooks/use-current-role";
+import { currentRole } from "@/lib/auth";
+import { useState } from "react";
 
 interface RoleGateProps {
   children: React.ReactNode;
@@ -10,7 +12,7 @@ interface RoleGateProps {
 };
 
 export const RoleGate = ({ children, allowedRole, noAccesPage}: RoleGateProps) => {
-  const role = useCurrentRole();
+  const role = useCurrentRole()
 
   switch (allowedRole) {
     case UserRole.USER:

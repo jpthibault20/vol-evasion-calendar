@@ -9,6 +9,9 @@ import { InfoAppointment } from '@/components/appointment/InfoAppointment';
 import { getAppointments } from '@/actions/get-appoitments';
 import { Spinner } from '@/components/ui/spinner';
 import { AddToCalendar } from '@/components/AddToCalendar';
+import { useCurrentRole } from '@/hooks/use-current-role';
+import { currentRole } from '@/lib/auth';
+import { User } from 'next-auth';
 
 
 const CalendarPage = () => {
