@@ -8,7 +8,7 @@ import { CalendarDays, CheckIcon, Info, UserPlusIcon, UserX, X } from 'lucide-re
 import { Calendar } from './ui/calendar'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
 import { useEffect, useState } from 'react'
-import { FormattedAppointment, getAppointmentsWithPilotID } from '@/actions/appointment'
+import { FormattedAppointment, bookAppointment, getAppointmentsWithPilotID } from '@/actions/appointment'
 import { useCurrentUser } from '@/hooks/use-current-user'
 import { compareAsc } from 'date-fns'
 import { Spinner } from './ui/spinner'
@@ -21,8 +21,9 @@ interface PrivatAppointmentsProps {
     setReccurenceID: (load: string) => void;
     setAddUserAppointments: (load: boolean) => void;
     setRemoveUser: (load: boolean) => void;
+    setIsRecurence: (load : boolean) => void;
 }
-export const PrivatAppointments = ({ reload, setReload, setRemovedAppointments, setID, setReccurenceID, setAddUserAppointments, setRemoveUser }: PrivatAppointmentsProps) => {
+export const PrivatAppointments = ({ reload, setReload, setRemovedAppointments, setID, setReccurenceID, setAddUserAppointments, setRemoveUser, setIsRecurence }: PrivatAppointmentsProps) => {
     const [appointments, setAppointments] = useState<FormattedAppointment[]>()
     const [isLoading, setIsLoading] = useState<Boolean>(true);
     const user = useCurrentUser();
@@ -52,8 +53,11 @@ export const PrivatAppointments = ({ reload, setReload, setRemovedAppointments, 
         setAddUserAppointments(true);
     }
 
-    const buttonRemoveUser = (ID: string) => {
+    const buttonRemoveUser = (ID: string, reccurent: string | null) => {
         setID(ID);
+        if (reccurent) {
+            setIsRecurence(true);
+        }
         setRemoveUser(true)
     }
 
@@ -151,7 +155,7 @@ export const PrivatAppointments = ({ reload, setReload, setRemovedAppointments, 
                                             {appointment.studentID ? (
                                                 <div className='flex space-x-2'>
                                                     <p className='place-content-center'>{appointment.studentName}</p>
-                                                    <button className='text-red-600' onClick={() => buttonRemoveUser(appointment.id)}>
+                                                    <button className='text-red-600' onClick={() => buttonRemoveUser(appointment.id, appointment.studentID)}>
                                                         <UserX />
                                                     </button>
                                                 </div>
