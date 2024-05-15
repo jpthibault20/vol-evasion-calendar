@@ -6,4 +6,11 @@
 
 - refont login phone view pas de card pour phone view
 
-- supression vol : afficher uniquement le bouton de supre
+- diseable sur la création / inscription de vol et sur la modification d'un utilisateur en tant que admin
+
+- Un utilisateur USER a acces a la liste des utilisateurs
+
+- un utilisateur pilote ne peux modifier un utilisateur admin
+
+- ajouter un oeil sur la page de login et d'inscription pour visualiser le mot de passe
+
