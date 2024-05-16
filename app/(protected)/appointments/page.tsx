@@ -10,7 +10,7 @@ import { RemoveUserApppointment } from '@/components/removeUserAppointment'
 
 const Appointments = () => {
     const [ID, setID] = useState("");
-    const [recurenceID, setRcurenceID] = useState("");
+    const [recurenceID, setRcurenceID] = useState<string | null>("");
     const [removedAppointments, setRemovedAppointments] = useState<boolean>(false);
     const [removeUserAppointments, setRemoveUserAppointments] = useState<boolean>(false);
     const [addUserAppointments, setAddUserAppointments] = useState<boolean>(false);

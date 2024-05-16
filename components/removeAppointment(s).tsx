@@ -11,7 +11,7 @@ interface RemoveAppointmentsProps {
     removedAppointments: boolean;
     setRemovedAppointments: (load: boolean) => void;
     ID: string;
-    recurenceID: string;
+    recurenceID: string | null;
     isReccurence: boolean;
 }
 
@@ -29,7 +29,7 @@ export const RemoveAppointments = ({ reload, setReload, removedAppointments, set
         }
 
 
-        if (deleteReccurence) {
+        if (deleteReccurence && recurenceID) {
             removeAppointmentByIDAndReccurencID(ID, recurenceID)
                 .catch((err) => {
                     if (err) setError(err);
@@ -50,6 +50,8 @@ export const RemoveAppointments = ({ reload, setReload, removedAppointments, set
         setReload(!reload);
     }
 
+    console.log(recurenceID)
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
             <CardWrapper headerLabel={"Supprimer un vol ?"} setShowForm={setRemovedAppointments} showForm={removedAppointments}>
@@ -69,7 +71,7 @@ export const RemoveAppointments = ({ reload, setReload, removedAppointments, set
                     >
                         Supprimer ce vol uniquement
                     </Button>
-                    {isReccurence && (
+                    {recurenceID && (
                         <Button
                         className="w-full"
                         variant="destructive"

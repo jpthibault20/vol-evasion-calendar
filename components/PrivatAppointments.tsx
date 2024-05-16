@@ -18,7 +18,7 @@ interface PrivatAppointmentsProps {
     setReload: (load: boolean) => void;
     setRemovedAppointments: (load: boolean) => void;
     setID: (load: string) => void;
-    setReccurenceID: (load: string) => void;
+    setReccurenceID: (load: string | null) => void;
     setAddUserAppointments: (load: boolean) => void;
     setRemoveUser: (load: boolean) => void;
     setIsRecurence: (load : boolean) => void;
@@ -44,6 +44,7 @@ export const PrivatAppointments = ({ reload, setReload, setRemovedAppointments, 
     const buttonSubmitDelete = (ID: string, RecurrenceID: string | null) => {
         setID(ID);
         if (RecurrenceID) setReccurenceID(RecurrenceID);
+        else setReccurenceID(null)
         setRemovedAppointments(true);
 
     }
