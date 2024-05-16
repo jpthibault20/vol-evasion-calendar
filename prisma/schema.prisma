@@ -93,6 +93,7 @@ model Appointment {
   color            String?          @default("")
   vehiculeID       String?
   studentID        String?
+  studentFirstname String?
   recurrence       Boolean?
   recurenceID      String?
   startDate        DateTime?

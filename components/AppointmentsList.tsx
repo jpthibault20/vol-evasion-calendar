@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useRef, RefObject } from 'react';
+import React, { useRef, RefObject } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import listPlugin from '@fullcalendar/list';
-import { getAppointments } from '@/data/appointments';
 import frLocale from '@fullcalendar/core/locales/fr'
-import { ChevronLeft } from 'lucide-react';
 import { Appointment } from '@prisma/client';
 import { EventClickArg } from '@fullcalendar/core/index.js';
 
@@ -16,15 +14,14 @@ interface EventListProp {
 export const EventList = ({ setIDAppointment, setViewInfo, appointments }: EventListProp) => {
   const calendarRef: RefObject<FullCalendar> = useRef(null);
 
-
   const events = appointments.map((appointment: Appointment) => {
   
     return {
-      title: appointment.studentID ? "Réservé" : "thibault",
+      title: appointment.studentID ? `${appointment.studentFirstname}` : `Disponible`,
       id: appointment.id || "",
       start: appointment.startDate || "",
       end: appointment.endDate || "",
-      color: appointment.studentID ? "#CECECE" : appointment.color || "",
+      color: appointment.studentID ? "#9E0202" : "#0E9E02",
     };
   });
 

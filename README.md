@@ -14,3 +14,6 @@
 
 - ajouter un oeil sur la page de login et d'inscription pour visualiser le mot de passe
 
+- Boite suppression vol (uniquement et récurence)
+
+- pour supprimer les vols, trouver une solution pour que se soit plus visuel

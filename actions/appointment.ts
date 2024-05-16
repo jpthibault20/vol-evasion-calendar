@@ -56,6 +56,7 @@ export const bookAppointment = async (appointmentID: string, userID: string, fli
             where: { id: appointmentID },
             data: {
                 studentID: userID,
+                studentFirstname: studentUser?.firstname,
                 type: flightType
             }
         });
