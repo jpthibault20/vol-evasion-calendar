@@ -15,7 +15,7 @@ export function Calendar({ setIDAppointment, appointments, setViewInfo }: Calend
 
 
   const events = appointments.map((appointment: Appointment) => {
-  
+
     return {
       title: appointment.studentID ? `${appointment.studentFirstname}` : `Disponible`,
       id: appointment.id || "",
@@ -24,7 +24,6 @@ export function Calendar({ setIDAppointment, appointments, setViewInfo }: Calend
       color: appointment.studentID ? "#9E0202" : "#0E9E02",
     };
   });
-
 
   const onClick = (info: EventClickArg) => {
     setIDAppointment(info.event.id);

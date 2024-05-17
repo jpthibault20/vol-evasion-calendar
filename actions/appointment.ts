@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db";
 import { getAppointments } from "./get-appointment";
-import { sendNotificationBooking, sendNotificationRemoveAppointment, sendStudentNotificationBooking } from "@/lib/mail";
+import { sendNotificationBooking, sendNotificationRemoveAppointment, sendNotificationSudentRemoveForPilot, sendStudentNotificationBooking } from "@/lib/mail";
 import { currentUser } from "@/lib/auth";
 import { getUserById } from "./user";
 import { Appointment, appointmentType } from "@prisma/client";
@@ -57,7 +57,7 @@ export const bookAppointment = async (appointmentID: string, userID: string, fli
             data: {
                 studentID: userID,
                 studentFirstname: studentUser?.firstname,
-                type: flightType
+                studentType: flightType
             }
         });
     } catch (error) {
@@ -75,6 +75,68 @@ export const getAppointmentsWithPilotID = async (piloteID: string) => {
     const appointments = await db.appointment.findMany({
         where: {
             piloteID: piloteID
+        }
+    });
+
+    const date = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 2, 0, 0); // 2 for local time europe
+
+    const upcomingAppointments = appointments.filter(
+        (appointment) => appointment.startDate !== null && appointment.startDate >= date
+    );
+
+    const formattedAppointments: FormattedAppointment[] = await Promise.all(upcomingAppointments.map(async (appointment: Appointment) => {
+        const { id, piloteID, studentID, startDate, endDate, studentType, appointmentDate, recurenceID } = appointment;
+        const studentUser = await getUserById(studentID || "");
+
+        const formattedStartDate = startDate?.toLocaleDateString('fr-FR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        });
+        // Créer une copie de la date de début pour éviter de modifier l'objet original
+        const startDateCopy = new Date(startDate!.getTime() || "");
+        if (process.env.ENVIRONEMENT == "DEV") {
+            startDateCopy.setHours(startDate!.getHours() - 2);
+        }
+        const formattedStartTime = formatTime(startDateCopy);
+
+        // Créer une copie de la date de fin pour éviter de modifier l'objet original
+        const endDateCopy = new Date(endDate!.getTime() || "");
+        if (process.env.ENVIRONEMENT == "DEV") {
+            endDateCopy.setHours(endDate!.getHours() - 2);
+        }
+        const formattedEndTime = formatTime(endDateCopy);
+
+        const formatedEndRecurence = appointmentDate?.toLocaleDateString('fr-FR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+        })
+
+        return {
+            id,
+            piloteID,
+            studentID,
+            studentName: `${studentUser?.firstName} ${studentUser?.name}`,
+            Date: formattedStartDate || "",
+            fullDate: startDate,
+            startTime: formattedStartTime || "",
+            endTime: formattedEndTime || "",
+            flightType: studentType,
+            endRecurence: formatedEndRecurence || null,
+            recurencID: recurenceID
+        };
+
+
+    })
+    );
+    return formattedAppointments;
+}
+
+export const getAppointmentsWithStudentID = async (studentID: string) => {
+    const appointments = await db.appointment.findMany({
+        where: {
+            studentID: studentID
         }
     });
 
@@ -214,7 +276,8 @@ export const addUserToAppointment = async (appointmentID: string, userID: string
             where: { id: appointmentID },
             data: {
                 studentID: userID,
-                type: flyingType
+                studentFirstname: user?.firstName,
+                studentType: flyingType
             }
         });
     } catch (error) {
@@ -227,14 +290,18 @@ export const addUserToAppointment = async (appointmentID: string, userID: string
 }
 
 export const removeStudentUser = async (appointmentID: string) => {
+    const appointment = await getAppointment(appointmentID);
+    const pilot = await getUserById(appointment?.piloteID || "")
+    const student = await getUserById(appointment?.studentID || "");
+
+
     if (!appointmentID) {
         return { error: "Error ID" }
     }
 
-    const appointment = await getAppointment(appointmentID);
     if (appointment?.studentID) {
-        const user = await getUserById(appointment?.studentID);
-        await sendNotificationRemoveAppointment(user?.email as string, appointment.startDate as Date, appointment.endDate as Date)
+        await sendNotificationRemoveAppointment(student?.email as string, appointment.startDate as Date, appointment.endDate as Date);
+        await sendNotificationSudentRemoveForPilot(pilot?.email as string, appointment.startDate as Date, appointment.endDate as Date);
     }
 
     try {
@@ -247,4 +314,6 @@ export const removeStudentUser = async (appointmentID: string) => {
         return { error: "Il y a eu une erreur" };
     }
     return { success: "Mise à jour effectué avec succes" };
+
+    
 }

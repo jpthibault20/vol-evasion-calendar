@@ -1,6 +1,6 @@
 "use client"
 
-import React, { startTransition, useState } from 'react'
+import React, { startTransition, useState, useTransition } from 'react'
 import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
@@ -22,8 +22,14 @@ interface bookingProps {
 export const Booking = ({ appointment, pilote, reload, setReload, setViewInfo }: bookingProps) => {
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
-
+  const [isPending, startTransition] = useTransition();
+  let availbleAppointment = true;
   const user = useCurrentUser();
+
+  const currentDate = new Date();
+  if (appointment?.endDate && currentDate > appointment?.endDate || appointment?.studentID != null) {
+    availbleAppointment= false;
+  }
 
   const formattedDateStart = appointment?.startDate?.toLocaleString('fr-FR');
   const formattedDateEnd = appointment?.endDate?.toLocaleString('fr-FR');
@@ -34,32 +40,36 @@ export const Booking = ({ appointment, pilote, reload, setReload, setViewInfo }:
     const formData = new FormData(event.currentTarget);
     const flightType = formData.get('type');
 
-    if (appointment?.id && user?.id) {
-      bookAppointment(appointment.id, user.id, flightType as appointmentType)
-        .then((data) => {
-          if (data.success) {
-            setSuccess(data.success);
-            toast(success || "Réservation réussie !", {
-              action: {
-                label: "X",
-                onClick: () => console.log("Undo"),
-              },
-            });
-            setReload(!reload);
-            setViewInfo(false);
-          }
-          if (data.error) {
-            setError(data.error);
-          }
-        })
-        .catch((err) => {
-          setError("Une erreur est survenue");
-          console.log(err);
-        })
-        .finally(() => {
+    startTransition(() => {
+      if (appointment?.id && user?.id) {
+        bookAppointment(appointment.id, user.id, flightType as appointmentType)
+          .then((data) => {
+            if (data.success) {
+              setSuccess(data.success);
+              toast(success || "Réservation réussie !", {
+                action: {
+                  label: "X",
+                  onClick: () => console.log("Undo"),
+                },
+              });
+              setReload(!reload);
+              setViewInfo(false);
+            }
+            if (data.error) {
+              setError(data.error);
+            }
+          })
+          .catch((err) => {
+            setError("Une erreur est survenue");
+            console.log(err);
+          })
+          .finally(() => {
 
-        })
-    }
+          })
+      }
+    })
+
+
 
   };
 
@@ -73,28 +83,31 @@ export const Booking = ({ appointment, pilote, reload, setReload, setViewInfo }:
 
             <div className="space-y-2">
               <Label htmlFor="firstName">Prénom du pilot</Label>
-              <Input value={pilote?.firstName || ""} readOnly />
+              <Input value={pilote?.firstName || ""} readOnly disabled={isPending} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="lastName">Nom du pilot</Label>
-              <Input value={pilote?.name || ""} readOnly />
+              <Input value={pilote?.name || ""} readOnly disabled={isPending} />
             </div>
           </div>
           <div className="md:grid md:grid-cols-2 md:gap-4">
             <div className="space-y-2">
               <Label htmlFor="startDate">Date de début</Label>
-              <Input value={formattedDateStart} readOnly />
+              <Input value={formattedDateStart} readOnly disabled={isPending} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="endDate">Date de fin</Label>
-              <Input value={formattedDateEnd} readOnly />
+              <Input value={formattedDateEnd} readOnly disabled={isPending} />
             </div>
           </div>
           <form onSubmit={handleSubmit} className='space-y-6'>
             <p className="text-gray-700 font-semibold pt-6">Coisisez le type de votre vol</p>
             <div className="space-y-2">
               <Label htmlFor="type">Type de vol</Label>
-              <Select name="type">
+              <Select
+                name="type"
+                disabled={isPending}
+              >
                 <SelectTrigger >
                   <SelectValue placeholder="Choisissez un type de vol" />
                 </SelectTrigger>
@@ -116,16 +129,21 @@ export const Booking = ({ appointment, pilote, reload, setReload, setViewInfo }:
             </div>
             <FormSuccess message={success} />
             <FormError message={error} />
-            {appointment?.studentID == null ? (
-              <Button className="w-full" type="submit">
-                Réserver
-              </Button>
+            {availbleAppointment ? (
+
+                <Button
+                  className="w-full"
+                  type="submit"
+                  disabled={isPending}
+                >
+                  Réserver
+                </Button>
             ) : (
-              <div>
-                <p className='text-center font-semibold text-gray-700'>
-                  vol déja reservé
-                </p>
-              </div>
+            <div>
+              <p className='text-center font-semibold text-gray-700'>
+                vol Indisponible
+              </p>
+            </div>
             )}
 
           </form>

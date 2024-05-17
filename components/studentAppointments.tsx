@@ -8,12 +8,12 @@ import { CalendarDays, CheckIcon, Info, UserPlusIcon, UserX, X } from 'lucide-re
 import { Calendar } from './ui/calendar'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
 import { useEffect, useState } from 'react'
-import { FormattedAppointment, bookAppointment, getAppointmentsWithPilotID } from '@/actions/appointment'
+import { FormattedAppointment, bookAppointment, getAppointmentsWithPilotID, getAppointmentsWithStudentID } from '@/actions/appointment'
 import { useCurrentUser } from '@/hooks/use-current-user'
 import { compareAsc } from 'date-fns'
 import { Spinner } from './ui/spinner'
 
-interface PrivatAppointmentsProps {
+interface StudentAppointmentsProps {
     reload: boolean,
     setReload: (load: boolean) => void;
     setRemovedAppointments: (load: boolean) => void;
@@ -23,15 +23,16 @@ interface PrivatAppointmentsProps {
     setRemoveUser: (load: boolean) => void;
     setIsRecurence: (load : boolean) => void;
 }
-export const PrivatAppointments = ({ reload, setReload, setRemovedAppointments, setID, setReccurenceID, setAddUserAppointments, setRemoveUser, setIsRecurence }: PrivatAppointmentsProps) => {
+export const StudentAppointments = ({ reload, setReload, setRemovedAppointments, setID, setReccurenceID, setAddUserAppointments, setRemoveUser, setIsRecurence }: StudentAppointmentsProps) => {
     const [appointments, setAppointments] = useState<FormattedAppointment[]>()
     const [isLoading, setIsLoading] = useState<Boolean>(true);
     const user = useCurrentUser();
 
+
     useEffect(() => {
         if (user) {
             setIsLoading(true);
-            getAppointmentsWithPilotID(user.id as string)
+            getAppointmentsWithStudentID(user.id as string)
                 .then((data) => {
                     setAppointments(data);
                 })
@@ -39,26 +40,10 @@ export const PrivatAppointments = ({ reload, setReload, setRemovedAppointments, 
                 .finally(() => { setIsLoading(false) })
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [reload])
+    }, [reload]);
 
-    const buttonSubmitDelete = (ID: string, RecurrenceID: string | null) => {
+    const buttonUnsubscribe = (ID: string) => {
         setID(ID);
-        if (RecurrenceID) setReccurenceID(RecurrenceID);
-        else setReccurenceID(null)
-        setRemovedAppointments(true);
-
-    }
-
-    const buttonSubmitAddUser = (ID: string) => {
-        setID(ID);
-        setAddUserAppointments(true);
-    }
-
-    const buttonRemoveUser = (ID: string, reccurent: string | null) => {
-        setID(ID);
-        if (reccurent) {
-            setIsRecurence(true);
-        }
         setRemoveUser(true)
     }
 
@@ -68,7 +53,7 @@ export const PrivatAppointments = ({ reload, setReload, setRemovedAppointments, 
             const dateB = b.fullDate || new Date(0);
             return compareAsc(dateA, dateB);
         });
-    }
+    };
 
     const sortedAppointments = sortAppointments(appointments || []);
 
@@ -76,7 +61,7 @@ export const PrivatAppointments = ({ reload, setReload, setRemovedAppointments, 
         <div>
             <div className="p-4  flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2">
+                    {/* <div className="flex items-center gap-2">
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button className="px-4 py-2 rounded-md transition-colors " variant="outline">
@@ -112,7 +97,7 @@ export const PrivatAppointments = ({ reload, setReload, setRemovedAppointments, 
                                 <Calendar />
                             </PopoverContent>
                         </Popover>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             {isLoading ? (
@@ -126,8 +111,6 @@ export const PrivatAppointments = ({ reload, setReload, setRemovedAppointments, 
                                 <TableHead>Date</TableHead>
                                 <TableHead>Heure de début</TableHead>
                                 <TableHead>Heure de fin</TableHead>
-                                <TableHead>Récurrent / Fin</TableHead>
-                                <TableHead>Élève inscrit</TableHead>
                                 <TableHead>Type de vol</TableHead>
                                 <TableHead>Action</TableHead>
                             </TableRow>
@@ -138,37 +121,8 @@ export const PrivatAppointments = ({ reload, setReload, setRemovedAppointments, 
                                     <TableCell>{appointment.Date}</TableCell>
                                     <TableCell>{appointment.startTime}</TableCell>
                                     <TableCell>{appointment.endTime}</TableCell>
-                                    <TableCell>
-                                        <div className="">
-                                            {appointment.endRecurence ? (
-                                                <div className='flex space-x-4'>
-                                                    <CheckIcon className="text-green-500" />
-                                                    <p>{appointment.endRecurence}</p>
-                                                </div>
-
-                                            ) : (
-                                                <X className="text-red-500" />
-                                            )}
-                                        </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="flex">
-                                            {appointment.studentID ? (
-                                                <div className='flex space-x-2'>
-                                                    <p className='place-content-center'>{appointment.studentName}</p>
-                                                    <button className='text-red-600' onClick={() => buttonRemoveUser(appointment.id, appointment.studentID)}>
-                                                        <UserX />
-                                                    </button>
-                                                </div>
-
-                                            ) : (
-                                                <button onClick={() => buttonSubmitAddUser(appointment.id)}>
-                                                    <UserPlusIcon className="text-blue-500" />
-                                                </button>
-                                            )}
-
-                                        </div>
-                                    </TableCell>
+                                    
+                                    
                                     <TableCell>
                                         {appointment.studentID ? (
                                             appointment.flightType
@@ -178,7 +132,7 @@ export const PrivatAppointments = ({ reload, setReload, setRemovedAppointments, 
                                     </TableCell>
                                     <TableCell>
                                         <div className='flex space-x-4'>
-                                            <Button variant="destructive" onClick={() => buttonSubmitDelete(appointment.id, appointment.recurencID)}>Supprimer</Button>
+                                            <Button variant="destructive" onClick={() => buttonUnsubscribe(appointment.id)}>se désinscrire</Button>
                                             {/* <Button variant="modify">Modifier</Button> */}
 
                                         </div>

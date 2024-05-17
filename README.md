@@ -15,3 +15,5 @@
 - ajouter un oeil sur la page de login et d'inscription pour visualiser le mot de passe
 
 - pour supprimer les vols, trouver une solution pour que se soit plus visuel
+
+- ajouter la possibilité a un pilote de se desinscrir d'un vol ou il serais inscrit 

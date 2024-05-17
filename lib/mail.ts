@@ -2,6 +2,7 @@ import MagicLinkEmail from "@/emails/MagicLink";
 import NotificationBookingPilote from "@/emails/NotificationBookingPilote";
 import NotificationBookingStudent from "@/emails/NotificationBookingStudent";
 import NotificationSudentRemove from "@/emails/NotificationSudentRemove"
+import NotificationSudentRemoveForPilot from "@/emails/NotificationSudentRemoveForPilot"
 import ResetPassword from "@/emails/ResetPassword";
 import { Resend } from "resend";
 
@@ -67,4 +68,16 @@ export const sendNotificationRemoveAppointment = async (email: string, startDate
     react: NotificationSudentRemove({startDate: formatedStartDate, endDate: formatedEndDate})
   });
 
+}
+
+export const sendNotificationSudentRemoveForPilot = async (email: string, startDate: Date, endDate: Date) => {
+  const formatedStartDate = startDate.toLocaleString('fr-FR');
+  const formatedEndDate = endDate.toLocaleString('fr-FR');
+
+  await resend.emails.send({
+    from: 'thibault@jp-developpement.com',
+    to: email,
+    subject: "vol Evasion",
+    react: NotificationSudentRemoveForPilot({startDate: formatedStartDate, endDate: formatedEndDate})
+  });
 }
