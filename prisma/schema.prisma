@@ -88,11 +88,13 @@ model Appointment {
   id               String           @id @default(cuid()) @map("_id")
   interAppointment Int?
   type             appointmentType?
+  studentType      appointmentType?
   piloteID         String
   piloteFirstname  String           @default("")
   color            String?          @default("")
   vehiculeID       String?
   studentID        String?
+  studentFirstname String?
   recurrence       Boolean?
   recurenceID      String?
   startDate        DateTime?

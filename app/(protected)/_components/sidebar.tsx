@@ -46,20 +46,20 @@ export const Sidebar = () => {
                   </div>
                 </Link>
               </li>
+              <li>
+                <Link href="/appointments">
+                  <div className={`flex items-center p-2 rounded-md hover:bg-gray-800 ${isOpen ? 'justify-start' : 'justify-center'}`}>
+                    <BetweenHorizontalEnd className="w-6 h-6" />
+                    {isOpen && <span className="ml-2">Mes vols</span>}
+                  </div>
+                </Link>
+              </li>
               <RoleGate allowedRole={UserRole.PILOTE}>
                 <li>
                   <Link href="/planes">
                     <div className={`flex items-center p-2 rounded-md hover:bg-gray-800 ${isOpen ? 'justify-start' : 'justify-center'}`}>
                       <Plane className="w-6 h-6" />
                       {isOpen && <span className="ml-2">Avions</span>}
-                    </div>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/appointments">
-                    <div className={`flex items-center p-2 rounded-md hover:bg-gray-800 ${isOpen ? 'justify-start' : 'justify-center'}`}>
-                      <BetweenHorizontalEnd className="w-6 h-6" />
-                      {isOpen && <span className="ml-2">Mes vols</span>}
                     </div>
                   </Link>
                 </li>
@@ -83,7 +83,6 @@ export const Sidebar = () => {
             </ul>
           </nav>
         </div>
-
         <div className='mb-4'>
           <LogoutButton>
             <div className={`flex items-center p-2 rounded-md hover:bg-gray-800 ${isOpen ? 'justify-start' : 'justify-center'}`}>

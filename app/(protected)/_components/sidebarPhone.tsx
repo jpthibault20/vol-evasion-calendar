@@ -46,6 +46,14 @@ export const SidebarPhone = () => {
                                         </div>
                                     </Link>
                                 </li>
+                                <li>
+                                    <Link href="/appointments" onClick={() => setShowSidebar(!showSidebar)}>
+                                        <div className={`flex items-center p-2 rounded-md hover:bg-gray-100 justify-start`}>
+                                            <BetweenHorizontalEnd className="w-6 h-6" />
+                                            <span className="ml-2">Mes vols</span>
+                                        </div>
+                                    </Link>
+                                </li>
                                 <RoleGate allowedRole={UserRole.PILOTE}>
                                     <li>
                                         <Link href="/planes" onClick={() => setShowSidebar(!showSidebar)}>
@@ -55,16 +63,6 @@ export const SidebarPhone = () => {
                                             </div>
                                         </Link>
                                     </li>
-
-                                    <li>
-                                        <Link href="/appointments" onClick={() => setShowSidebar(!showSidebar)}>
-                                            <div className={`flex items-center p-2 rounded-md hover:bg-gray-100 justify-start`}>
-                                                <BetweenHorizontalEnd  className="w-6 h-6" />
-                                                <span className="ml-2">Mes vols</span>
-                                            </div>
-                                        </Link>
-                                    </li>
-
                                     <li>
                                         <Link href="/students" onClick={() => setShowSidebar(!showSidebar)}>
                                             <div className={`flex items-center p-2 rounded-md hover:bg-gray-100 justify-start`}>

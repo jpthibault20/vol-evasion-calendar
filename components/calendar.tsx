@@ -15,21 +15,21 @@ export function Calendar({ setIDAppointment, appointments, setViewInfo }: Calend
 
 
   const events = appointments.map((appointment: Appointment) => {
-  
+
     return {
-      title: appointment.studentID ? "Réservé" : appointment.piloteFirstname,
+      title: appointment.studentID ? `${appointment.studentFirstname}` : `Disponible`,
       id: appointment.id || "",
       start: appointment.startDate || "",
       end: appointment.endDate || "",
-      color: appointment.studentID ? "#CECECE" : appointment.color || "",
+      color: appointment.studentID ? "#9E0202" : "#0E9E02",
     };
   });
-
 
   const onClick = (info: EventClickArg) => {
     setIDAppointment(info.event.id);
     setViewInfo(true);
   }
+
 
   return (
     <div className="container mx-auto">
