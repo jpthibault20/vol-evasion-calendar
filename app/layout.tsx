@@ -5,7 +5,6 @@ import { auth } from '@/auth'
 import './globals.css'
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from '@/lib/utils'
-import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,8 +17,7 @@ export default async function RootLayout({children}: {children: React.ReactNode}
   const session = await auth();
 
   return (
-    <div>
-      <SessionProvider session={session}>
+    <SessionProvider session={session}>
       <html lang="fr">
         <body className={cn(inter.className, "bg-gray-100")}>
           <Toaster />
@@ -27,8 +25,5 @@ export default async function RootLayout({children}: {children: React.ReactNode}
         </body>
       </html>
     </SessionProvider>
-    <SpeedInsights/>
-    </div>
-    
   )
 }

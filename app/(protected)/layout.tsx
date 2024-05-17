@@ -2,6 +2,7 @@ import { SessionProvider } from "next-auth/react";
 import { Sidebar } from "./_components/sidebar";
 import { SidebarPhone } from "./_components/sidebarPhone";
 import { auth } from "@/auth";
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 interface ProtectedLayoutProps {
   children: React.ReactNode;
@@ -29,6 +30,7 @@ export default async function protectedLayout({ children }: ProtectedLayoutProps
           </div>
         </div>
       </div>
+      <SpeedInsights />
     </SessionProvider>
   );
 }
