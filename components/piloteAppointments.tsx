@@ -10,7 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { useEffect, useState } from 'react'
 import { FormattedAppointment, bookAppointment, getAppointmentsWithPilotID } from '@/actions/appointment'
 import { useCurrentUser } from '@/hooks/use-current-user'
-import { compareAsc } from 'date-fns'
+import { compareAsc, isSameDay } from 'date-fns'
 import { Spinner } from './ui/spinner'
 
 interface PiloteAppointmentsProps {
@@ -21,12 +21,16 @@ interface PiloteAppointmentsProps {
     setReccurenceID: (load: string | null) => void;
     setAddUserAppointments: (load: boolean) => void;
     setRemoveUser: (load: boolean) => void;
-    setIsRecurence: (load : boolean) => void;
+    setIsRecurence: (load: boolean) => void;
 }
 export const PiloteAppointments = ({ reload, setReload, setRemovedAppointments, setID, setReccurenceID, setAddUserAppointments, setRemoveUser, setIsRecurence }: PiloteAppointmentsProps) => {
     const [appointments, setAppointments] = useState<FormattedAppointment[]>()
     const [isLoading, setIsLoading] = useState<Boolean>(true);
     const user = useCurrentUser();
+    const [recurringFilter, setRecurringFilter] = useState<'all' | 'recurring' | 'non-recurring'>('all');
+    const [availabilityFilter, setAvailabilityFilter] = useState<'all' | 'available' | 'booked'>('all');
+    const [dateFilter, setDateFilter] = useState<Date | null>(null);
+
 
     useEffect(() => {
         if (user) {
@@ -62,15 +66,58 @@ export const PiloteAppointments = ({ reload, setReload, setRemovedAppointments, 
         setRemoveUser(true)
     }
 
-    const sortAppointments = (appointments: FormattedAppointment[]) => {
-        return appointments.sort((a, b) => {
+    const handleRecurringFilterChange = (value: 'all' | 'recurring' | 'non-recurring') => {
+        setRecurringFilter(value);
+    };
+
+    const handleAvailabilityFilterChange = (value: 'all' | 'available' | 'booked') => {
+        setAvailabilityFilter(value);
+    };
+
+    const handleDateFilterChange = (date: Date | undefined | null) => {
+        if (date == undefined) {
+            setDateFilter(null);
+        }
+        else {
+            setDateFilter(date);
+        }
+    };
+
+    const sortAppointments = (
+        appointments: FormattedAppointment[],
+        recurringFilter: 'all' | 'recurring' | 'non-recurring',
+        availabilityFilter: 'all' | 'available' | 'booked',
+        dateFilter: Date | null
+    ) => {
+        let filteredAppointments = appointments;
+
+        if (recurringFilter === 'recurring') {
+            filteredAppointments = appointments.filter((appointment) => appointment.endRecurence);
+        } else if (recurringFilter === 'non-recurring') {
+            filteredAppointments = appointments.filter((appointment) => !appointment.endRecurence);
+        }
+
+        if (availabilityFilter === 'available') {
+            filteredAppointments = filteredAppointments.filter((appointment) => !appointment.studentID);
+        } else if (availabilityFilter === 'booked') {
+            filteredAppointments = filteredAppointments.filter((appointment) => appointment.studentID);
+        }
+
+        if (dateFilter) {
+            filteredAppointments = filteredAppointments.filter((appointment) => {
+                const appointmentDate = appointment.fullDate || new Date(0);
+                return isSameDay(appointmentDate, dateFilter);
+            });
+        }
+
+        return filteredAppointments.sort((a, b) => {
             const dateA = a.fullDate || new Date(0);
             const dateB = b.fullDate || new Date(0);
             return compareAsc(dateA, dateB);
         });
-    }
+    };
 
-    const sortedAppointments = sortAppointments(appointments || []);
+    const sortedAppointments = sortAppointments(appointments || [], recurringFilter, availabilityFilter, dateFilter);
 
     return (
         <div>
@@ -84,8 +131,24 @@ export const PiloteAppointments = ({ reload, setReload, setRemovedAppointments, 
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
-                                <DropdownMenuCheckboxItem>Reccurent</DropdownMenuCheckboxItem>
-                                <DropdownMenuCheckboxItem>Occasionel</DropdownMenuCheckboxItem>
+                                <DropdownMenuCheckboxItem
+                                    checked={recurringFilter === 'all'}
+                                    onCheckedChange={() => handleRecurringFilterChange('all')}
+                                >
+                                    Tous
+                                </DropdownMenuCheckboxItem>
+                                <DropdownMenuCheckboxItem
+                                    checked={recurringFilter === 'recurring'}
+                                    onCheckedChange={() => handleRecurringFilterChange('recurring')}
+                                >
+                                    Récurrent
+                                </DropdownMenuCheckboxItem>
+                                <DropdownMenuCheckboxItem
+                                    checked={recurringFilter === 'non-recurring'}
+                                    onCheckedChange={() => handleRecurringFilterChange('non-recurring')}
+                                >
+                                    Non récurrent
+                                </DropdownMenuCheckboxItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                         <DropdownMenu>
@@ -95,8 +158,24 @@ export const PiloteAppointments = ({ reload, setReload, setRemovedAppointments, 
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
-                                <DropdownMenuCheckboxItem>Disponible</DropdownMenuCheckboxItem>
-                                <DropdownMenuCheckboxItem>Reservé</DropdownMenuCheckboxItem>
+                                <DropdownMenuCheckboxItem
+                                    checked={availabilityFilter === 'all'}
+                                    onCheckedChange={() => handleAvailabilityFilterChange('all')}
+                                >
+                                    Tous
+                                </DropdownMenuCheckboxItem>
+                                <DropdownMenuCheckboxItem
+                                    checked={availabilityFilter === 'available'}
+                                    onCheckedChange={() => handleAvailabilityFilterChange('available')}
+                                >
+                                    Disponible
+                                </DropdownMenuCheckboxItem>
+                                <DropdownMenuCheckboxItem
+                                    checked={availabilityFilter === 'booked'}
+                                    onCheckedChange={() => handleAvailabilityFilterChange('booked')}
+                                >
+                                    Réservé
+                                </DropdownMenuCheckboxItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
@@ -109,7 +188,20 @@ export const PiloteAppointments = ({ reload, setReload, setRemovedAppointments, 
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent className="p-0">
-                                <Calendar />
+                                <Calendar
+                                    mode='single'
+                                    selected={dateFilter || new Date()}
+                                    onSelect={handleDateFilterChange}
+                                />
+                                <div className='w-full p-4'>
+                                    <Button 
+                                        className=' w-full hover:bg-slate-600'
+                                        onClick={() => handleDateFilterChange(null)}
+                                    >
+                                        Reset
+                                    </Button>
+                                </div>
+
                             </PopoverContent>
                         </Popover>
                     </div>

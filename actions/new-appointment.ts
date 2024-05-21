@@ -39,7 +39,7 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
         // console.log("date : ", new Date())
         // console.log("timeStart : ", timeStart)
         if (new Date().getHours() >= timeStart.getHours()) {
-            return { error: "Horaire début erroné (min + 1h)" }
+            return { error: "Horaire début erroné (min + 1h) ou heure passée" }
         }
     }
 
@@ -63,6 +63,17 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
     const { dateEndReccurence } = validatedFields.data;
     dateEndReccurence?.setHours(25);
     dateEndReccurence?.setMinutes(59);
+
+    console.log(timeEnd.getTime() - timeStart.getTime())
+
+    if (recurrence && timeEnd.getTime() - timeStart.getTime() > 3600000) {
+        return {error:"1h max pour une recurence"}
+    }
+
+    if (recurrence && !dateEndReccurence) {
+        return { error: "Date de fin invalide" }
+    }
+
     if (recurrence) {
         if (dateEndReccurence!.getTime() < date.getTime() + (1209600000 - 86400000)) {
             return { error: "date fin récurence trop proche min (2 semaines)" }
@@ -94,7 +105,7 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
         };
 
         const useDateStart = date;
-        const useDateEnd = new Date(useDateStart.getTime() + 3600000 );
+        const useDateEnd = new Date(useDateStart.getTime() + 3600000);
 
         while (useDateStart < timeEnd) {
             await db.appointment.create({
@@ -142,7 +153,7 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
                 if (appointmentAlreadyExiste.length !== 0) {
                     return { error: `Indisponibilité déja présente avec c'est dates : ${useStartDate.toDateString()} - ${useEndDate.toDateString()}` }
                 };
-                
+
 
                 await db.appointment.create({
                     data: {
@@ -160,7 +171,7 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
 
 
 
-                
+
                 useStartDate.setTime(useStartDate.getTime() + oneHourMs);
                 useEndDate.setTime(useStartDate.getTime() + oneHourMs);
             }

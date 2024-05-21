@@ -50,8 +50,6 @@ export const RemoveAppointments = ({ reload, setReload, removedAppointments, set
         setReload(!reload);
     }
 
-    console.log(recurenceID)
-
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
             <CardWrapper headerLabel={"Supprimer un vol ?"} setShowForm={setRemovedAppointments} showForm={removedAppointments}>

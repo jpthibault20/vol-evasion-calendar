@@ -157,7 +157,7 @@ export const AppointmentForm = ({ setShowForm, showForm, setReload, reload }: Ap
                                                         mode="single"
                                                         weekStartsOn={1}
                                                         locale={fr}
-                                                        selected={field.value ? new Date(field.value) : undefined}
+                                                        selected={field.value ? new Date(field.value) : new Date()}
                                                         onSelect={(date) => {
                                                             field.onChange(date);
                                                             setPopoverCalendar(false);
