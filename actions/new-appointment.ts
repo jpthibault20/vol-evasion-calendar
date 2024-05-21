@@ -63,6 +63,11 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
     const { dateEndReccurence } = validatedFields.data;
     dateEndReccurence?.setHours(25);
     dateEndReccurence?.setMinutes(59);
+
+if (!dateEndReccurence) {
+    return {error:"Date de fin invalide"}
+}
+
     if (recurrence) {
         if (dateEndReccurence!.getTime() < date.getTime() + (1209600000 - 86400000)) {
             return { error: "date fin récurence trop proche min (2 semaines)" }

@@ -215,7 +215,10 @@ export const removeAppointmentByIDAndReccurencID = async (ID: string, reccurence
         try {
             await db.appointment.deleteMany({
                 where: {
-                    recurenceID: reccurenceID
+                    recurenceID: reccurenceID,
+                    endDate: {
+                        gt: new Date()
+                    }
                 }
             })
         } catch (error) {
