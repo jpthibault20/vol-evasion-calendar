@@ -198,7 +198,7 @@ export const PiloteAppointments = ({ reload, setReload, setRemovedAppointments, 
                                         className=' w-full hover:bg-slate-600'
                                         onClick={() => handleDateFilterChange(null)}
                                     >
-                                        Reset
+                                        Tous les vols
                                     </Button>
                                 </div>
 
