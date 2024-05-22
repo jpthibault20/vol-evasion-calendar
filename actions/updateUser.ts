@@ -7,6 +7,7 @@ import { db } from "@/lib/db";
 import { UserRole } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { generateVerificationToken } from "@/lib/tokens";
+import { currentRole } from "@/lib/auth";
 
 interface dataInterface {
     name: string,
@@ -29,6 +30,11 @@ export const updateUserAction = async (userID: string, adressID: string, data: d
 
     const dataUser = await getUserById(userID);
     const dataAdress = await getAdressById(adressID);
+    const roleCurrentUser = await currentRole();
+
+    if (roleCurrentUser == 'PILOTE' && dataUser?.role == 'ADMIN') {
+        return{error:"Vous n'avez pas les droit pour modifier cette utilisateur"}
+    }
 
     if (data.name != dataUser?.name && data.name != null) {
         const res = await updateName(userID, data.name);

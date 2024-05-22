@@ -72,28 +72,26 @@ export const UpdateUser = ({ show, setShow, ID, reload, setReload }: UpdateUserP
                 .then((data) => {
                     if (data.success) {
                         setSuccess(data.success);
-                        toast("Utilisateur modifié !", {
+                        toast("Utilisateur mis à jour !", {
                             action: {
                                 label: "X",
-                                onClick: () => console.log("Undo"),
+                                onClick: () => {},
                             },
                         })
+                        setShow(false);
+                        setReload(!reload);
                     }
                     if (data.error) {
                         setError(data.error);
                         toast("Oups, il y a eu un problème !", {
                             action: {
                                 label: "X",
-                                onClick: () => console.log("Undo"),
+                                onClick: () => {},
                             },
                         })
                     }
                 })
                 .catch(() => setError("Une erreur est survenue"))
-                .finally(() => {
-                    setShow(false);
-                    setReload(!reload);
-                });
         });
     };
 
