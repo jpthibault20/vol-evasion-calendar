@@ -29,13 +29,13 @@ export const NotificationSudentRemove = ({ startDate, endDate}: NotificationSude
         <EmailTemplate preview={"Oups une heure à était annulé"}>
             <Section className="my-6">
                 <Text className="text-lg leading-6">
-                    Mauvaise nouvelle, Votre vol : 
+                Mauvaise nouvelle, votre vol :
                 </Text>
                 <Text className="text-lg leading-6">
                     {startDate} ➡️ {endDate}
                 </Text>
                 <Text className="text-lg leading-6">
-                    Doit être annulé, n&apos;hesité pas réserver une nouvelle heure
+                doit être annulé. N&apos;hésitez pas à réserver un nouveau créneau horaire.
                 </Text>
             </Section>
         </EmailTemplate>

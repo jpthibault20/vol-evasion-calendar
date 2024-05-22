@@ -289,7 +289,7 @@ export const addUserToAppointment = async (appointmentID: string, userID: string
     }
 
     await sendStudentNotificationBooking(user?.email as string, appointment?.startDate as Date, appointment?.endDate as Date)
-    return { success: "Mise à jour effectué avec succes" };
+    return { success: "Mise à jour effectuée avec succès" };
 }
 
 export const removeStudentUser = async (appointmentID: string) => {
@@ -316,7 +316,7 @@ export const removeStudentUser = async (appointmentID: string) => {
         console.log(error);
         return { error: "Oups, une erreur s'est produite (E_002)" };
     }
-    return { success: "Mise à jour effectué avec succes" };
+    return { success: "Mise à jour effectuée avec succès" };
 
     
 }

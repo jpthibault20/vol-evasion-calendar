@@ -28,11 +28,11 @@ export const ResetPassword = ({ magicLink }: ResetPasswordProps) => (
         <EmailTemplate preview={"Reinitialisation du mot de passe"}>
             <Section className="my-6">
                 <Text className="text-lg leading-6">
-                    Vous avez demander une Réinitialisation de votre mot de passe, voici le lien : 
+                Vous avez demandé une réinitialisation de votre mot de passe, voici le lien : 
                 </Text>
                 <Text className="text-lg leading-6">
                     <Link className="text-blue-500" href={magicLink}>
-                        👉 Lien de Réinitialisation 👈
+                        👉 Lien de réinitialisation 👈
                     </Link>
                 </Text>
             </Section>
