@@ -127,7 +127,9 @@ export const PiloteAppointments = ({ reload, setReload, setRemovedAppointments, 
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button className="px-4 py-2 rounded-md transition-colors " variant="outline">
-                                    Récurence
+                                        {recurringFilter === 'all' && 'Récurence'}
+                                        {recurringFilter === 'recurring' && 'Récurrent'}
+                                        {recurringFilter === 'non-recurring' && 'Non récurrent'}
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
@@ -154,7 +156,9 @@ export const PiloteAppointments = ({ reload, setReload, setRemovedAppointments, 
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button className="px-4 py-2 rounded-md transition-colors " variant="outline">
-                                    Disponibilité
+                                        {availabilityFilter === 'all' && 'Disponibilité'}
+                                        {availabilityFilter === 'available' && 'Disponible'}
+                                        {availabilityFilter === 'booked' && 'Réservé'}
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>

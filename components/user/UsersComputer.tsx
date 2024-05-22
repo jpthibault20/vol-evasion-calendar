@@ -109,10 +109,13 @@ const UserManagement = () => {
                             <DropdownMenuTrigger asChild>
                                 <Button className="rounded-md bg-white text-gray-500 hover:bg-slate-200">
                                     <div className='flex w-full space-x-2'>
-                                        Filtre
-                                        <ChevronDown  className='w-4 ml-4'/>
+                                        {roleFilter === 'all' && 'Filtre'}
+                                        {roleFilter === 'admin' && 'Admin'}
+                                        {roleFilter === 'pilot' && 'Pilote'}
+                                        {roleFilter === 'student' && 'Élève'}
+                                        {roleFilter === 'user' && 'User'}
+                                        <ChevronDown className='w-4 ml-4' />
                                     </div>
-
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
