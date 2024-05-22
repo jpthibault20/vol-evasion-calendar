@@ -5,13 +5,13 @@ import img from "@/public/userProfil.png"
 import { User } from "@prisma/client";
 import Image from 'next/image';
 import { useEffect, useState } from "react";
-import { UpdateUser } from "./UpdateUser";
+import { UpdateUser } from "@/components/user/UpdateUser";
 import { X } from "lucide-react";
-import { RemoveUser } from "./RemoveUser";
-import { Spinner } from "../ui/spinner";
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+import { RemoveUser } from "@/components/user/RemoveUser";
+import { Spinner } from "@/components/ui/spinner";
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export const UsersPhone = () => {
 
@@ -57,7 +57,7 @@ export const UsersPhone = () => {
     ) => {
         let filteredUsers = users;
 
-        // Filtrer par rôle
+        // Filter by rol
         if (roleFilter === 'admin') {
             filteredUsers = filteredUsers.filter((user) => user.role === 'ADMIN');
         } else if (roleFilter === 'pilot') {
@@ -68,7 +68,7 @@ export const UsersPhone = () => {
             filteredUsers = filteredUsers.filter((user) => user.role === 'USER');
         }
 
-        // Filtrer par nom/prénom
+        // Filter by firstname and lastname
         if (searchQuery) {
             const query = searchQuery.toLowerCase();
             filteredUsers = filteredUsers.filter(
@@ -82,7 +82,7 @@ export const UsersPhone = () => {
     };
 
     const sortedUsers = sortUser(users || [], roleFilter, searchQuery);
-    
+
     return (
         <div className=" dark:bg-zinc-800 min-h-screen p-4">
             <div className="flex justify-between items-center mb-4">
