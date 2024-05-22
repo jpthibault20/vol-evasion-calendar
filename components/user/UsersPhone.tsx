@@ -11,6 +11,7 @@ import { RemoveUser } from "./RemoveUser";
 import { Spinner } from "../ui/spinner";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 
 export const UsersPhone = () => {
 
@@ -21,6 +22,7 @@ export const UsersPhone = () => {
     const [reload, setReload] = useState(true);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [roleFilter, setRoleFilter] = useState<'all' | 'admin' | 'pilot' | 'student' | 'user'>('all');
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         setIsLoading(true);
@@ -50,32 +52,47 @@ export const UsersPhone = () => {
 
     const sortUser = (
         users: User[],
-        roleFilter: 'all' | 'admin' | 'pilot' | 'student' | 'user'
+        roleFilter: 'all' | 'admin' | 'pilot' | 'student' | 'user',
+        searchQuery: string
     ) => {
-        let filteredStudents = users;
+        let filteredUsers = users;
 
-        if (roleFilter == 'admin') {
-            filteredStudents = users.filter((user) => user.role == 'ADMIN');
-        }
-        if (roleFilter == 'pilot') {
-            filteredStudents = users.filter((user) => user.role == 'PILOTE');
-        }
-        if (roleFilter == 'student') {
-            filteredStudents = users.filter((user) => user.role == 'ELEVE');
-        }
-        if (roleFilter == 'user') {
-            filteredStudents = users.filter((user) => user.role == 'USER');
+        // Filtrer par rôle
+        if (roleFilter === 'admin') {
+            filteredUsers = filteredUsers.filter((user) => user.role === 'ADMIN');
+        } else if (roleFilter === 'pilot') {
+            filteredUsers = filteredUsers.filter((user) => user.role === 'PILOTE');
+        } else if (roleFilter === 'student') {
+            filteredUsers = filteredUsers.filter((user) => user.role === 'ELEVE');
+        } else if (roleFilter === 'user') {
+            filteredUsers = filteredUsers.filter((user) => user.role === 'USER');
         }
 
-        return filteredStudents;
-    }
+        // Filtrer par nom/prénom
+        if (searchQuery) {
+            const query = searchQuery.toLowerCase();
+            filteredUsers = filteredUsers.filter(
+                (user) =>
+                    user.firstName?.toLowerCase().includes(query) ||
+                    user.name?.toLowerCase().includes(query)
+            );
+        }
 
-    const sortedUsers = sortUser(users || [], roleFilter);
+        return filteredUsers;
+    };
 
+    const sortedUsers = sortUser(users || [], roleFilter, searchQuery);
+    
     return (
         <div className=" dark:bg-zinc-800 min-h-screen p-4">
             <div className="flex justify-between items-center mb-4">
-                <input type="text" placeholder="Search..." className="p-2 rounded-lg w-full md:w-1/3 mr-10" />
+                <Input
+                    type="text"
+                    placeholder="Search..."
+                    className="p-2 rounded-lg w-full md:w-1/3 mr-10 bg-white"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button className="px-4 py-2 rounded-md transition-colors " variant="outline">
