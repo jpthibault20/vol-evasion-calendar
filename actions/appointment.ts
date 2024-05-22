@@ -46,7 +46,7 @@ export const bookAppointment = async (appointmentID: string, userID: string, fli
     }
 
     if (appointment.studentID) {
-        return { error: "réservation plus disponible " }
+        return { error: "réservation indisponible " }
     }
 
     const piloteUser = await getUserById(appointment?.piloteID);
@@ -62,7 +62,7 @@ export const bookAppointment = async (appointmentID: string, userID: string, fli
         });
     } catch (error) {
         console.log(error);
-        return { error: "Oups, une erreur s'est produite dans la réservation" }
+        return { error: "Oups, une erreur s'est produite dans la réservation (E_002)" }
     }
 
     await sendNotificationBooking(piloteUser?.email as string, studentUser?.firstname as string, studentUser?.name as string, appointment.startDate as Date, appointment.endDate as Date);
@@ -223,7 +223,7 @@ export const removeAppointmentByIDAndReccurencID = async (ID: string, reccurence
             })
         } catch (error) {
             console.log(error);
-            return { error: "Erreur dans la suppression de la recurence" }
+            return { error: "Erreur dans la suppression de la recurence (E_003)" }
         }
         return;
     }
@@ -252,7 +252,7 @@ export const removeAppointmentByIDAndReccurencID = async (ID: string, reccurence
         })
     } catch (error) {
         console.log(error);
-        return { error: "Erreur dans la suppression de la recurence" }
+        return { error: "Erreur dans la suppression de la recurence  (E_003)"}
     }
     return;
 }
@@ -285,7 +285,7 @@ export const addUserToAppointment = async (appointmentID: string, userID: string
         });
     } catch (error) {
         console.log(error);
-        return { error: "Il y a eu une erreur" };
+        return { error: "Il y a eu une erreur (E_002)" };
     }
 
     await sendStudentNotificationBooking(user?.email as string, appointment?.startDate as Date, appointment?.endDate as Date)
@@ -314,7 +314,7 @@ export const removeStudentUser = async (appointmentID: string) => {
         })
     } catch (error) {
         console.log(error);
-        return { error: "Il y a eu une erreur" };
+        return { error: "Oups, une erreur s'est produite (E_002)" };
     }
     return { success: "Mise à jour effectué avec succes" };
 

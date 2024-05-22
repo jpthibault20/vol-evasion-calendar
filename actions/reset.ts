@@ -11,7 +11,7 @@ export const reset = async (values: z.infer<typeof ResetSchema>) => {
   const validatedFields = ResetSchema.safeParse(values);
 
   if (!validatedFields.success) {
-    return { error: "Mail non valide !" };
+    return { error: "Email non valide !" };
   }
 
   const { email } = validatedFields.data;
@@ -19,7 +19,7 @@ export const reset = async (values: z.infer<typeof ResetSchema>) => {
   const existingUser = await getUserByEmail(email);
 
   if (!existingUser) {
-    return { error: "Mail introuvable !" };
+    return { error: "Email introuvable !" };
   }
 
   const passwordResetToken = await generatePasswordResetToken(email);
@@ -28,5 +28,5 @@ export const reset = async (values: z.infer<typeof ResetSchema>) => {
     passwordResetToken.token,
   );
 
-  return { success: "Mail de réinitialisation envoyé !" };
+  return { success: "Email de réinitialisation envoyé !" };
 }

@@ -13,7 +13,7 @@ export const newPassword = async (
   token?: string | null,
 ) => {
   if (!token) {
-    return { error: "Jeton manquant !" };
+    return { error: "Token manquant !" };
   }
 
   const validatedFields = NewPasswordSchema.safeParse(values);
@@ -33,13 +33,13 @@ export const newPassword = async (
   const hasExpired = new Date(existingToken.expires) < new Date();
 
   if (hasExpired) {
-    return { error: "Le jeton a expiré !" };
+    return { error: "Le Token a expiré !" };
   }
 
   const existingUser = await getUserByEmail(existingToken.email);
 
   if (!existingUser) {
-    return { error: "Le mail n'existe pas !" }
+    return { error: "L'email n'existe pas !" }
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);

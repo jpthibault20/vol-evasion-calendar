@@ -6,11 +6,11 @@ import { AuthError } from "next-auth";
 import { signIn } from "@/auth";
 import { LoginSchema } from "@/schemas";
 import { getUserByEmail } from "@/data/user";
-import { 
+import {
   sendVerificationEmail,
 } from "@/lib/mail";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
-import { 
+import {
   generateVerificationToken
 } from "@/lib/tokens";
 
@@ -60,7 +60,7 @@ export const login = async (
         case "CredentialsSignin":
           return { error: "Informations d'identification non valides !" }
         default:
-          return { error: "Quelque chose n'a pas fonctionné !" }
+          return { error: "Quelque chose n'a pas fonctionné ! (E_004)" }
       }
     }
 

@@ -25,12 +25,12 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
   const existingUser = await getUserByEmail(email);
 
   if (existingUser) {
-    return { error: "Le mail est déjà utilisé !" };
+    return { error: "L'email est déjà utilisé !" };
   }
 
   const phoneNumber = Number(phone);
   if (isNaN(phoneNumber)) {
-    return{error: "Tel invalide"}
+    return{error: "Téléphone invalide"}
   }
 
   const adressID = randomUUID();
@@ -61,5 +61,5 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     verificationToken.token,
   );
 
-  return { success: "Mail de confirmation envoyé !" };
+  return { success: "Email de confirmation envoyé !" };
 };

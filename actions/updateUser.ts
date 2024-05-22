@@ -32,9 +32,10 @@ export const updateUserAction = async (userID: string, adressID: string, data: d
     const dataAdress = await getAdressById(adressID);
     const roleCurrentUser = await currentRole();
 
-    if (roleCurrentUser == 'PILOTE' && dataUser?.role == 'ADMIN') {
-        return{error:"Vous n'avez pas les droit pour modifier cette utilisateur"}
+    if (dataUser?.role == 'ADMIN' || dataUser?.role == 'PILOTE' && roleCurrentUser != 'ADMIN') {
+        return { error: "Vous n'avez pas les droit pour modifier cette utilisateur" }
     }
+
 
     if (data.name != dataUser?.name && data.name != null) {
         const res = await updateName(userID, data.name);
@@ -99,34 +100,34 @@ export const updateUserAction = async (userID: string, adressID: string, data: d
         }
     };
 
-if (data.adressZipCode != dataAdress?.zipCode && data.adressZipCode) {
-    const res = await updateZipCode(adressID, data.adressZipCode);
+    if (data.adressZipCode != dataAdress?.zipCode && data.adressZipCode) {
+        const res = await updateZipCode(adressID, data.adressZipCode);
 
-    if (res.error) {
-        console.log(res);
-        return { error: res.error };
+        if (res.error) {
+            console.log(res);
+            return { error: res.error };
+        }
+    };
+
+    if (data.adressCountry != dataAdress?.country && data.adressCountry) {
+        const res = await updateCountry(adressID, data.adressCountry);
+
+        if (res.error) {
+            console.log(res);
+            return { error: res.error };
+        }
+    };
+
+    if (data.password && data.passwordConfirmation) {
+        const res = await updatePassword(userID, data.password, data.passwordConfirmation);
+
+        if (res.error) {
+            console.log(res);
+            return { error: res.error };
+        }
     }
-};
 
-if (data.adressCountry != dataAdress?.country && data.adressCountry) {
-    const res = await updateCountry(adressID, data.adressCountry);
-
-    if (res.error) {
-        console.log(res);
-        return { error: res.error };
-    }
-};
-
-if (data.password && data.passwordConfirmation) {
-   const res = await updatePassword(userID, data.password, data.passwordConfirmation);
-
-   if (res.error) {
-        console.log(res);
-        return { error: res.error };
-   }
-}
-
-return { success: "Utilisateur mis à jour" }
+    return { success: "Utilisateur mis à jour" }
 };
 
 
@@ -138,7 +139,7 @@ export const updateName = async (ID: string, Name: string) => {
                 data: { name: Name }
             });
         } catch (error) {
-            return { error: "Oups, une erreur s'est produite." }
+            return { error: "Oups, une erreur s'est produite. (E_001)" }
         }
         return { success: "Le nom a été mis à jour." };
     };
@@ -155,9 +156,9 @@ export const updateFirstName = async (ID: string, FirstName: string) => {
                 data: { firstName: FirstName }
             });
         } catch (error) {
-            return { error: "Oups, une erreur s'est produite." }
+            return { error: "Oups, une erreur s'est produite. (E_001)" }
         }
-        return { success: "Le prenom a été mis à jour." };
+        return { success: "Le prénom a été mis à jour." };
     };
 
     return { error: "Le prénom doit avoir au minimum 3 caractères." };
@@ -170,17 +171,17 @@ export const updateEmail = async (ID: string, Email: string) => {
         const existingUser = await getUserByEmail(Email);
 
         if (existingUser && existingUser.id !== ID) {
-          return { error: "Mail déja utilisé" }
+            return { error: "Email déja utilisé" }
         }
-        const verificationToken = await generateVerificationToken( Email, ID );
+        const verificationToken = await generateVerificationToken(Email, ID);
         await sendVerificationEmail(
-          verificationToken.email,
-          verificationToken.token,
+            verificationToken.email,
+            verificationToken.token,
         );
-        
-        return { success: "Mail de vérification envoyé !" };
+
+        return { success: "Email de vérification envoyé !" };
     }
-    return { error: "Le mail n'est pas valide." }
+    return { error: "L'email n'est pas valide." }
 };
 
 export const updatePhone = async (ID: string, Phone: string) => {
@@ -191,7 +192,7 @@ export const updatePhone = async (ID: string, Phone: string) => {
                 data: { phone: Phone }
             });
         } catch (error) {
-            return { error: "Oups, une erreur s'est produite." }
+            return { error: "Oups, une erreur s'est produite. (E_001)" }
         }
 
         return { success: "Le téléphone a été mis à jour." };
@@ -207,7 +208,7 @@ export const updateRole = async (ID: string, Role: UserRole) => {
                 data: { role: Role as UserRole }
             });
         } catch (error) {
-            return { error: "Oups, une erreur s'est produite." }
+            return { error: "Oups, une erreur s'est produite. (E_001)" }
         }
 
         return { success: "Le role a été mis à jour." };
@@ -223,7 +224,7 @@ export const updateCity = async (ID: string, City: string) => {
                 data: { city: City }
             });
         } catch (error) {
-            return { error: "Oups, une erreur s'est produite." }
+            return { error: "Oups, une erreur s'est produite. (E_001)" }
         }
 
         return { success: "La ville a été mis à jour." };
@@ -239,7 +240,7 @@ export const updateAdress = async (ID: string, Adress: string) => {
                 data: { adress: Adress }
             });
         } catch (error) {
-            return { error: "Oups, une erreur s'est produite." }
+            return { error: "Oups, une erreur s'est produite. (E_001)" }
         }
 
         return { success: "L'adresse a été mis à jour." };
@@ -247,7 +248,7 @@ export const updateAdress = async (ID: string, Adress: string) => {
     return { error: "L'adresse n'est pas valide." }
 };
 
-export const updateZipCode = async (ID: string, ZipCode: string) => { 
+export const updateZipCode = async (ID: string, ZipCode: string) => {
     if (!isNaN(Number(ZipCode))) {
         try {
             await db.address.update({
@@ -255,7 +256,7 @@ export const updateZipCode = async (ID: string, ZipCode: string) => {
                 data: { zipCode: ZipCode }
             });
         } catch (error) {
-            return { error: "Oups, une erreur s'est produite." }
+            return { error: "Oups, une erreur s'est produite. (E_001)" }
         }
 
         return { success: "Le code postale a été mis à jour." };
@@ -271,7 +272,7 @@ export const updateCountry = async (ID: string, Country: string) => {
                 data: { country: Country }
             });
         } catch (error) {
-            return { error: "Oups, une erreur s'est produite." }
+            return { error: "Oups, une erreur s'est produite. (E_001)" }
         }
 
         return { success: "Le pays a été mis à jour." };
@@ -290,13 +291,13 @@ export const updatePassword = async (ID: string, password: string, passwordConfi
                     data: { password: hashedPassword }
                 });
             } catch (error) {
-                return { error: "Oups, une erreur s'est produite." }
+                return { error: "Oups, une erreur s'est produite. (E_001)" }
             }
 
 
-            return {success: "Mot de passe mis a jour !"}
+            return { success: "Mot de passe mis a jour !" }
         }
-        return {error: "6 caractères requis pour le mot de passe !"}
+        return { error: "6 caractères requis pour le mot de passe !" }
     }
-    return {error: "Les mots de passe ne correspondent pas !"}
+    return { error: "Les mots de passe ne correspondent pas !" }
 }

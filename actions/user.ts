@@ -41,7 +41,7 @@ export const removeUserById = async (id: string) => {
     await db.user.delete({where: { id }});
 
   } catch (error) {
-    return { error: "Il y a eu une erreur" };
+    return { error: "Il y a eu une erreur (E_006)" };
   }
   
   return { succes: "Utilisateur suprimé" };
