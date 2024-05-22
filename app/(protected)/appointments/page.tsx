@@ -20,56 +20,51 @@ const AppointmentsPage = () => {
 
     return (
         <div>
-            
-                <div className="w-full md:space-y-8 flex flex-col items-center md:divide-y md:divide-gray-200 md:dark:divide-gray-800 md:pt-8">
 
-                    <div className='hidden md:block'>
-                        <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-50">Mes vols</h2>
-                    </div>
 
-                    <div className='px-6 pb-6 w-full'>
-                        <Appointments
-                            setReload={setReload}
-                            reload={reload}
-                            setRemovedAppointments={setRemovedAppointments}
-                            setReccurenceID={setRcurenceID}
-                            setID={setID}
-                            setAddUserAppointments={setAddUserAppointments}
-                            setRemoveUser={setRemoveUserAppointments}
-                            setIsRecurence={setIsReccurence}
-                        />
-                    </div>
-                </div>
-                
-                <RoleGate allowedRole={'PILOTE'}>
-                    <AddToCalendar
+
+            <Appointments
+                setReload={setReload}
+                reload={reload}
+                setRemovedAppointments={setRemovedAppointments}
+                setReccurenceID={setRcurenceID}
+                setID={setID}
+                setAddUserAppointments={setAddUserAppointments}
+                setRemoveUser={setRemoveUserAppointments}
+                setIsRecurence={setIsReccurence}
+            />
+
+
+
+            <RoleGate allowedRole={'PILOTE'}>
+                <AddToCalendar
                     setReload={setReload}
                     reload={reload}
                 />
-                </RoleGate>
-                
-                <AddStudent
-                    view={addUserAppointments}
-                    setView={setAddUserAppointments}
-                    appointmentID={ID}
-                    setReload={setReload}
-                    reload={reload}
-                />
-                <RemoveAppointments
-                    setReload={setReload}
-                    reload={reload}
-                    removedAppointments={removedAppointments}
-                    setRemovedAppointments={setRemovedAppointments}
-                    ID={ID}
-                    recurenceID={recurenceID}
-                    isReccurence={isReccurence}
-                />
-                <RemoveUserApppointment
-                    view={removeUserAppointments}
-                    setView={setRemoveUserAppointments}
-                    reload={reload}
-                    setReload={setReload}
-                    appointmentID={ID} />
+            </RoleGate>
+
+            <AddStudent
+                view={addUserAppointments}
+                setView={setAddUserAppointments}
+                appointmentID={ID}
+                setReload={setReload}
+                reload={reload}
+            />
+            <RemoveAppointments
+                setReload={setReload}
+                reload={reload}
+                removedAppointments={removedAppointments}
+                setRemovedAppointments={setRemovedAppointments}
+                ID={ID}
+                recurenceID={recurenceID}
+                isReccurence={isReccurence}
+            />
+            <RemoveUserApppointment
+                view={removeUserAppointments}
+                setView={setRemoveUserAppointments}
+                reload={reload}
+                setReload={setReload}
+                appointmentID={ID} />
         </div>
     )
 }

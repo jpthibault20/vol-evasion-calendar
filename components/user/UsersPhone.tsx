@@ -96,7 +96,11 @@ export const UsersPhone = () => {
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button className="px-4 py-2 rounded-md transition-colors " variant="outline">
-                            Filtre
+                            {roleFilter === 'all' && 'Filtre'}
+                            {roleFilter === 'admin' && 'Admin'}
+                            {roleFilter === 'pilot' && 'Pilote'}
+                            {roleFilter === 'student' && 'Élève'}
+                            {roleFilter === 'user' && 'User'}
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
