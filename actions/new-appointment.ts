@@ -82,10 +82,7 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
 
     // 
     if (!user?.id) {
-        return { error: "Un problème es survenue" }
-    }
-    if (!user.color) {
-        return { error: "Un problème es survenue" }
+        return { error: "Un problème es survenue (E_005)" }
     }
 
     if (!recurrence) {

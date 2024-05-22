@@ -8,13 +8,13 @@ export const newVerification = async (token: string) => {
   const existingToken = await getVerificationTokenByToken(token);
 
   if (!existingToken) {
-    return { error: "Le jeton n'existe pas !" };
+    return { error: "Le Token n'existe pas !" };
   }
 
   const hasExpired = new Date(existingToken.expires) < new Date();
 
   if (hasExpired) {
-    return { error: "Le jeton a expiré !" };
+    return { error: "Le Token a expiré !" };
   }
 
   const existingUser = await getUserById(existingToken.userID);
@@ -34,5 +34,5 @@ export const newVerification = async (token: string) => {
     where: { id: existingToken.id }
   });
 
-  return { success: "Mail verifié !" };
+  return { success: "Email verifié !" };
 };
