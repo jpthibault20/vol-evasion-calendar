@@ -21,35 +21,69 @@ export const Appointments = ({ reload, setReload, setRemovedAppointments, setID,
     if (user?.role === 'PILOTE' || user?.role === 'ADMIN') {
         return (
             <div>
-                <PiloteAppointments
-                    setReload={setReload}
-                    reload={reload}
-                    setRemovedAppointments={setRemovedAppointments}
-                    setReccurenceID={setReccurenceID}
-                    setID={setID}
-                    setAddUserAppointments={setAddUserAppointments}
-                    setRemoveUser={setRemoveUser}
-                    setIsRecurence={setIsRecurence}
-                />
+                <div className='w-full md:space-y-8 flex flex-col items-center md:divide-y md:divide-gray-200 md:dark:divide-gray-800 md:pt-8'>
+
+                    <div className='hidden md:block'>
+                        <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-50">Mes vols (pilote)</h2>
+                    </div>
+                    <div className='px-6 pb-6 w-full'>
+                        <PiloteAppointments
+                            setReload={setReload}
+                            reload={reload}
+                            setRemovedAppointments={setRemovedAppointments}
+                            setReccurenceID={setReccurenceID}
+                            setID={setID}
+                            setAddUserAppointments={setAddUserAppointments}
+                            setRemoveUser={setRemoveUser}
+                            setIsRecurence={setIsRecurence}
+                        />
+                    </div>
+
+                    <div className='w-full text-center'>
+                        <h2 className="text-2xl font-bold tracking-tight mt-5 text-gray-900 dark:text-gray-50">Mes vols (élève)</h2>
+
+                        <div className='px-6 pb-6 w-full'>
+                            <StudentAppointments
+                                setReload={setReload}
+                                reload={reload}
+                                setRemovedAppointments={setRemovedAppointments}
+                                setReccurenceID={setReccurenceID}
+                                setID={setID}
+                                setAddUserAppointments={setAddUserAppointments}
+                                setRemoveUser={setRemoveUser}
+                                setIsRecurence={setIsRecurence}
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     };
 
-    if (user?.role === 'ELEVE'  || user?.role === 'USER') {
-        return (
-                <div>
-                    <StudentAppointments
-                    setReload={setReload}
-                    reload={reload}
-                    setRemovedAppointments={setRemovedAppointments}
-                    setReccurenceID={setReccurenceID}
-                    setID={setID}
-                    setAddUserAppointments={setAddUserAppointments}
-                    setRemoveUser={setRemoveUser}
-                    setIsRecurence={setIsRecurence}
-                />
+    return (
+        <div>
+            <div className='w-full md:space-y-8 flex flex-col items-center md:divide-y md:divide-gray-200 md:dark:divide-gray-800 md:pt-8'>
+
+                <div className='hidden md:block w-full text-center'>
+                    <h2 className="text-2xl font-bold tracking-tight mt-5 text-gray-900 dark:text-gray-50">Mes vols</h2>
                 </div>
-        );
-    };
+                <div className='px-6 pb-6 w-full'>
+                    <StudentAppointments
+                        setReload={setReload}
+                        reload={reload}
+                        setRemovedAppointments={setRemovedAppointments}
+                        setReccurenceID={setReccurenceID}
+                        setID={setID}
+                        setAddUserAppointments={setAddUserAppointments}
+                        setRemoveUser={setRemoveUser}
+                        setIsRecurence={setIsRecurence}
+                    />
+                </div>
+
+            </div>
+        </div>
+
+    );
+
 
 };
