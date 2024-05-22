@@ -6,7 +6,7 @@ import { User } from '@prisma/client';
 import { getAllUsers } from '@/actions/user';
 import { UpdateUser } from '@/components/user/UpdateUser';
 import { RemoveUser } from '@/components/user/RemoveUser';
-import { Info } from 'lucide-react';
+import { ChevronDown, Info } from 'lucide-react';
 import { InfoUser } from '@/components/user/InfoUser';
 import { Spinner } from '@/components/ui/spinner';
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -97,7 +97,7 @@ const UserManagement = () => {
 
             <div className="container mx-auto px-4">
                 <div className="flex justify-between items-center py-4">
-                    <div className="flex items-center">
+                    <div className="flex items-center w-2/3">
                         <Input
                             type="text"
                             placeholder="Search..."
@@ -107,8 +107,12 @@ const UserManagement = () => {
                         />
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button className="px-4 py-2 rounded-md transition-colors " variant="outline">
-                                    Filtre
+                                <Button className="rounded-md bg-white text-gray-500 hover:bg-slate-200">
+                                    <div className='flex w-full space-x-2'>
+                                        Filtre
+                                        <ChevronDown  className='w-4 ml-4'/>
+                                    </div>
+
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
