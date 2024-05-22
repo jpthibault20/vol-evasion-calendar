@@ -2,13 +2,16 @@
 import Image from 'next/image';
 import img from "@/public/userProfil.png"
 import { useEffect, useState } from 'react';
-import { Address, User } from '@prisma/client';
-import { getAllAdress, getAllUsers } from '@/actions/user';
-import { UpdateUser } from './UpdateUser';
-import { RemoveUser } from './RemoveUser';
-import { Info } from 'lucide-react';
-import { InfoUser } from './InfoUser';
-import { Spinner } from '../ui/spinner';
+import { User } from '@prisma/client';
+import { getAllUsers } from '@/actions/user';
+import { UpdateUser } from '@/components/user/UpdateUser';
+import { RemoveUser } from '@/components/user/RemoveUser';
+import { ChevronDown, Info } from 'lucide-react';
+import { InfoUser } from '@/components/user/InfoUser';
+import { Spinner } from '@/components/ui/spinner';
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 const UserManagement = () => {
     const [users, setUsers] = useState<User[]>([]);
@@ -18,6 +21,8 @@ const UserManagement = () => {
     const [showInfoUser, setshowInfoUser] = useState(false);
     const [reload, setReload] = useState(true);
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [roleFilter, setRoleFilter] = useState<'all' | 'admin' | 'pilot' | 'student' | 'user'>('all');
+    const [searchQuery, setSearchQuery] = useState('');
 
     const updateRole = (ID: string) => {
         setUserID(ID);
@@ -46,6 +51,43 @@ const UserManagement = () => {
             .finally(() => setIsLoading(false))
     }, [reload]);
 
+    const handleRoleFilterChange = (value: 'all' | 'admin' | 'pilot' | 'student' | 'user') => {
+        setRoleFilter(value);
+    };
+
+    const sortUser = (
+        users: User[],
+        roleFilter: 'all' | 'admin' | 'pilot' | 'student' | 'user',
+        searchQuery: string
+    ) => {
+        let filteredUsers = users;
+
+        // Filter by rol
+        if (roleFilter === 'admin') {
+            filteredUsers = filteredUsers.filter((user) => user.role === 'ADMIN');
+        } else if (roleFilter === 'pilot') {
+            filteredUsers = filteredUsers.filter((user) => user.role === 'PILOTE');
+        } else if (roleFilter === 'student') {
+            filteredUsers = filteredUsers.filter((user) => user.role === 'ELEVE');
+        } else if (roleFilter === 'user') {
+            filteredUsers = filteredUsers.filter((user) => user.role === 'USER');
+        }
+
+        // Filter by firstname and lastname
+        if (searchQuery) {
+            const query = searchQuery.toLowerCase();
+            filteredUsers = filteredUsers.filter(
+                (user) =>
+                    user.firstName?.toLowerCase().includes(query) ||
+                    user.name?.toLowerCase().includes(query)
+            );
+        }
+
+        return filteredUsers;
+    };
+
+    const sortedUsers = sortUser(users || [], roleFilter, searchQuery);
+
 
     return (
         <div className='w-full flex flex-col items-center space-y-8 md:divide-y md:divide-gray-200 md:dark:divide-gray-800 md:pt-8 '>
@@ -55,15 +97,57 @@ const UserManagement = () => {
 
             <div className="container mx-auto px-4">
                 <div className="flex justify-between items-center py-4">
-                    <div className="flex items-center">
-                        <input type="text" placeholder="Search..." className="p-2 rounded-lg w-full md:w-2/3 mr-10" />
-                        <select className="p-2 rounded-lg">
-                            <option value="">Filtre</option>
-                            <option value="admin">Admin</option>
-                            <option value="pilot">Pilot</option>
-                            <option value="student">Student</option>
-                            <option value="user">User</option>
-                        </select>
+                    <div className="flex items-center w-2/3">
+                        <Input
+                            type="text"
+                            placeholder="Search..."
+                            className="p-2 rounded-lg w-full md:w-1/3 mr-10 bg-white"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button className="rounded-md bg-white text-gray-500 hover:bg-slate-200">
+                                    <div className='flex w-full space-x-2'>
+                                        Filtre
+                                        <ChevronDown  className='w-4 ml-4'/>
+                                    </div>
+
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuCheckboxItem
+                                    checked={roleFilter === 'all'}
+                                    onCheckedChange={() => handleRoleFilterChange('all')}
+                                >
+                                    Tous
+                                </DropdownMenuCheckboxItem>
+                                <DropdownMenuCheckboxItem
+                                    checked={roleFilter === 'admin'}
+                                    onCheckedChange={() => handleRoleFilterChange('admin')}
+                                >
+                                    Admin
+                                </DropdownMenuCheckboxItem>
+                                <DropdownMenuCheckboxItem
+                                    checked={roleFilter === 'pilot'}
+                                    onCheckedChange={() => handleRoleFilterChange('pilot')}
+                                >
+                                    Pilote
+                                </DropdownMenuCheckboxItem>
+                                <DropdownMenuCheckboxItem
+                                    checked={roleFilter === 'student'}
+                                    onCheckedChange={() => handleRoleFilterChange('student')}
+                                >
+                                    Elève
+                                </DropdownMenuCheckboxItem>
+                                <DropdownMenuCheckboxItem
+                                    checked={roleFilter === 'user'}
+                                    onCheckedChange={() => handleRoleFilterChange('user')}
+                                >
+                                    User
+                                </DropdownMenuCheckboxItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
                 </div>
                 {isLoading ? (
@@ -81,7 +165,7 @@ const UserManagement = () => {
                             </thead>
 
                             <tbody>
-                                {users.map((user, index) => (
+                                {sortedUsers.map((user, index) => (
                                     <tr key={index} className="hover:bg-grey-lighter">
                                         <td className="py-4 px-6 border-b border-grey-light">
                                             <div className="flex items-center">
