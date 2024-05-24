@@ -38,7 +38,7 @@ export const EmailTemplate = ({children, preview}: EmailTemplateProps) => (
                     {children}
                     <Text className="text-lg leading-6">
                         Salutation,
-                        <br />- L&apos;équipe Vol Evasion
+                        <br />- L&apos;équipe Vol Evasion -
                     </Text>
                     <Hr className="border-gray-300 mt-12" />
                     <Text className="text-sm text-blue-gray-500 text-gray-500">Vol evasion</Text>

@@ -88,7 +88,7 @@ export const SidebarPhone = () => {
                         <LogoutButton>
                             <div className={`inline-flex items-center p-2 rounded-md hover:bg-gray-100 justify-start`}>
                                 <LogOut className="w-6 h-6" />
-                                <span className="ml-2">Logout</span>
+                                <span className="ml-2">Déconnexion</span>
                             </div>
                         </LogoutButton>
                     </div>

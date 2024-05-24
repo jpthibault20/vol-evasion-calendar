@@ -99,11 +99,11 @@ export const AddStudent = ({ view, setView, appointmentID, reload, setReload }: 
                     <Spinner>Chargement ...</Spinner>
                 ) : (
                     <div className="space-y-6">
-                        <p className="text-gray-500 text-center mb-5">Ajouter un Elève à ce vol ?</p>
+                        <p className="text-gray-500 text-center mb-5">Ajouter un élève à ce vol ?</p>
 
                         <form className="space-y-6" onSubmit={handleSubmit}>
                             <div>
-                                <label>Liste des élève</label>
+                                <label>Liste des élèves</label>
                                 <select
                                     name="userID"
                                     disabled={isPending}
@@ -118,7 +118,7 @@ export const AddStudent = ({ view, setView, appointmentID, reload, setReload }: 
                             </div>
 
                             <div>
-                                <label>Type de vole</label>
+                                <label>Type de vol</label>
                                 <select
                                     name="flyingType"
                                     disabled={isPending}

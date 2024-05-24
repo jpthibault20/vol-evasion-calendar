@@ -92,7 +92,7 @@ const UserManagement = () => {
     return (
         <div className='w-full flex flex-col items-center space-y-8 md:divide-y md:divide-gray-200 md:dark:divide-gray-800 md:pt-8 '>
             <div>
-                <h1 className="text-2xl font-bold">Liste des Utilisateurs</h1>
+                <h1 className="text-2xl font-bold">Liste des utilisateurs</h1>
             </div>
 
             <div className="container mx-auto px-4">
@@ -147,14 +147,14 @@ const UserManagement = () => {
                                     checked={roleFilter === 'user'}
                                     onCheckedChange={() => handleRoleFilterChange('user')}
                                 >
-                                    User
+                                    Utilisateur
                                 </DropdownMenuCheckboxItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
                 </div>
                 {isLoading ? (
-                    <Spinner>Chargement</Spinner>
+                    <Spinner>Chargement ...</Spinner>
                 ) : (
                     <div className="bg-white shadow-md rounded my-6">
                         <table className="text-left w-full border-collapse">
@@ -203,7 +203,7 @@ const UserManagement = () => {
                 )}
 
                 <div className="flex justify-between items-center py-4">
-                    <span>Total Users : {users.length}</span>
+                    <span>Effectif total : {users.length}</span>
                 </div>
 
                 <UpdateUser ID={userID} show={showUpdateUser} setShow={setShowUpdateUser} setReload={setReload} reload={reload} />

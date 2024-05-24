@@ -29,12 +29,12 @@ export const NotificationBookingStudent = ({startDate, endDate}: NotificationBoo
         <EmailTemplate preview={"Inscription à une heure de vol"}>
             <Section className="my-6">
                 <Text className="text-lg leading-6">
-                    Vous etes inscrit à une nouvelle heure de vol : 
+                Vous êtes inscrit à une nouvelle heure de vol : 
                 </Text>
                 <Text className="text-lg leading-6">
                     {startDate} ➡️ {endDate}
                 </Text>
-                <Text className="text-lg leading-6">Information: Il faut prévoir 30 min avant le vol et 15 min après le vol</Text>
+                <Text className="text-lg leading-6">Information : Veuillez prévoir 30 minutes avant le vol et 15 minutes après le vol.</Text>
             </Section>
         </EmailTemplate>
 

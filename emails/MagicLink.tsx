@@ -28,7 +28,7 @@ export const MagicLinkEmail = ({ magicLink }: MagicLinkEmailProps) => (
         <EmailTemplate preview={"Inscription"}>
             <Section className="my-6">
                 <Text className="text-lg leading-6">
-                    Vous avez demander une création de compte, voici le lien de validation d&apos;email :
+                    Vous avez demandé une création de compte, voici le lien de validation d&apos;email :
                 </Text>
                 <Text className="text-lg leading-6">
                     <Link className="text-blue-500" href={magicLink}>
@@ -36,7 +36,7 @@ export const MagicLinkEmail = ({ magicLink }: MagicLinkEmailProps) => (
                     </Link>
                 </Text>
                 <Text className="text-lg leading-6">
-                    Si vous ne l&apos;avez pas demandé, veuillez ignorer cet e-mail..
+                    Si vous ne l&apos;avez pas demandé, veuillez ignorer cet e-mail...
                 </Text>
             </Section>
         </EmailTemplate>

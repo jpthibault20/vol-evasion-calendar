@@ -132,13 +132,13 @@ export const UsersPhone = () => {
                             checked={roleFilter === 'user'}
                             onCheckedChange={() => handleRoleFilterChange('user')}
                         >
-                            User
+                            Utilisateur
                         </DropdownMenuCheckboxItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
             {isLoading ? (
-                <Spinner>Chargelment ...</Spinner>
+                <Spinner>Chargement ...</Spinner>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {sortedUsers.map((user, index) => (

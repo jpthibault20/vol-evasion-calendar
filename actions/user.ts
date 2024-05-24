@@ -44,6 +44,6 @@ export const removeUserById = async (id: string) => {
     return { error: "Il y a eu une erreur (E_006)" };
   }
   
-  return { succes: "Utilisateur suprimé" };
+  return { succes: "Utilisateur supprimé" };
 }
 

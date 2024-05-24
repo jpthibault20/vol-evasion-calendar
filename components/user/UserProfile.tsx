@@ -77,7 +77,7 @@ export const UserProfile = ({ user, adress, reload, setReload }: UserProfileProp
         <div className='hidden md:block'>
           <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-50">Profil</h2>
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            Vos informations personel
+            Vos informations personelles
           </p>
         </div>
         <div className="space-y-6 pt-8">
@@ -123,12 +123,12 @@ export const UserProfile = ({ user, adress, reload, setReload }: UserProfileProp
             <div className='sm:col-span-6 flex gap-4'>
               <div className="sm:col-span-3">
                 <label className="block text-sm font-bold text-gray-700 dark:text-gray-300" htmlFor="first-name">
-                  Prenom
+                  Prénom
                 </label>
                 <div className="mt-1">
                   <Input
                     name='Prenom'
-                    placeholder='Prenom'
+                    placeholder='Prénom'
                     defaultValue={user?.firstName || ""}
                     disabled={isPending}
                     className='bg-white'
@@ -153,12 +153,12 @@ export const UserProfile = ({ user, adress, reload, setReload }: UserProfileProp
 
             <div className="sm:col-span-4">
               <label className="block text-sm font-bold text-gray-700 dark:text-gray-300" htmlFor="email">
-                Mail
+                Email
               </label>
               <div className="mt-1">
                 <Input
                   name='email'
-                  placeholder='Mail'
+                  placeholder='Email'
                   defaultValue={user?.email || ""}
                   disabled={isPending}
                   className='bg-white'
@@ -181,7 +181,7 @@ export const UserProfile = ({ user, adress, reload, setReload }: UserProfileProp
             </div>
             <div className="sm:col-span-6">
               <label className="block text-sm font-bold text-gray-700 dark:text-gray-300" htmlFor="address">
-                Addresse
+                Adresse
               </label>
               <div className="mt-1">
                 <Input

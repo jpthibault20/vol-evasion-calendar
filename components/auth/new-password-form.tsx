@@ -88,7 +88,7 @@ export const NewPasswordForm = () => {
             type="submit"
             className="w-full"
           >
-            Reinitialiser le mot de pass
+            Réinitialiser le mot de passe
           </Button>
         </form>
       </Form>

@@ -64,7 +64,7 @@ export const RemoveUser = ({ show, setShow, ID, reload, setReload }: UpdateUserP
                         </div>
 
                     ) : (
-                        <Spinner>Cargement ... </Spinner>
+                        <Spinner>Chargement ... </Spinner>
                     )}
 
 

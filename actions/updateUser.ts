@@ -33,7 +33,7 @@ export const updateUserAction = async (userID: string, adressID: string, data: d
     const roleCurrentUser = await currentRole();
 
     if (dataUser?.role == 'ADMIN' || dataUser?.role == 'PILOTE' && roleCurrentUser != 'ADMIN') {
-        return { error: "Vous n'avez pas les droit pour modifier cette utilisateur" }
+        return { error: "Vous n'avez pas les droits pour modifier cet utilisateur" }
     }
 
 
@@ -211,9 +211,9 @@ export const updateRole = async (ID: string, Role: UserRole) => {
             return { error: "Oups, une erreur s'est produite. (E_001)" }
         }
 
-        return { success: "Le role a été mis à jour." };
+        return { success: "Le rôle a été mis à jour." };
     }
-    return { error: "Le role n'est pas valide." }
+    return { error: "Le rôle n'est pas valide." }
 };
 
 export const updateCity = async (ID: string, City: string) => {
@@ -227,7 +227,7 @@ export const updateCity = async (ID: string, City: string) => {
             return { error: "Oups, une erreur s'est produite. (E_001)" }
         }
 
-        return { success: "La ville a été mis à jour." };
+        return { success: "La ville a été mise à jour." };
     }
     return { error: "La ville n'est pas valide." }
 };
@@ -243,7 +243,7 @@ export const updateAdress = async (ID: string, Adress: string) => {
             return { error: "Oups, une erreur s'est produite. (E_001)" }
         }
 
-        return { success: "L'adresse a été mis à jour." };
+        return { success: "L'adresse a été mise à jour." };
     }
     return { error: "L'adresse n'est pas valide." }
 };

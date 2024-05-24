@@ -62,7 +62,7 @@ export const bookAppointment = async (appointmentID: string, userID: string, fli
         });
     } catch (error) {
         console.log(error);
-        return { error: "Oups, une erreur s'est produite dans la réservation (E_002)" }
+        return { error: "Oups, une erreur s'est produite dans la réservation (code: E_002)" }
     }
 
     await sendNotificationBooking(piloteUser?.email as string, studentUser?.firstname as string, studentUser?.name as string, appointment.startDate as Date, appointment.endDate as Date);
@@ -223,7 +223,7 @@ export const removeAppointmentByIDAndReccurencID = async (ID: string, reccurence
             })
         } catch (error) {
             console.log(error);
-            return { error: "Erreur dans la suppression de la recurence (E_003)" }
+            return { error: "Erreur dans la suppression de la recurrence (code: E_003)" }
         }
         return;
     }
@@ -252,7 +252,7 @@ export const removeAppointmentByIDAndReccurencID = async (ID: string, reccurence
         })
     } catch (error) {
         console.log(error);
-        return { error: "Erreur dans la suppression de la recurence  (E_003)"}
+        return { error: "Erreur dans la suppression de la recurrence (code: E_003)"}
     }
     return;
 }
@@ -285,11 +285,11 @@ export const addUserToAppointment = async (appointmentID: string, userID: string
         });
     } catch (error) {
         console.log(error);
-        return { error: "Il y a eu une erreur (E_002)" };
+        return { error: "Il y a eu une erreur (code: E_002)" };
     }
 
     await sendStudentNotificationBooking(user?.email as string, appointment?.startDate as Date, appointment?.endDate as Date)
-    return { success: "Mise à jour effectué avec succes" };
+    return { success: "Mise à jour effectuée" };
 }
 
 export const removeStudentUser = async (appointmentID: string) => {
@@ -299,7 +299,7 @@ export const removeStudentUser = async (appointmentID: string) => {
 
 
     if (!appointmentID) {
-        return { error: "Error ID" }
+        return { error: "Erreur ID (code: E_007)" }
     }
 
     if (appointment?.studentID) {
@@ -314,9 +314,9 @@ export const removeStudentUser = async (appointmentID: string) => {
         })
     } catch (error) {
         console.log(error);
-        return { error: "Oups, une erreur s'est produite (E_002)" };
+        return { error: "Oups, une erreur s'est produite (code: E_002)" };
     }
-    return { success: "Mise à jour effectué avec succes" };
+    return { success: "Mise à jour effectuée" };
 
     
 }

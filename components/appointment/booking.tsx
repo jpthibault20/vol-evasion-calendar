@@ -101,7 +101,7 @@ export const Booking = ({ appointment, pilote, reload, setReload, setViewInfo }:
             </div>
           </div>
           <form onSubmit={handleSubmit} className='space-y-6'>
-            <p className="text-gray-700 font-semibold pt-6">Coisisez le type de votre vol</p>
+            <p className="text-gray-700 font-semibold pt-6">Choisisez le type de votre vol</p>
             <div className="space-y-2">
               <Label htmlFor="type">Type de vol</Label>
               <Select
@@ -141,7 +141,7 @@ export const Booking = ({ appointment, pilote, reload, setReload, setViewInfo }:
             ) : (
             <div>
               <p className='text-center font-semibold text-gray-700'>
-                vol Indisponible
+                Vol indisponible
               </p>
             </div>
             )}

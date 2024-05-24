@@ -132,7 +132,7 @@ export const StudentAppointments = ({ reload, setReload, setRemovedAppointments,
                                     </TableCell>
                                     <TableCell>
                                         <div className='flex space-x-4'>
-                                            <Button variant="destructive" onClick={() => buttonUnsubscribe(appointment.id)}>se désinscrire</Button>
+                                            <Button variant="destructive" onClick={() => buttonUnsubscribe(appointment.id)}>Se désinscrire</Button>
                                             {/* <Button variant="modify">Modifier</Button> */}
 
                                         </div>
