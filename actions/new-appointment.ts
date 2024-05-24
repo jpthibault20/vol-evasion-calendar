@@ -34,7 +34,7 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
 
     // validation "Horaire début" not passed
 
-    //timeStart.setHours(timeStart.getHours() + 2);  // hours gmt paris
+    timeStart.setHours(timeStart.getHours() + 2);  // hours gmt paris
     if (new Date().getDate() == timeStart.getDate() && new Date().getMonth() == timeStart.getMonth() && new Date().getFullYear() == timeStart.getFullYear()) {
         // console.log("date : ", new Date())
         // console.log("timeStart : ", timeStart)
