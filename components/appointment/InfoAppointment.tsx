@@ -60,7 +60,7 @@ export function InfoAppointment({ viewInfo, setViewInfo, ID, reload, setReload }
     <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto pt-20 md:pt-0">
       <AppointmentCardWrapper headerLabel={"Réservez votre vol"} setShowForm={setViewInfo} showForm={viewInfo}>
         {isLoading ? (
-          <Spinner>Loading...</Spinner>
+          <Spinner>Chargement...</Spinner>
         ) : appointment ? (
           <>
             <Booking appointment={appointment} pilote={pilote} setReload={setReload} reload={reload} setViewInfo={setViewInfo}/>

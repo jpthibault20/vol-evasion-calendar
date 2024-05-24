@@ -63,7 +63,7 @@ export const ResetForm = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Mail</FormLabel>
+                  <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -84,7 +84,7 @@ export const ResetForm = () => {
             type="submit"
             className="w-full"
           >
-            Envoyé
+            Envoyer
           </Button>
         </form>
       </Form>

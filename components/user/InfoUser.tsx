@@ -18,7 +18,7 @@ export const InfoUser = ({ show, setShow, ID }: UpdateUserProps) => {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
             <CardWrapper headerLabel={"Information utilisateur"} setShowForm={setShow} showForm={show}>
-                Info User : {ID}
+                Information Utilisateur : {ID}
             </CardWrapper>
         </div>
 

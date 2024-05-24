@@ -87,7 +87,7 @@ export const Sidebar = () => {
           <LogoutButton>
             <div className={`flex items-center p-2 rounded-md hover:bg-gray-800 ${isOpen ? 'justify-start' : 'justify-center'}`}>
               <LogOut className="w-6 h-6" />
-              {isOpen && <span className="ml-2">Logout</span>}
+              {isOpen && <span className="ml-2">Déconnexion</span>}
             </div>
           </LogoutButton>
         </div>

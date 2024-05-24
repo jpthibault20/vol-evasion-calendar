@@ -17,7 +17,7 @@ const TimePicker = ({timeAppointment, setTimeAppointment} : TimePickerPrrops) =>
 
       <div className="grid gap-1 text-center">
         <Label htmlFor="hours" className="text-xs">
-          Hours
+          Heures
         </Label>
         <TimePickerInput
           picker="hours"

@@ -13,13 +13,13 @@ export const newPassword = async (
   token?: string | null,
 ) => {
   if (!token) {
-    return { error: "Token manquant !" };
+    return { error: "Clé manquante !" };
   }
 
   const validatedFields = NewPasswordSchema.safeParse(values);
 
   if (!validatedFields.success) {
-    return { error: "Champs non valides !" };
+    return { error: "Informations invalides !" };
   }
 
   const { password } = validatedFields.data;
@@ -27,13 +27,13 @@ export const newPassword = async (
   const existingToken = await getPasswordResetTokenByToken(token);
 
   if (!existingToken) {
-    return { error: "Champs non valides !" };
+    return { error: "Informations invalides !" };
   }
 
   const hasExpired = new Date(existingToken.expires) < new Date();
 
   if (hasExpired) {
-    return { error: "Le Token a expiré !" };
+    return { error: "La clé a expiré !" };
   }
 
   const existingUser = await getUserByEmail(existingToken.email);

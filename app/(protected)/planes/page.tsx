@@ -7,7 +7,7 @@ const planes = () => {
       <RoleGate allowedRole={'PILOTE'} noAccesPage={true}>
         <div className="flex justify-center items-center h-screen">
           <p className="text-center">
-            planes page
+            Page indisponible pour le moment
           </p>
         </div>
       </RoleGate>

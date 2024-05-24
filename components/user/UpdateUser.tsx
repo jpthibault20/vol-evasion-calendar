@@ -83,7 +83,7 @@ export const UpdateUser = ({ show, setShow, ID, reload, setReload }: UpdateUserP
                     }
                     if (data.error) {
                         setError(data.error);
-                        toast("Oups, il y a eu un problème !", {
+                        toast("Oups, il y a eu un problème ! (code: E_008)", {
                             action: {
                                 label: "X",
                                 onClick: () => {},
@@ -111,7 +111,7 @@ export const UpdateUser = ({ show, setShow, ID, reload, setReload }: UpdateUserP
                                         disabled={isPending} />
                                 </div>
                                 <div>
-                                    <label>prenom</label>
+                                    <label>Prénom</label>
                                     <Input
                                         name="Prenom"
                                         placeholder="Prenom"
@@ -119,7 +119,7 @@ export const UpdateUser = ({ show, setShow, ID, reload, setReload }: UpdateUserP
                                 </div>
 
                                 <div>
-                                    <label>Mail</label>
+                                    <label>Email</label>
                                     <Input
                                         name="email"
                                         placeholder="Mail"
@@ -181,17 +181,17 @@ export const UpdateUser = ({ show, setShow, ID, reload, setReload }: UpdateUserP
                                     </div>
                                     <div>
                                         <div className="relative">
-                                            <label>Role</label>
+                                            <label>Rôle</label>
                                             <select
                                                 name="Role"
                                                 className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 rounded-md bg-white text-gray-900 disabled:bg-gray-100 disabled:text-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                                                 defaultValue={user?.role}
                                                 disabled={isPending}
                                             >
-                                                <option value={UserRole.ADMIN}>Admin</option>
+                                                <option value={UserRole.ADMIN}>Administrateur</option>
                                                 <option value={UserRole.PILOTE}>Pilote</option>
-                                                <option value={UserRole.ELEVE}>Eleve</option>
-                                                <option value={UserRole.USER}>User</option>
+                                                <option value={UserRole.ELEVE}>Elève</option>
+                                                <option value={UserRole.USER}>Utilisatur</option>
                                             </select>
                                             <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
                                                 <svg className="w-5 h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -213,7 +213,7 @@ export const UpdateUser = ({ show, setShow, ID, reload, setReload }: UpdateUserP
                             </div>
                         </form>
                     ) : (
-                        <Spinner>Loading...</Spinner>
+                        <Spinner>Chargement...</Spinner>
                     )}
                 </CardWrapper>
             </div>

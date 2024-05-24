@@ -21,7 +21,7 @@ export const login = async (
   const validatedFields = LoginSchema.safeParse(values);
 
   if (!validatedFields.success) {
-    return { error: "Champs non valides !" };
+    return { error: "Entrée invalide !" };
   }
 
   const { email, password, code } = validatedFields.data;
@@ -29,7 +29,7 @@ export const login = async (
   const existingUser = await getUserByEmail(email);
 
   if (!existingUser || !existingUser.email || !existingUser.password) {
-    return { error: "Le mail n'existe pas !" }
+    return { error: "L'email n'existe pas !" }
   }
 
   if (!existingUser.emailVerified) {
@@ -43,7 +43,7 @@ export const login = async (
       verificationToken.token,
     );
 
-    return { success: "Mail envoyé !" };
+    return { success: "Email envoyé !" };
   }
 
 
@@ -58,7 +58,7 @@ export const login = async (
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
-          return { error: "Informations d'identification non valides !" }
+          return { error: "Informations d'identifications invalides !" }
         default:
           return { error: "Quelque chose n'a pas fonctionné ! (E_004)" }
       }

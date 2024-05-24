@@ -103,7 +103,7 @@ export const AppointmentForm = ({ setShowForm, showForm, setReload, reload }: Ap
                                 render={({ field }) => (
 
                                     <FormItem>
-                                        <FormLabel>Type de disponibilitée</FormLabel>
+                                        <FormLabel>Type de disponibilité</FormLabel>
                                         <Select
                                             disabled={isPending}
                                             onValueChange={field.onChange}
@@ -111,7 +111,7 @@ export const AppointmentForm = ({ setShowForm, showForm, setReload, reload }: Ap
                                         >
                                             <FormControl>
                                                 <SelectTrigger>
-                                                    <SelectValue placeholder="Choisir un type de disponibilitée" />
+                                                    <SelectValue placeholder="Choisir un type de disponibilité" />
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
@@ -178,7 +178,7 @@ export const AppointmentForm = ({ setShowForm, showForm, setReload, reload }: Ap
                                 name="timeStart"
                                 render={({ field }) => (
                                     <div className="">
-                                        <FormLabel>Horaire début</FormLabel>
+                                        <FormLabel>Horaire de début</FormLabel>
                                         <div className="mt-2 grid grid-col-2 grid-flow-col">
                                             <Popover>
                                                 <PopoverTrigger asChild>
@@ -190,7 +190,7 @@ export const AppointmentForm = ({ setShowForm, showForm, setReload, reload }: Ap
                                                         )}
                                                     >
                                                         <Clock3 className="mr-2 h-4 w-4" />
-                                                        {timeAppointmentStart ? format(timeAppointmentStart, "k:mm") : "horaire début"}
+                                                        {timeAppointmentStart ? format(timeAppointmentStart, "k:mm") : "horaire de début"}
                                                     </Button>
                                                 </PopoverTrigger>
                                                 <PopoverContent className="w-auto p-0">
@@ -209,7 +209,7 @@ export const AppointmentForm = ({ setShowForm, showForm, setReload, reload }: Ap
                                 name="timeEnd"
                                 render={({ field }) => (
                                     <div className="">
-                                        <FormLabel>Horaire Fin</FormLabel>
+                                        <FormLabel>Horaire de Fin</FormLabel>
                                         <div className="mt-2 grid grid-col-2 grid-flow-col">
                                             <Popover>
                                                 <PopoverTrigger asChild>
@@ -221,7 +221,7 @@ export const AppointmentForm = ({ setShowForm, showForm, setReload, reload }: Ap
                                                         )}
                                                     >
                                                         <Clock3 className="mr-2 h-4 w-4" />
-                                                        {timeAppointmentEnd ? format(timeAppointmentEnd, "k:mm") : "horaire fin"}
+                                                        {timeAppointmentEnd ? format(timeAppointmentEnd, "k:mm") : "horaire de fin"}
                                                     </Button>
                                                 </PopoverTrigger>
                                                 <PopoverContent className="w-auto p-0">
@@ -240,12 +240,12 @@ export const AppointmentForm = ({ setShowForm, showForm, setReload, reload }: Ap
                                 name="recurrence"
                                 render={({ field }) => (
                                     <FormItem >
-                                        <FormLabel>Disponibilité récurente</FormLabel>
+                                        <FormLabel>Disponibilité récurrente</FormLabel>
                                         <div className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                                             <div className="space-y-0.5">
-                                                <FormLabel>Disponibilitée Récurente</FormLabel>
+                                                <FormLabel>Disponibilité Récurrente</FormLabel>
                                                 <FormDescription>
-                                                    Disponibilitée récurente toutes les semaines
+                                                    Disponibilité récurrente toutes les semaines
                                                 </FormDescription>
                                             </div>
                                             <FormControl>
@@ -265,7 +265,7 @@ export const AppointmentForm = ({ setShowForm, showForm, setReload, reload }: Ap
                                     name="dateEndReccurence"
                                     render={({ field }) => (
                                         <div className="">
-                                            <FormLabel>Date fin recurrence</FormLabel>
+                                            <FormLabel>Date de fin de recurrence</FormLabel>
                                             <div className="mt-2 grid grid-col-2 grid-flow-col">
                                                 <Popover open={popoverCalendarAppointment} onOpenChange={setPopoverCalendarAppointment}>
                                                     <PopoverTrigger asChild>
@@ -277,7 +277,7 @@ export const AppointmentForm = ({ setShowForm, showForm, setReload, reload }: Ap
                                                             )}
                                                         >
                                                             <CalendarIcon className="mr-2 h-4 w-4" />
-                                                            {dateAppointment ? format(dateAppointment, "dd/MM/yyyy") : "date fin"}
+                                                            {dateAppointment ? format(dateAppointment, "dd/MM/yyyy") : "date de fin"}
                                                         </Button>
                                                     </PopoverTrigger>
                                                     <PopoverContent className="w-auto p-0">
