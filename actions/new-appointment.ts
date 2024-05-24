@@ -34,10 +34,12 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
 
     // validation "Horaire début" not passed
 
-    timeStart.setHours(timeStart.getHours() + 2);  // hours gmt paris
+    //timeStart.setHours(timeStart.getHours() + 2);  // hours gmt paris
     if (new Date().getDate() == timeStart.getDate() && new Date().getMonth() == timeStart.getMonth() && new Date().getFullYear() == timeStart.getFullYear()) {
         // console.log("date : ", new Date())
         // console.log("timeStart : ", timeStart)
+        console.log(new Date().getHours())
+        console.log(timeStart.getHours())
         if (new Date().getHours() >= timeStart.getHours()) {
             return { error: "Horaire de début erronée (min + 1h) ou horaire passée" }
         }
@@ -63,8 +65,6 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
     const { dateEndReccurence } = validatedFields.data;
     dateEndReccurence?.setHours(25);
     dateEndReccurence?.setMinutes(59);
-
-    console.log(timeEnd.getTime() - timeStart.getTime())
 
     if (recurrence && timeEnd.getTime() - timeStart.getTime() > 3600000) {
         return {error:"1h max pour une recurrence"}
