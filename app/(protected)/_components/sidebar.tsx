@@ -59,7 +59,7 @@ export const Sidebar = () => {
                   <Link href="/planes">
                     <div className={`flex items-center p-2 rounded-md hover:bg-gray-800 ${isOpen ? 'justify-start' : 'justify-center'}`}>
                       <Plane className="w-6 h-6" />
-                      {isOpen && <span className="ml-2">Avions</span>}
+                      {isOpen && <span className="ml-2">Mes ULM</span>}
                     </div>
                   </Link>
                 </li>

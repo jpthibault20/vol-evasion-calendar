@@ -2,8 +2,8 @@
 
 import { UserRole } from "@prisma/client";
 import { useCurrentRole } from "@/hooks/use-current-role";
-import { currentRole } from "@/lib/auth";
-import { useState } from "react";
+import Image from "next/image"
+import noAcces from "@/public/401 Error Unauthorized.gif"
 
 interface RoleGateProps {
   children: React.ReactNode;
@@ -44,9 +44,15 @@ export const RoleGate = ({ children, allowedRole, noAccesPage}: RoleGateProps) =
     if (noAccesPage == true) {
       return (
         <div className="flex justify-center items-center h-screen">
-            <p className="text-center">
-                Vous n&apos;êtes pas autorisé à accéder à cette page...
-            </p>
+            <div className="text-center">
+              <p>
+                Vous n&apos;avez pas accès à cette page
+              </p>
+                <Image 
+                src={noAcces}
+                alt="401 Error Unauthorized"
+                width={500}/>
+            </div>
         </div>
       )
     }
