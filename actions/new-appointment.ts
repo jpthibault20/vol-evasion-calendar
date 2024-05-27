@@ -38,10 +38,8 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
     if (new Date().getDate() == timeStart.getDate() && new Date().getMonth() == timeStart.getMonth() && new Date().getFullYear() == timeStart.getFullYear()) {
         // console.log("date : ", new Date())
         // console.log("timeStart : ", timeStart)
-        console.log(new Date().getHours())
-        console.log(timeStart.getHours())
         if (new Date().getHours() >= timeStart.getHours()) {
-            return { error: "Horaire de début erronée (min + 1h) ou horaire passée" }
+            return { error: "Horaire de début invalide (min + 1h) ou horaire passée" }
         }
     }
 
@@ -50,15 +48,14 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
 
     // validation "Horaire fin" must min 1 hour between "Horaire début"
     const { timeEnd } = validatedFields.data
-    timeEnd.setHours(timeEnd.getHours() + 2);  // hours gmt paris
-    if (timeEnd.getHours() <= timeStart.getHours()) {
-        return { error: "Horaire de fin erronée (min dispo 1h)" }
-    }
-
-    timeEnd.setDate(date.getDate());
-    timeEnd.setMonth(date.getMonth());
     timeEnd.setFullYear(date.getFullYear());
+    timeEnd.setMonth(date.getMonth());
+    timeEnd.setDate(date.getDate());
+    timeEnd.setHours(timeEnd.getHours() + 2);  // hours gmt paris
 
+    if (timeEnd.getTime() <= timeStart.getTime()) {
+        return { error: "Horaire de fin invalide (min dispo 1h)" }
+    }
 
     // if "disponibilité récurente" validate "date fin récurence" must have min 1 week between "date"
     const { recurrence } = validatedFields.data;
@@ -67,7 +64,7 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
     dateEndReccurence?.setMinutes(59);
 
     if (recurrence && timeEnd.getTime() - timeStart.getTime() > 3600000) {
-        return {error:"1h max pour une recurrence"}
+        return { error: "1h max pour une recurrence" }
     }
 
     if (recurrence && !dateEndReccurence) {
@@ -97,6 +94,7 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
             }
         });
 
+
         if (appointmentAlreadyExiste.length !== 0) {
             return { error: "Une disponibilité existe déja avec ces dates" }
         };
@@ -121,6 +119,8 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
             useDateStart.setHours(useDateStart.getHours() + 1);
             useDateEnd.setHours(useDateEnd.getHours() + 1);
         };
+
+
     };
 
 
