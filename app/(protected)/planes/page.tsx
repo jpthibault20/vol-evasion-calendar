@@ -8,13 +8,13 @@ const planes = () => {
     <div>
       <RoleGate allowedRole={'PILOTE'} noAccesPage={true}>
         <div className="flex justify-center items-center h-screen">
-          <p className="text-center">
+          <div className="text-center">
             <p>Cette page est en construction</p>
-            <Image 
-            src={pictureBuilding}
-            alt='picture website in building'
-            width={500}/>
-          </p>
+            <Image
+              src={pictureBuilding}
+              alt='picture website in building'
+              width={500} />
+          </div>
         </div>
       </RoleGate>
     </div>
