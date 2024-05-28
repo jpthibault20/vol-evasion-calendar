@@ -213,13 +213,13 @@ export const removeAppointmentByIDAndReccurencID = async (ID: string, reccurence
             }
         })
         await Promise.all(appointments.map(async (appointment) => {
+            if (process.env.ENVIRONEMENT != "DEV") {
+                appointment.startDate?.setHours(appointment.startDate.getHours() + 2);
+                appointment.endDate?.setHours(appointment.endDate.getHours() + 2);
+            }
             if (appointment.studentID) {
                 const student = await db.user.findUnique({ where: { id: appointment.studentID } });
                 if (student) {
-                    if (process.env.ENVIRONEMENT != "DEV") {
-                        appointment.startDate?.setHours(appointment.startDate.getHours() + 2);
-                        appointment.endDate?.setHours(appointment.endDate.getHours() + 2);
-                    }
                     sendNotificationRemoveAppointment(student.email as string, appointment.startDate as Date, appointment.endDate as Date);
                 }
             }
@@ -252,10 +252,6 @@ export const removeAppointmentByIDAndReccurencID = async (ID: string, reccurence
     if (appointment?.studentID) {
         const student = await db.user.findUnique({ where: { id: appointment.studentID } });
         if (student) {
-            if (process.env.ENVIRONEMENT != "DEV") {
-                appointment.startDate?.setHours(appointment.startDate.getHours() + 2);
-                appointment.endDate?.setHours(appointment.endDate.getHours() + 2);
-            }
             sendNotificationRemoveAppointment(student.email as string, appointment.startDate as Date, appointment.endDate as Date);
         }
     }
