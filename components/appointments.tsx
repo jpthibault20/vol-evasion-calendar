@@ -39,8 +39,8 @@ export const Appointments = ({ reload, setReload, setRemovedAppointments, setID,
                         />
                     </div>
 
-                    <div className='w-full text-center'>
-                        <h2 className="text-2xl font-bold tracking-tight mt-5 text-gray-900 dark:text-gray-50">Mes vols (élève)</h2>
+                    <div className='w-full '>
+                        <h2 className="text-2xl text-center font-bold tracking-tight mt-5 text-gray-900 dark:text-gray-50">Mes vols (élève)</h2>
 
                         <div className='px-6 pb-6 w-full'>
                             <StudentAppointments
