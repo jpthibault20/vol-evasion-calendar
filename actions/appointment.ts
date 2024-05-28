@@ -65,10 +65,15 @@ export const bookAppointment = async (appointmentID: string, userID: string, fli
         return { error: "Oups, une erreur s'est produite dans la réservation (code: E_002)" }
     }
 
-    if (process.env.ENVIRONEMENT == "PROD") {
-        appointment.startDate?.setHours( appointment.startDate.getHours() + 2 );
-        appointment.endDate?.setHours( appointment.endDate.getHours() + 2 );
+    if (process.env.ENVIRONEMENT == "DEV") {
+        await sendNotificationBooking(piloteUser?.email as string, studentUser?.firstname as string, studentUser?.name as string, appointment.startDate as Date, appointment.endDate as Date);
+        await sendStudentNotificationBooking(studentUser?.email as string, appointment.startDate as Date, appointment.endDate as Date);
+
+        return { success: "Réservation réussie" }
     }
+
+    appointment.startDate?.setHours(appointment.startDate.getHours() + 2);
+    appointment.endDate?.setHours(appointment.endDate.getHours() + 2);
 
     await sendNotificationBooking(piloteUser?.email as string, studentUser?.firstname as string, studentUser?.name as string, appointment.startDate as Date, appointment.endDate as Date);
     await sendStudentNotificationBooking(studentUser?.email as string, appointment.startDate as Date, appointment.endDate as Date);
@@ -257,7 +262,7 @@ export const removeAppointmentByIDAndReccurencID = async (ID: string, reccurence
         })
     } catch (error) {
         console.log(error);
-        return { error: "Erreur dans la suppression de la recurrence (code: E_003)"}
+        return { error: "Erreur dans la suppression de la recurrence (code: E_003)" }
     }
     return;
 }
@@ -323,5 +328,5 @@ export const removeStudentUser = async (appointmentID: string) => {
     }
     return { success: "Mise à jour effectuée" };
 
-    
+
 }
