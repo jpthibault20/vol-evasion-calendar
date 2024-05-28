@@ -216,6 +216,10 @@ export const removeAppointmentByIDAndReccurencID = async (ID: string, reccurence
             if (appointment.studentID) {
                 const student = await db.user.findUnique({ where: { id: appointment.studentID } });
                 if (student) {
+                    if (process.env.ENVIRONEMENT != "DEV") {
+                        appointment.startDate?.setHours(appointment.startDate.getHours() + 2);
+                        appointment.endDate?.setHours(appointment.endDate.getHours() + 2);
+                    }
                     sendNotificationRemoveAppointment(student.email as string, appointment.startDate as Date, appointment.endDate as Date);
                 }
             }
@@ -248,7 +252,10 @@ export const removeAppointmentByIDAndReccurencID = async (ID: string, reccurence
     if (appointment?.studentID) {
         const student = await db.user.findUnique({ where: { id: appointment.studentID } });
         if (student) {
-
+            if (process.env.ENVIRONEMENT != "DEV") {
+                appointment.startDate?.setHours(appointment.startDate.getHours() + 2);
+                appointment.endDate?.setHours(appointment.endDate.getHours() + 2);
+            }
             sendNotificationRemoveAppointment(student.email as string, appointment.startDate as Date, appointment.endDate as Date);
         }
     }
@@ -297,7 +304,10 @@ export const addUserToAppointment = async (appointmentID: string, userID: string
         console.log(error);
         return { error: "Il y a eu une erreur (code: E_002)" };
     }
-
+    if (process.env.ENVIRONEMENT != "DEV") {
+        appointment?.startDate?.setHours(appointment.startDate.getHours() + 2);
+        appointment?.endDate?.setHours(appointment.endDate.getHours() + 2);
+    }
     await sendStudentNotificationBooking(user?.email as string, appointment?.startDate as Date, appointment?.endDate as Date)
     return { success: "Mise à jour effectuée" };
 }
@@ -313,6 +323,10 @@ export const removeStudentUser = async (appointmentID: string) => {
     }
 
     if (appointment?.studentID) {
+        if (process.env.ENVIRONEMENT != "DEV") {
+            appointment.startDate?.setHours(appointment.startDate.getHours() + 2);
+            appointment.endDate?.setHours(appointment.endDate.getHours() + 2);
+        }
         await sendNotificationRemoveAppointment(student?.email as string, appointment.startDate as Date, appointment.endDate as Date);
         await sendNotificationSudentRemoveForPilot(pilot?.email as string, appointment.startDate as Date, appointment.endDate as Date);
     }
