@@ -65,6 +65,11 @@ export const bookAppointment = async (appointmentID: string, userID: string, fli
         return { error: "Oups, une erreur s'est produite dans la réservation (code: E_002)" }
     }
 
+    if (process.env.ENVIRONEMENT == "PROD") {
+        appointment.startDate?.setHours( appointment.startDate.getHours() + 2 );
+        appointment.endDate?.setHours( appointment.endDate.getHours() + 2 );
+    }
+
     await sendNotificationBooking(piloteUser?.email as string, studentUser?.firstname as string, studentUser?.name as string, appointment.startDate as Date, appointment.endDate as Date);
     await sendStudentNotificationBooking(studentUser?.email as string, appointment.startDate as Date, appointment.endDate as Date);
 
