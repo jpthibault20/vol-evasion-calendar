@@ -209,7 +209,7 @@ export const UserProfile = ({ user, adress, reload, setReload }: UserProfileProp
             </div>
             <div className="sm:col-span-3">
               <label className="block text-sm font-bold text-gray-700 dark:text-gray-300" htmlFor="zip">
-                Code postale
+                Code postal
               </label>
               <div className="mt-1">
                 <Input
