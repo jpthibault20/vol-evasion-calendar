@@ -125,7 +125,7 @@ export const StudentAppointments = ({ reload, setReload, setRemovedAppointments,
                                     
                                     <TableCell>
                                         {appointment.studentID ? (
-                                            appointment.flightType
+                                            appointment.studentType
                                         ) : (
                                             <p>...</p>
                                         )}
