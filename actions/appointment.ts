@@ -19,6 +19,7 @@ export interface FormattedAppointment {
     endRecurence: string | null;
     recurencID: string | null;
     flightType: appointmentType | null;
+    studentType: appointmentType | null;
 }
 
 function formatTime(date: Date) {
@@ -133,6 +134,7 @@ export const getAppointmentsWithPilotID = async (piloteID: string) => {
             startTime: formattedStartTime || "",
             endTime: formattedEndTime || "",
             flightType: studentType,
+            studentType: studentType,
             endRecurence: formatedEndRecurence || null,
             recurencID: recurenceID
         };
@@ -157,7 +159,7 @@ export const getAppointmentsWithStudentID = async (studentID: string) => {
     );
 
     const formattedAppointments: FormattedAppointment[] = await Promise.all(upcomingAppointments.map(async (appointment: Appointment) => {
-        const { id, piloteID, studentID, startDate, endDate, type, appointmentDate, recurenceID } = appointment;
+        const { id, piloteID, studentID, startDate, endDate, type, appointmentDate, recurenceID, studentType } = appointment;
         const studentUser = await getUserById(studentID || "");
 
         const formattedStartDate = startDate?.toLocaleDateString('fr-FR', {
@@ -195,6 +197,7 @@ export const getAppointmentsWithStudentID = async (studentID: string) => {
             startTime: formattedStartTime || "",
             endTime: formattedEndTime || "",
             flightType: type,
+            studentType: studentType,
             endRecurence: formatedEndRecurence || null,
             recurencID: recurenceID
         };
@@ -339,4 +342,26 @@ export const removeStudentUser = async (appointmentID: string) => {
     return { success: "Mise à jour effectuée" };
 
 
+}
+
+export const removeAppointmentChecked = async (ID: string[],) => {
+    for (let i = 0; i < ID.length; i++) {
+        const appointment = await getAppointment(ID[i]);
+        if (appointment?.studentID) {
+            const student = await db.user.findUnique({ where: { id: appointment.studentID } });
+            if (student) {
+                sendNotificationRemoveAppointment(student.email as string, appointment.startDate as Date, appointment.endDate as Date);
+            }
+        }
+        try {
+            await db.appointment.delete({
+                where: {
+                    id: ID[i]
+                }
+            })
+        } catch (error) {
+            return { error: "Erreur dans la suppression de la recurrence (code: E_009)" }
+        }
+    }
+    return { success: "Suppression effectuée" };
 }

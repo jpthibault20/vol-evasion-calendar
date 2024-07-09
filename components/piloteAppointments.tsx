@@ -8,10 +8,14 @@ import { CalendarDays, CheckIcon, Info, UserPlusIcon, UserX, X } from 'lucide-re
 import { Calendar } from './ui/calendar'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
 import { useEffect, useState } from 'react'
-import { FormattedAppointment, bookAppointment, getAppointmentsWithPilotID } from '@/actions/appointment'
+import { FormattedAppointment, getAppointmentsWithPilotID, removeAppointmentChecked } from '@/actions/appointment'
 import { useCurrentUser } from '@/hooks/use-current-user'
-import { compareAsc, isSameDay } from 'date-fns'
+import { compareAsc, isSameDay, set } from 'date-fns'
 import { Spinner } from './ui/spinner'
+import { Checkbox } from "@/components/ui/checkbox"
+import { toast } from "sonner";
+
+
 
 interface PiloteAppointmentsProps {
     reload: boolean,
@@ -30,7 +34,8 @@ export const PiloteAppointments = ({ reload, setReload, setRemovedAppointments, 
     const [recurringFilter, setRecurringFilter] = useState<'all' | 'recurring' | 'non-recurring'>('all');
     const [availabilityFilter, setAvailabilityFilter] = useState<'all' | 'available' | 'booked'>('all');
     const [dateFilter, setDateFilter] = useState<Date | null>(null);
-
+    const [checkedAppointments, setCheckedAppointments] = useState<string[]>([]);
+    const [popover, setPopover] = useState<boolean>(false);
 
     useEffect(() => {
         if (user) {
@@ -44,6 +49,10 @@ export const PiloteAppointments = ({ reload, setReload, setRemovedAppointments, 
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reload])
+
+    useEffect(() => {
+        console.log(checkedAppointments)
+    },[checkedAppointments])
 
     const buttonSubmitDelete = (ID: string, RecurrenceID: string | null) => {
         setID(ID);
@@ -119,6 +128,39 @@ export const PiloteAppointments = ({ reload, setReload, setRemovedAppointments, 
 
     const sortedAppointments = sortAppointments(appointments || [], recurringFilter, availabilityFilter, dateFilter);
 
+    const handleCheckboxChange = (id: string) => {
+        setCheckedAppointments((prevCheckedAppointments) => {
+            if (prevCheckedAppointments.includes(id)) {
+                return prevCheckedAppointments.filter((appointmentId) => appointmentId !== id);
+            } else {
+                return [...prevCheckedAppointments, id];
+            }
+        });
+    };
+
+    const handleButtonSelection = () => {
+        removeAppointmentChecked(checkedAppointments)
+            .then((data)=>{
+                if (data.success) {
+                    setCheckedAppointments([]);
+                    setReload(!reload);
+                    setPopover(false)
+                    toast("Vols supprimés", {
+                        action: {
+                            label: "X",
+                            onClick: () => console.log("Undo"),
+                        },
+                    })
+                }
+            })
+            .catch((err)=>{
+                console.log("Err : ", err);
+            })   
+            .finally(() => {
+            })
+    };
+
+
     return (
         <div>
             <div className="p-4  flex items-center justify-between">
@@ -127,9 +169,9 @@ export const PiloteAppointments = ({ reload, setReload, setRemovedAppointments, 
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button className="px-4 py-2 rounded-md transition-colors " variant="outline">
-                                        {recurringFilter === 'all' && 'Récurence'}
-                                        {recurringFilter === 'recurring' && 'Récurrent'}
-                                        {recurringFilter === 'non-recurring' && 'Non récurrent'}
+                                    {recurringFilter === 'all' && 'Récurence'}
+                                    {recurringFilter === 'recurring' && 'Récurrent'}
+                                    {recurringFilter === 'non-recurring' && 'Non récurrent'}
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
@@ -156,9 +198,9 @@ export const PiloteAppointments = ({ reload, setReload, setRemovedAppointments, 
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button className="px-4 py-2 rounded-md transition-colors " variant="outline">
-                                        {availabilityFilter === 'all' && 'Disponibilité'}
-                                        {availabilityFilter === 'available' && 'Disponible'}
-                                        {availabilityFilter === 'booked' && 'Réservé'}
+                                    {availabilityFilter === 'all' && 'Disponibilité'}
+                                    {availabilityFilter === 'available' && 'Disponible'}
+                                    {availabilityFilter === 'booked' && 'Réservé'}
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
@@ -198,7 +240,7 @@ export const PiloteAppointments = ({ reload, setReload, setRemovedAppointments, 
                                     onSelect={handleDateFilterChange}
                                 />
                                 <div className='w-full p-4'>
-                                    <Button 
+                                    <Button
                                         className=' w-full hover:bg-slate-600'
                                         onClick={() => handleDateFilterChange(null)}
                                     >
@@ -219,6 +261,7 @@ export const PiloteAppointments = ({ reload, setReload, setRemovedAppointments, 
                     <Table className="w-full">
                         <TableHeader>
                             <TableRow>
+                                <TableHead></TableHead>
                                 <TableHead>Date</TableHead>
                                 <TableHead>Heure de début</TableHead>
                                 <TableHead>Heure de fin</TableHead>
@@ -228,9 +271,13 @@ export const PiloteAppointments = ({ reload, setReload, setRemovedAppointments, 
                                 <TableHead>Action</TableHead>
                             </TableRow>
                         </TableHeader>
+
                         <TableBody>
                             {sortedAppointments?.map((appointment, index) => (
                                 <TableRow key={index}>
+                                    <TableCell>
+                                        <Checkbox id={appointment.id} onCheckedChange={() => handleCheckboxChange(appointment.id)} />
+                                    </TableCell>
                                     <TableCell>{appointment.Date}</TableCell>
                                     <TableCell>{appointment.startTime}</TableCell>
                                     <TableCell>{appointment.endTime}</TableCell>
@@ -284,10 +331,25 @@ export const PiloteAppointments = ({ reload, setReload, setRemovedAppointments, 
                             ))}
                         </TableBody>
                     </Table>
+
                 </div>
 
 
             )}
+            <div className='mt-6'>
+                <Popover open={popover} onOpenChange={setPopover}>
+                    <PopoverTrigger asChild>
+                        <Button variant="destructive" onClick={() => setPopover(true)}>Supprimer la sélection</Button>
+                    </PopoverTrigger>
+                    <PopoverContent >
+                        <div className='w-full justify-center items-center text-center'>
+                            <p>Supprimer ces vols ?</p>
+                            <Button variant="destructive" onClick={() => handleButtonSelection()} className='mt-6'>Oui</Button>
+                        </div>
+                    </PopoverContent>
+                </Popover>
+
+            </div>
         </div>
     )
 };
