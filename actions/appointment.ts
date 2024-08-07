@@ -315,11 +315,12 @@ export const addUserToAppointment = async (appointmentID: string, userID: string
 }
 
 export const removeStudentUser = async (appointmentID: string) => {
-    console.log("LOGPERSO #1 : removeStudentUser");
+    console.log("removeStudentUser #1 : start");
     const appointment = await getAppointment(appointmentID);
     const pilot = await getUserById(appointment?.piloteID || "")
     const student = await getUserById(appointment?.studentID || "");
 
+    console.log("removeStudentUser #2 : construction des variables");
 
     if (!appointmentID) {
         return { error: "Erreur ID (code: E_007)" }
@@ -333,7 +334,7 @@ export const removeStudentUser = async (appointmentID: string) => {
         await sendNotificationRemoveAppointment(student?.email as string, appointment.startDate as Date, appointment.endDate as Date);
         await sendNotificationSudentRemoveForPilot(pilot?.email as string, appointment.startDate as Date, appointment.endDate as Date);
     }
-
+    console.log("removeStudentUser #3 : send mail");
     try {
         await db.appointment.update({
             where: { id: appointmentID },
@@ -344,7 +345,7 @@ export const removeStudentUser = async (appointmentID: string) => {
         return { error: "Oups, une erreur s'est produite (code: E_002)" };
     }
 
-    console.log("LOGPERSO #2 : removeStudentUser");
+    console.log("removeStudentUser #2 : update db / end");
 
 
     return { success: "Mise à jour effectuée" };
