@@ -31,6 +31,7 @@ function formatTime(date: Date) {
 }
 
 export const bookAppointment = async (appointmentID: string, userID: string, flightType: appointmentType) => {
+    console.log("LOGPERSO #1 : bookAppointment");
     const appointment = await getAppointments(appointmentID);
     const studentUser = await currentUser();
 
@@ -78,6 +79,8 @@ export const bookAppointment = async (appointmentID: string, userID: string, fli
 
     await sendNotificationBooking(piloteUser?.email as string, studentUser?.firstname as string, studentUser?.name as string, appointment.startDate as Date, appointment.endDate as Date);
     await sendStudentNotificationBooking(studentUser?.email as string, appointment.startDate as Date, appointment.endDate as Date);
+    
+    console.log("LOGPERSO #1 : bookAppointment");
 
     return { success: "Réservation réussie" }
 };
