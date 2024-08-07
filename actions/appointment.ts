@@ -79,7 +79,7 @@ export const bookAppointment = async (appointmentID: string, userID: string, fli
 
     await sendNotificationBooking(piloteUser?.email as string, studentUser?.firstname as string, studentUser?.name as string, appointment.startDate as Date, appointment.endDate as Date);
     await sendStudentNotificationBooking(studentUser?.email as string, appointment.startDate as Date, appointment.endDate as Date);
-    
+
     console.log("LOGPERSO #1 : bookAppointment");
 
     return { success: "Réservation réussie" }
@@ -315,6 +315,7 @@ export const addUserToAppointment = async (appointmentID: string, userID: string
 }
 
 export const removeStudentUser = async (appointmentID: string) => {
+    console.log("LOGPERSO #1 : removeStudentUser");
     const appointment = await getAppointment(appointmentID);
     const pilot = await getUserById(appointment?.piloteID || "")
     const student = await getUserById(appointment?.studentID || "");
@@ -342,6 +343,10 @@ export const removeStudentUser = async (appointmentID: string) => {
         console.log(error);
         return { error: "Oups, une erreur s'est produite (code: E_002)" };
     }
+
+    console.log("LOGPERSO #2 : removeStudentUser");
+
+
     return { success: "Mise à jour effectuée" };
 
 
