@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 export const newAppointment = async (values: z.infer<typeof NewAppointment>) => {
+    console.log("LOGPERSO #1 : newAppointment");
     const user = await currentUser();
 
     // validation fields
@@ -183,7 +184,7 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
 
 
 
-
+    console.log("LOGPERSO #2 : newAppointment");
 
     return { success: "Disponibilité ajoutée" };
 
