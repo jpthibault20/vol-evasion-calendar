@@ -21,6 +21,7 @@ export const RemoveAppointments = ({ reload, setReload, removedAppointments, set
     if (!removedAppointments) return null;
 
     const onClickButtonRemove = (deleteReccurence: boolean) => {
+        console.log("onClickButtonRemove #1 : start");
         setError("");
         setIsPending(true);
         if (deleteReccurence && !recurenceID) {
@@ -34,20 +35,22 @@ export const RemoveAppointments = ({ reload, setReload, removedAppointments, set
                 .catch((err) => {
                     if (err) setError(err);
                 })
-                .finally(()=>setIsPending(false))
+                .finally(() => setIsPending(false))
         }
         else {
             removeAppointmentByIDAndReccurencID(ID)
                 .catch((err) => {
                     if (err) setError(err);
                 })
-                .finally(()=>setIsPending(false))
+                .finally(() => setIsPending(false))
         }
 
 
 
         setRemovedAppointments(false)
         setReload(!reload);
+
+        console.log("onClickButtonRemove #2 : end");
     }
 
     return (
@@ -71,15 +74,15 @@ export const RemoveAppointments = ({ reload, setReload, removedAppointments, set
                     </Button>
                     {recurenceID && (
                         <Button
-                        className="w-full"
-                        variant="destructive"
-                        disabled={isPensding}
-                        onClick={() => { onClickButtonRemove(true) }}
-                    >
-                        Supprimer toute la récurence
-                    </Button>
+                            className="w-full"
+                            variant="destructive"
+                            disabled={isPensding}
+                            onClick={() => { onClickButtonRemove(true) }}
+                        >
+                            Supprimer toute la récurence
+                        </Button>
                     )}
-                    
+
 
                     <FormError message={error} />
                 </div>

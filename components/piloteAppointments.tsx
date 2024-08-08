@@ -39,6 +39,7 @@ export const PiloteAppointments = ({ reload, setReload, setRemovedAppointments, 
 
     useEffect(() => {
         if (user) {
+            console.log("useEffect #1 : user");
             setIsLoading(true);
             getAppointmentsWithPilotID(user.id as string)
                 .then((data) => {
@@ -46,13 +47,14 @@ export const PiloteAppointments = ({ reload, setReload, setRemovedAppointments, 
                 })
                 .catch((err) => { console.log(err); })
                 .finally(() => { setIsLoading(false) })
+            console.log("useEffect #2 : user");
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reload])
 
     useEffect(() => {
         console.log(checkedAppointments)
-    },[checkedAppointments])
+    }, [checkedAppointments])
 
     const buttonSubmitDelete = (ID: string, RecurrenceID: string | null) => {
         setID(ID);
@@ -140,7 +142,7 @@ export const PiloteAppointments = ({ reload, setReload, setRemovedAppointments, 
 
     const handleButtonSelection = () => {
         removeAppointmentChecked(checkedAppointments)
-            .then((data)=>{
+            .then((data) => {
                 if (data.success) {
                     setCheckedAppointments([]);
                     setReload(!reload);
@@ -153,9 +155,9 @@ export const PiloteAppointments = ({ reload, setReload, setRemovedAppointments, 
                     })
                 }
             })
-            .catch((err)=>{
+            .catch((err) => {
                 console.log("Err : ", err);
-            })   
+            })
             .finally(() => {
             })
     };
