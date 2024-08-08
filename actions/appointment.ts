@@ -331,10 +331,17 @@ export const removeStudentUser = async (appointmentID: string) => {
             appointment.startDate?.setHours(appointment.startDate.getHours() + 2);
             appointment.endDate?.setHours(appointment.endDate.getHours() + 2);
         }
+
+        console.log("removeStudentUser #3 : set Hours");
+
         await sendNotificationRemoveAppointment(student?.email as string, appointment.startDate as Date, appointment.endDate as Date);
+
+        console.log("removeStudentUser #4 : send mail removeAppointment");
+
         await sendNotificationSudentRemoveForPilot(pilot?.email as string, appointment.startDate as Date, appointment.endDate as Date);
+
+        console.log("removeStudentUser #5 : send mail removeStudent");
     }
-    console.log("removeStudentUser #3 : send mail");
     try {
         await db.appointment.update({
             where: { id: appointmentID },
@@ -345,7 +352,7 @@ export const removeStudentUser = async (appointmentID: string) => {
         return { error: "Oups, une erreur s'est produite (code: E_002)" };
     }
 
-    console.log("removeStudentUser #2 : update db / end");
+    console.log("removeStudentUser #6 : update db / end");
 
 
     return { success: "Mise à jour effectuée" };
