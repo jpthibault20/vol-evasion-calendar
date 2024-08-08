@@ -1,3 +1,5 @@
+"use client";
+
 import { removeAppointmentByIDAndReccurencID } from "@/actions/appointment";
 import { CardWrapper } from "./CardWrapper";
 import { Button } from "./ui/button";
