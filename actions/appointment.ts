@@ -320,7 +320,7 @@ export const removeStudentUser = async (appointmentID: string) => {
     const pilot = await getUserById(appointment?.piloteID || "")
     const student = await getUserById(appointment?.studentID || "");
 
-    console.log("removeStudentUser #2 : construction des variables");
+    console.log("removeStudentUser #2 : construction des variables"); // 0:42 sec
 
     if (!appointmentID) {
         return { error: "Erreur ID (code: E_007)" }
@@ -332,15 +332,15 @@ export const removeStudentUser = async (appointmentID: string) => {
             appointment.endDate?.setHours(appointment.endDate.getHours() + 2);
         }
 
-        console.log("removeStudentUser #3 : set Hours");
+        console.log("removeStudentUser #3 : set Hours"); // 0:00 sec
 
-        await sendNotificationRemoveAppointment(student?.email as string, appointment.startDate as Date, appointment.endDate as Date);
+        sendNotificationRemoveAppointment(student?.email as string, appointment.startDate as Date, appointment.endDate as Date);
 
-        console.log("removeStudentUser #4 : send mail removeAppointment");
+        console.log("removeStudentUser #4 : send mail removeAppointment"); // 1:96 sec
 
-        await sendNotificationSudentRemoveForPilot(pilot?.email as string, appointment.startDate as Date, appointment.endDate as Date);
+        sendNotificationSudentRemoveForPilot(pilot?.email as string, appointment.startDate as Date, appointment.endDate as Date);
 
-        console.log("removeStudentUser #5 : send mail removeStudent");
+        console.log("removeStudentUser #5 : send mail removeStudent"); // 1:75 sec
     }
     try {
         await db.appointment.update({
@@ -352,7 +352,7 @@ export const removeStudentUser = async (appointmentID: string) => {
         return { error: "Oups, une erreur s'est produite (code: E_002)" };
     }
 
-    console.log("removeStudentUser #6 : update db / end");
+    console.log("removeStudentUser #6 : update db / end"); // 0:34 sec
 
 
     return { success: "Mise à jour effectuée" };
