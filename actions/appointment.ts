@@ -342,15 +342,16 @@ export const removeStudentUser = async (appointmentID: string) => {
 
         console.log("removeStudentUser #5 : send mail removeStudent"); // 1:75 sec
     }
-    try {
-        await db.appointment.update({
-            where: { id: appointmentID },
-            data: { studentID: null }
-        })
-    } catch (error) {
+
+    db.appointment.update({
+        where: { id: appointmentID },
+        data: { studentID: null }
+    })
+    .catch((error) => {
         console.log(error);
         return { error: "Oups, une erreur s'est produite (code: E_002)" };
     }
+    );
 
     console.log("removeStudentUser #6 : update db / end"); // 0:34 sec
 
