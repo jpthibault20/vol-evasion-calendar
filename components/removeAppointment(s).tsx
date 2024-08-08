@@ -23,7 +23,7 @@ export const RemoveAppointments = ({ reload, setReload, removedAppointments, set
     if (!removedAppointments) return null;
 
     const onClickButtonRemove = (deleteReccurence: boolean) => {
-        console.log("onClickButtonRemove #1 : start");
+
         setError("");
         setIsPending(true);
         if (deleteReccurence && !recurenceID) {
@@ -31,7 +31,7 @@ export const RemoveAppointments = ({ reload, setReload, removedAppointments, set
             return;
         }
 
-
+        console.log("onClickButtonRemove #1 : start");
         if (deleteReccurence && recurenceID) {
             removeAppointmentByIDAndReccurencID(ID, recurenceID)
                 .catch((err) => {
@@ -47,12 +47,12 @@ export const RemoveAppointments = ({ reload, setReload, removedAppointments, set
                 .finally(() => setIsPending(false))
         }
 
-
+        console.log("onClickButtonRemove #2 : end");
 
         setRemovedAppointments(false)
         setReload(!reload);
 
-        console.log("onClickButtonRemove #2 : end");
+
     }
 
     return (
