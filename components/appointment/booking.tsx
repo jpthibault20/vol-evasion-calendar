@@ -28,7 +28,7 @@ export const Booking = ({ appointment, pilote, reload, setReload, setViewInfo }:
 
   const currentDate = new Date();
   if (appointment?.endDate && currentDate > appointment?.endDate || appointment?.studentID != null) {
-    availbleAppointment= false;
+    availbleAppointment = false;
   }
 
   const formattedDateStart = appointment?.startDate?.toLocaleString('fr-FR');
@@ -39,6 +39,11 @@ export const Booking = ({ appointment, pilote, reload, setReload, setViewInfo }:
 
     const formData = new FormData(event.currentTarget);
     const flightType = formData.get('type');
+
+    if (user?.blocked_reservation) {
+      setError("Vous n'avez pas la permission de réserver un vol, raprochez vous de votre instructeur");
+      return;
+    }
 
     startTransition(() => {
       if (appointment?.id && user?.id) {
@@ -131,19 +136,19 @@ export const Booking = ({ appointment, pilote, reload, setReload, setViewInfo }:
             <FormError message={error} />
             {availbleAppointment ? (
 
-                <Button
-                  className="w-full"
-                  type="submit"
-                  disabled={isPending}
-                >
-                  Réserver
-                </Button>
+              <Button
+                className="w-full"
+                type="submit"
+                disabled={isPending}
+              >
+                Réserver
+              </Button>
             ) : (
-            <div>
-              <p className='text-center font-semibold text-gray-700'>
-                Vol indisponible
-              </p>
-            </div>
+              <div>
+                <p className='text-center font-semibold text-gray-700'>
+                  Vol indisponible
+                </p>
+              </div>
             )}
 
           </form>

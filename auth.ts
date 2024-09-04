@@ -51,6 +51,7 @@ export const {
         session.user.firstname = token.firstname as string;
         session.user.email = token.email as string;
         session.user.color = token.color as string;
+        session.user.blocked_reservation = token.blocked_reservation as boolean;
       }
       return session;
     },
@@ -68,6 +69,7 @@ export const {
       token.email = existingUser.email;
       token.role = existingUser.role;
       token.color = existingUser.color;
+      token.blocked_reservation = existingUser.blocked_reservation;
 
       return token;
     }
