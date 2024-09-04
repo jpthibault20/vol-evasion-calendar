@@ -75,7 +75,7 @@ export const UpdateUser = ({ show, setShow, ID, reload, setReload }: UpdateUserP
                         toast("Utilisateur mis à jour !", {
                             action: {
                                 label: "X",
-                                onClick: () => {},
+                                onClick: () => { },
                             },
                         })
                         setShow(false);
@@ -86,7 +86,7 @@ export const UpdateUser = ({ show, setShow, ID, reload, setReload }: UpdateUserP
                         toast("Oups, il y a eu un problème ! (code: E_008)", {
                             action: {
                                 label: "X",
-                                onClick: () => {},
+                                onClick: () => { },
                             },
                         })
                     }
@@ -198,8 +198,14 @@ export const UpdateUser = ({ show, setShow, ID, reload, setReload }: UpdateUserP
                                                 </svg>
                                             </div>
                                         </div>
-
                                     </div>
+
+                                    {/* <div>
+                                        <div className="relative">
+                                            <label>Bloquer l'utilisateur</label>
+
+                                        </div>
+                                    </div> */}
 
 
                                 </div>

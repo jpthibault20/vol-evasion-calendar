@@ -15,20 +15,21 @@ enum UserRole {
 }
 
 model User {
-  id            String        @id @default(cuid()) @map("_id")
-  name          String?
-  firstName     String?
-  email         String?       @unique
-  emailVerified DateTime?
-  phone         String?
-  color         String?       @default("")
-  image         String?
-  password      String?
-  address       Address?      @relation(fields: [addressId], references: [id], onDelete: Cascade)
-  addressId     String?       @unique
-  role          UserRole      @default(USER)
-  accounts      Account[]
-  appointments  Appointment[]
+  id                  String        @id @default(cuid()) @map("_id")
+  name                String?
+  firstName           String?
+  email               String?       @unique
+  emailVerified       DateTime?
+  phone               String?
+  color               String?       @default("")
+  image               String?
+  password            String?
+  address             Address?      @relation(fields: [addressId], references: [id], onDelete: Cascade)
+  addressId           String?       @unique
+  role                UserRole      @default(USER)
+  accounts            Account[]
+  appointments        Appointment[]
+  blocked_reservation Boolean       @default(false)
 }
 
 model Account {
