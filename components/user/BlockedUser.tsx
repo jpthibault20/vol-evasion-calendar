@@ -16,13 +16,11 @@ export const BlockedUser = ({ user }: Props) => {
     }, [user]);
 
     const handleBlockedChange = (value: boolean) => {
-        console.log('handleBlockedChange', value);
         setBlocked(value);
         blockUser(user.id, value);
     }
 
     const blockUser = (ID: string, blocked: boolean) => {
-        console.log(ID, blocked);
         setIsLoading(true);
         updateBlockedReservation(ID, blocked)
             .catch(error => {

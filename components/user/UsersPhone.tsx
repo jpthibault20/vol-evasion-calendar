@@ -12,6 +12,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { BlockedUser } from "./BlockedUser";
 
 export const UsersPhone = () => {
 
@@ -154,8 +155,10 @@ export const UsersPhone = () => {
                                 <div className="w-full ml-6 mb-2">
                                     <div className="text-lg font-semibold text-left">{user.firstName} {user.name}</div>
                                     <div className="text-sm text-zinc-500 text-left">{user.role}</div>
+
                                 </div>
                             </button>
+                            <BlockedUser user={user} />
                             <button key={index} className="flex" onClick={() => removeUser(user.id)}>
                                 <X className="text-red-500 top-0" />
                             </button>

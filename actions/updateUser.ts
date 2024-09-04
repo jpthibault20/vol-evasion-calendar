@@ -303,7 +303,6 @@ export const updatePassword = async (ID: string, password: string, passwordConfi
 }
 
 export const updateBlockedReservation = async (ID: string, blocked: boolean) => {
-    console.log(ID, blocked);
     try {
         await db.user.update({
             where: { id: ID },

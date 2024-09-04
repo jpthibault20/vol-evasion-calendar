@@ -42,10 +42,6 @@ const UserManagement = () => {
         setShowUpdateUser(true);
     }
 
-    const blockUser = (ID: string, blocked: any) => {
-        console.log(ID, blocked);
-    }
-
     useEffect(() => {
         setIsLoading(true);
         getAllUsers()
