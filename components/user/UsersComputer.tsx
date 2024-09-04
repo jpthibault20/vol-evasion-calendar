@@ -13,6 +13,9 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
+import { BlockedUser } from './BlockedUser';
+
+
 const UserManagement = () => {
     const [users, setUsers] = useState<User[]>([]);
     const [userID, setUserID] = useState("");
@@ -161,6 +164,7 @@ const UserManagement = () => {
                             <thead>
                                 <tr>
                                     <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Nom</th>
+                                    <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Utilisateur bloqué</th>
                                     <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Info</th>
                                     <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Role </th>
                                     <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Action</th>
@@ -182,6 +186,10 @@ const UserManagement = () => {
                                                     <p className="text-gray-500">{user.email}</p>
                                                 </div>
                                             </div>
+                                        </td>
+                                        <td className="py-4 px-6 border-b border-grey-light">
+                                            <BlockedUser user={user} />
+                                            {/* <Switch onChange={(value) => blockUser(user.id, value)} /> */}
                                         </td>
                                         <td className="py-4 px-6 border-b border-grey-light">
                                             <button onClick={() => infoUser(user.id)}>

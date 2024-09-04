@@ -1,3 +1,5 @@
+"use client";
+
 import { removeAppointmentByIDAndReccurencID } from "@/actions/appointment";
 import { CardWrapper } from "./CardWrapper";
 import { Button } from "./ui/button";
@@ -21,6 +23,7 @@ export const RemoveAppointments = ({ reload, setReload, removedAppointments, set
     if (!removedAppointments) return null;
 
     const onClickButtonRemove = (deleteReccurence: boolean) => {
+
         setError("");
         setIsPending(true);
         if (deleteReccurence && !recurenceID) {
@@ -28,26 +31,28 @@ export const RemoveAppointments = ({ reload, setReload, removedAppointments, set
             return;
         }
 
-
+        console.log("onClickButtonRemove #1 : start");
         if (deleteReccurence && recurenceID) {
             removeAppointmentByIDAndReccurencID(ID, recurenceID)
                 .catch((err) => {
                     if (err) setError(err);
                 })
-                .finally(()=>setIsPending(false))
+                .finally(() => setIsPending(false))
         }
         else {
             removeAppointmentByIDAndReccurencID(ID)
                 .catch((err) => {
                     if (err) setError(err);
                 })
-                .finally(()=>setIsPending(false))
+                .finally(() => setIsPending(false))
         }
 
-
+        console.log("onClickButtonRemove #2 : end");
 
         setRemovedAppointments(false)
         setReload(!reload);
+
+
     }
 
     return (
@@ -71,15 +76,15 @@ export const RemoveAppointments = ({ reload, setReload, removedAppointments, set
                     </Button>
                     {recurenceID && (
                         <Button
-                        className="w-full"
-                        variant="destructive"
-                        disabled={isPensding}
-                        onClick={() => { onClickButtonRemove(true) }}
-                    >
-                        Supprimer toute la récurence
-                    </Button>
+                            className="w-full"
+                            variant="destructive"
+                            disabled={isPensding}
+                            onClick={() => { onClickButtonRemove(true) }}
+                        >
+                            Supprimer toute la récurence
+                        </Button>
                     )}
-                    
+
 
                     <FormError message={error} />
                 </div>

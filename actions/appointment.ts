@@ -31,6 +31,7 @@ function formatTime(date: Date) {
 }
 
 export const bookAppointment = async (appointmentID: string, userID: string, flightType: appointmentType) => {
+    console.log("LOGPERSO #1 : bookAppointment");
     const appointment = await getAppointments(appointmentID);
     const studentUser = await currentUser();
 
@@ -78,6 +79,8 @@ export const bookAppointment = async (appointmentID: string, userID: string, fli
 
     await sendNotificationBooking(piloteUser?.email as string, studentUser?.firstname as string, studentUser?.name as string, appointment.startDate as Date, appointment.endDate as Date);
     await sendStudentNotificationBooking(studentUser?.email as string, appointment.startDate as Date, appointment.endDate as Date);
+
+    console.log("LOGPERSO #1 : bookAppointment");
 
     return { success: "Réservation réussie" }
 };
@@ -312,10 +315,12 @@ export const addUserToAppointment = async (appointmentID: string, userID: string
 }
 
 export const removeStudentUser = async (appointmentID: string) => {
+    console.log("removeStudentUser #1 : start");
     const appointment = await getAppointment(appointmentID);
     const pilot = await getUserById(appointment?.piloteID || "")
     const student = await getUserById(appointment?.studentID || "");
 
+    console.log("removeStudentUser #2 : construction des variables"); // 0:42 sec
 
     if (!appointmentID) {
         return { error: "Erreur ID (code: E_007)" }
@@ -326,19 +331,31 @@ export const removeStudentUser = async (appointmentID: string) => {
             appointment.startDate?.setHours(appointment.startDate.getHours() + 2);
             appointment.endDate?.setHours(appointment.endDate.getHours() + 2);
         }
-        await sendNotificationRemoveAppointment(student?.email as string, appointment.startDate as Date, appointment.endDate as Date);
-        await sendNotificationSudentRemoveForPilot(pilot?.email as string, appointment.startDate as Date, appointment.endDate as Date);
+
+        console.log("removeStudentUser #3 : set Hours"); // 0:00 sec
+
+        sendNotificationRemoveAppointment(student?.email as string, appointment.startDate as Date, appointment.endDate as Date);
+
+        console.log("removeStudentUser #4 : send mail removeAppointment"); // 1:96 sec
+
+        sendNotificationSudentRemoveForPilot(pilot?.email as string, appointment.startDate as Date, appointment.endDate as Date);
+
+        console.log("removeStudentUser #5 : send mail removeStudent"); // 1:75 sec
     }
 
-    try {
-        await db.appointment.update({
-            where: { id: appointmentID },
-            data: { studentID: null }
-        })
-    } catch (error) {
+    db.appointment.update({
+        where: { id: appointmentID },
+        data: { studentID: null }
+    })
+    .catch((error) => {
         console.log(error);
         return { error: "Oups, une erreur s'est produite (code: E_002)" };
     }
+    );
+
+    console.log("removeStudentUser #6 : update db / end"); // 0:34 sec
+
+
     return { success: "Mise à jour effectuée" };
 
 

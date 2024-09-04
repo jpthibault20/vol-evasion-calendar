@@ -301,3 +301,16 @@ export const updatePassword = async (ID: string, password: string, passwordConfi
     }
     return { error: "Les mots de passe ne correspondent pas !" }
 }
+
+export const updateBlockedReservation = async (ID: string, blocked: boolean) => {
+    try {
+        await db.user.update({
+            where: { id: ID },
+            data: { blocked_reservation: blocked }
+        });
+    } catch (error) {
+        return { error: "Oups, une erreur s'est produite. ()" }
+    }
+
+    return { success: "Le blocage de la réservation a été mis à jour." };
+}
