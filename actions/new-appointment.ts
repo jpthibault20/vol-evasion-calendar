@@ -21,7 +21,7 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
 
     // validation "date" not passed
     const { date } = validatedFields.data;
-    date.setHours(date.getHours() + 2); // hours gmt paris
+    date.setHours(date.getHours() + 1); // hours gmt paris
     date.setHours(23, 59);
     if (date <= new Date()) {
         return { error: "Date de l'évènement passé" }
@@ -35,7 +35,7 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
 
     // validation "Horaire début" not passed
 
-    timeStart.setHours(timeStart.getHours() + 2);  // hours gmt paris
+    timeStart.setHours(timeStart.getHours() + 1);  // hours gmt paris
     if (new Date().getDate() == timeStart.getDate() && new Date().getMonth() == timeStart.getMonth() && new Date().getFullYear() == timeStart.getFullYear()) {
         // console.log("date : ", new Date())
         // console.log("timeStart : ", timeStart)
@@ -52,7 +52,7 @@ export const newAppointment = async (values: z.infer<typeof NewAppointment>) => 
     timeEnd.setFullYear(date.getFullYear());
     timeEnd.setMonth(date.getMonth());
     timeEnd.setDate(date.getDate());
-    timeEnd.setHours(timeEnd.getHours() + 2);  // hours gmt paris
+    timeEnd.setHours(timeEnd.getHours() + 1);  // hours gmt paris
 
     if (timeEnd.getTime() <= timeStart.getTime()) {
         return { error: "Horaire de fin invalide (min dispo 1h)" }
