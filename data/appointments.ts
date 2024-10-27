@@ -8,8 +8,8 @@ export const getAppointments = async (client?: boolean) => {
     const appointments = await db.appointment.findMany();
     const newAppointments = appointments.map(appointment => ({
       ...appointment,
-      timeStart: new Date(appointment.startDate!.getTime() - 7200000 ),
-      timeEnd: new Date(appointment.endDate!.getTime() - 7200000 ),
+      timeStart: new Date(appointment.startDate!.getTime() - 3600000 ),
+      timeEnd: new Date(appointment.endDate!.getTime() - 3600000 ),
     }));
 
 
