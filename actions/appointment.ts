@@ -74,8 +74,8 @@ export const bookAppointment = async (appointmentID: string, userID: string, fli
         return { success: "Réservation réussie" }
     }
 
-    appointment.startDate?.setHours(appointment.startDate.getHours() + 2);
-    appointment.endDate?.setHours(appointment.endDate.getHours() + 2);
+    appointment.startDate?.setHours(appointment.startDate.getHours() + 1);
+    appointment.endDate?.setHours(appointment.endDate.getHours() + 1);
 
     await sendNotificationBooking(piloteUser?.email as string, studentUser?.firstname as string, studentUser?.name as string, appointment.startDate as Date, appointment.endDate as Date);
     await sendStudentNotificationBooking(studentUser?.email as string, appointment.startDate as Date, appointment.endDate as Date);
